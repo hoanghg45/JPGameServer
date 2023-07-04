@@ -57,7 +57,8 @@ var KTLogin = function() {
                     swal.fire({
 		                text: "All is cool! Now you submit this form",
 		                icon: "success",
-		                buttonsStyling: false,
+                        buttonsStyling: false,
+                        heightAuto: false,
 		                confirmButtonText: "Ok, got it!",
                         customClass: {
     						confirmButton: "btn font-weight-bold btn-light-primary"
@@ -69,7 +70,8 @@ var KTLogin = function() {
 					swal.fire({
 		                text: "Sorry, looks like there are some errors detected, please try again.",
 		                icon: "error",
-		                buttonsStyling: false,
+                        buttonsStyling: false,
+                        heightAuto: false,
 		                confirmButtonText: "Ok, got it!",
                         customClass: {
     						confirmButton: "btn font-weight-bold btn-light-primary"
