@@ -150,6 +150,7 @@
       <DependentUpon>Context.edmx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2070,10 +2071,15 @@
     <Content Include="Areas\assets\plugins\global\fonts\socicon\socicon.svg" />
     <Content Include="Areas\assets\plugins\global\plugins.bundle.css" />
     <Content Include="Areas\assets\plugins\global\plugins.bundle.js" />
+    <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\owl.carousel.css" />
+    <Content Include="Content\data.css" />
+    <Content Include="Content\style.css" />
     <Content Include="Context.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Context.edmx</DependentUpon>
@@ -2088,6 +2094,62 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="icon-fonts\fontawesome-webfont.svg" />
+    <Content Include="img\attachment.jpg" />
+    <Content Include="img\authors\1.jpg" />
+    <Content Include="img\authors\2.jpg" />
+    <Content Include="img\authors\3.jpg" />
+    <Content Include="img\authors\4.jpg" />
+    <Content Include="img\authors\5.jpg" />
+    <Content Include="img\authors\6.jpg" />
+    <Content Include="img\authors\7.jpg" />
+    <Content Include="img\authors\8.jpg" />
+    <Content Include="img\community-bg.jpg" />
+    <Content Include="img\favicon.ico" />
+    <Content Include="img\features\1.jpg" />
+    <Content Include="img\features\2.jpg" />
+    <Content Include="img\features\3.jpg" />
+    <Content Include="img\features\4.jpg" />
+    <Content Include="img\footer-logo.png" />
+    <Content Include="img\footer-top-bg.png" />
+    <Content Include="img\icons\heart.png" />
+    <Content Include="img\icons\star.png" />
+    <Content Include="img\latest-blog\1.jpg" />
+    <Content Include="img\latest-blog\2.jpg" />
+    <Content Include="img\latest-blog\3.jpg" />
+    <Content Include="img\logo.png" />
+    <Content Include="img\page-top-bg\1.jpg" />
+    <Content Include="img\page-top-bg\2.jpg" />
+    <Content Include="img\page-top-bg\3.jpg" />
+    <Content Include="img\page-top-bg\4.jpg" />
+    <Content Include="img\page-top-bg\5.jpg" />
+    <Content Include="img\pattern.png" />
+    <Content Include="img\recent-game-bg.png" />
+    <Content Include="img\recent-game\1.jpg" />
+    <Content Include="img\recent-game\2.jpg" />
+    <Content Include="img\recent-game\3.jpg" />
+    <Content Include="img\recent-game\4.jpg" />
+    <Content Include="img\recent-game\5.jpg" />
+    <Content Include="img\recent-game\6.jpg" />
+    <Content Include="img\recent-game\7.jpg" />
+    <Content Include="img\recent-game\8.jpg" />
+    <Content Include="img\recent-game\big.jpg" />
+    <Content Include="img\review-bg-2.jpg" />
+    <Content Include="img\review-bg.png" />
+    <Content Include="img\review\1.jpg" />
+    <Content Include="img\review\10.jpg" />
+    <Content Include="img\review\2.jpg" />
+    <Content Include="img\review\3.jpg" />
+    <Content Include="img\review\4.jpg" />
+    <Content Include="img\review\5.jpg" />
+    <Content Include="img\review\6.jpg" />
+    <Content Include="img\review\7.jpg" />
+    <Content Include="img\review\8.jpg" />
+    <Content Include="img\review\9.jpg" />
+    <Content Include="img\slider-1.jpg" />
+    <Content Include="img\slider-2.jpg" />
+    <Content Include="img\tournament\1.jpg" />
+    <Content Include="img\tournament\2.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admin\Views\web.config" />
@@ -2143,17 +2205,26 @@
     <Content Include="Context.edmx.diagram">
       <DependentUpon>Context.edmx</DependentUpon>
     </Content>
+    <Content Include="img\tournament\3DLayer.obj" />
+    <Content Include="icon-fonts\fontawesome-webfont.eot" />
+    <Content Include="icon-fonts\fontawesome-webfont.woff" />
+    <Content Include="icon-fonts\fontawesome-webfont.woff2" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.marquee.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\owl.carousel.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -2168,6 +2239,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Login\SignUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
