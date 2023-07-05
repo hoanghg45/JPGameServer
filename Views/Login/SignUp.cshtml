@@ -6,14 +6,10 @@
 <html lang="en">
 <!--begin::Head-->
 <head>
-    <base href="../../../../">
     <meta charset="utf-8" />
-    <title>Sign Up | Keenthemes</title>
+    <title>Đăng Kí</title>
     <meta name="description" content="Singin page example" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="canonical" href="https://keenthemes.com/metronic" />
-    <!--begin::Fonts-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
     <!--begin::Page Custom Styles(used by this page)-->
     <link href="~/Areas/assets/css/pages/login/login-3.css" rel="stylesheet" type="text/css" />
@@ -29,7 +25,7 @@
     <link href="~/Areas/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />
     <link href="~/Areas/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
     <!--end::Layout Themes-->
-    <link rel="shortcut icon" href="~/Areas/assets/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="" />
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -59,8 +55,8 @@
                                         <span class="wizard-number">1</span>
                                     </div>
                                     <div class="wizard-label">
-                                        <h3 class="wizard-title">Account Settings</h3>
-                                        <div class="wizard-desc">Setup Your Account Details</div>
+                                        <h3 class="wizard-title">Cài Đặt Tài Khoản</h3>
+                                        <div class="wizard-desc">Tài Khoản Đăng Nhập</div>
                                     </div>
                                 </div>
                             </div>
@@ -138,29 +134,29 @@
                             <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
                                 <!--begin::Title-->
                                 <div class="pb-10 pb-lg-15">
-                                    <h3 class="font-weight-bolder text-dark display5">Create Account</h3>
+                                    <h3 class="font-weight-bolder text-dark display5">Đăng Kí Tài Khoản</h3>
                                     <div class="text-muted font-weight-bold font-size-h4">
-                                        Already have an Account ?
-                                        <a href="custom/pages/login/login-3/signin.html" class="text-primary font-weight-bolder">Sign In</a>
+                                        Đã Có Tài Khoản
+                                        <a href="/dang-nhap/" class="text-primary font-weight-bolder">Đăng Nhập</a>
                                     </div>
                                 </div>
                                 <!--begin::Title-->
                                 <!--begin::Form Group-->
                                 <div class="form-group">
-                                    <label class="font-size-h6 font-weight-bolder text-dark">First Name</label>
-                                    <input type="text" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" name="fname" placeholder="First Name" value="" />
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Tên Tài Khoản <span style="color:red">(*)</span></label>
+                                    <input type="text" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" id="account" placeholder="Tài Khoản" value="" />
                                 </div>
                                 <!--end::Form Group-->
                                 <!--begin::Form Group-->
                                 <div class="form-group">
-                                    <label class="font-size-h6 font-weight-bolder text-dark">Last Name</label>
-                                    <input type="text" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" name="lname" placeholder="Last Name" value="" />
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Mật Khẩu</label>
+                                    <input type="password" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" id="pass" placeholder="Mật Khẩu" value="" />
                                 </div>
                                 <!--end::Form Group-->
                                 <!--begin::Form Group-->
                                 <div class="form-group">
-                                    <label class="font-size-h6 font-weight-bolder text-dark">Phone</label>
-                                    <input type="tel" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" name="phone" placeholder="phone" value="+61412345678" />
+                                    <label class="font-size-h6 font-weight-bolder text-dark">Nhập Lại Mật Khẩu</label>
+                                    <input type="password" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" id="pass_again" placeholder="Mật Khẩu" value="" />
                                 </div>
                                 <!--end::Form Group-->
                             </div>
