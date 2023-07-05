@@ -17,6 +17,10 @@ namespace JPGame.Controllers
         {
             return View();
         }
+        public ActionResult AccountInformation()
+        {
+            return View();
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -35,9 +39,11 @@ namespace JPGame.Controllers
         {
             try
             {
-                var user = (Account)Session["account"];
-                if(user!= null)
+                var account = (Account)Session["account"];
+
+                if(account != null)
                 {
+                    var user = db.Accounts.Find(account.AccountID);
                     return Json(new { code = 200, user = user}, JsonRequestBehavior.AllowGet);
                 }
                 else

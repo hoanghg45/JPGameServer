@@ -26,5 +26,7 @@ namespace JPGame
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
+        public string Avatar { get; set; }
+        public Nullable<System.DateTime> Wedding { get; set; }
     }
 }

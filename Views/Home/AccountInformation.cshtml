@@ -1,8 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "Thông Tin Cá Nhân";
+    ViewBag.Title = "Thông Tin Tài Khoản";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <link href="~/Areas/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 <link href="~/Areas/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
 <link href="~/Areas/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
@@ -46,7 +47,7 @@
                             <!--begin::User-->
                             <div class="d-flex align-items-center">
                                 <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
-                                    <div class="symbol-label" name="avatar" style="background-image:url('')"></div>
+                                    <div name="avatar" class="symbol-label" style="background-image:url('')"></div>
                                     <i class="symbol-badge bg-success"></i>
                                 </div>
                                 <div>
@@ -70,7 +71,7 @@
                             <!--begin::Nav-->
                             <div class="navi navi-bold navi-hover navi-active navi-link-rounded">
                                 <div class="navi-item mb-2">
-                                    <a href="/thong-tin-nguoi-dung/" class="navi-link py-4 active">
+                                    <a href="/thong-tin-nguoi-dung/" class="navi-link py-4 ">
                                         <span class="navi-icon mr-2">
                                             <span class="svg-icon">
                                                 <!--begin::Svg Icon | path:assets/media/svg/icons/General/User.svg-->
@@ -88,7 +89,7 @@
                                     </a>
                                 </div>
                                 <div class="navi-item mb-2">
-                                    <a href="/thong-tin-tai-khoan/" class="navi-link py-4 ">
+                                    <a href="/thong-tin-tai-khoan/" class="navi-link py-4 active">
                                         <span class="navi-icon mr-2">
                                             <span class="svg-icon">
                                                 <!--begin::Svg Icon | path:assets/media/svg/icons/Code/Compiling.svg-->
@@ -106,7 +107,7 @@
                                     </a>
                                 </div>
                                 <div class="navi-item mb-2">
-                                    <a href="custom/apps/profile/profile-1/change-password.html" class="navi-link py-4">
+                                    <a href="custom/apps/profile/profile-1/change-password.html" class="navi-link py-4 ">
                                         <span class="navi-icon mr-2">
                                             <span class="svg-icon">
                                                 <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Shield-user.svg-->
@@ -217,8 +218,8 @@
                         <!--begin::Header-->
                         <div class="card-header py-3">
                             <div class="card-title align-items-start flex-column">
-                                <h3 class="card-label font-weight-bolder text-dark">Thông Tin Người Dùng</h3>
-                                <span class="text-muted font-weight-bold font-size-sm mt-1">Cập Nhật Thông Tin Người Dùng</span>
+                                <h3 class="card-label font-weight-bolder text-dark">Thông Tin Tài Khoản</h3>
+                                <span class="text-muted font-weight-bold font-size-sm mt-1">Cập Nhật Thông Tin Tài Khoản</span>
                             </div>
                             <div class="card-toolbar">
                                 <button type="reset" class="btn btn-success mr-2" onclick="Update()">Cập Nhật</button>
@@ -372,3 +373,4 @@
         })
     }
 </script>
+
