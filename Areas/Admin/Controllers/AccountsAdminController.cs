@@ -27,7 +27,7 @@ namespace JPGame.Areas.Admin.Controllers
                 AccountName = a.AccountName.Trim(),
                 FullName = a.FullName.Trim(),
                 PhoneNumber = a.Phone.Trim(),
-                DateOfBirth = a.DateOfBirth.Value.ToString("dd/MM/yyyy"),
+                DateOfBirth = a.DateOfBirth.Value,
                 Email = a.Email.Trim(),
                 CreateAt = a.CreateDate,
             });

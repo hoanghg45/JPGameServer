@@ -39,6 +39,8 @@ License: You must have a valid license purchased only from themeforest(the above
     <link href="~/Areas/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
     <!--end::Layout Themes-->
     <link rel="shortcut icon" href="~/Areas/assets/media/logos/favicon.ico" />
+    @*Jquery*@
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -189,15 +191,15 @@ License: You must have a valid license purchased only from themeforest(the above
                                                             <span class="menu-text">Add User</span>
                                                         </a>
                                                     </li>
-                                                    
+
                                                 </ul>
                                             </div>
                                         </li>
-                                      
+
                                     </ul>
                                 </div>
                             </li>
-                            
+
                         </ul>
                         <!--end::Menu Nav-->
                     </div>
@@ -854,7 +856,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!--end::Header Menu Wrapper-->
                         <!--begin::Topbar-->
                         <div class="topbar">
-                           
+
                             <!--begin::Languages-->
                             <div class="dropdown">
                                 <!--begin::Toggle-->
@@ -878,7 +880,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </a>
                                         </li>
                                         <!--end::Item-->
-                                        
                                         <!--begin::Item-->
                                         <li class="navi-item">
                                             <a href="#" class="navi-link">
@@ -889,7 +890,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </a>
                                         </li>
                                         <!--end::Item-->
-                                        
+
                                     </ul>
                                     <!--end::Nav-->
                                 </div>
@@ -2171,7 +2172,6 @@ License: You must have a valid license purchased only from themeforest(the above
         </span>
     </div>
     <!--end::Scrolltop-->
-   
     <!--begin::Demo Panel-->
     <div id="kt_demo_panel" class="offcanvas offcanvas-right p-10">
         <!--begin::Header-->
@@ -2480,9 +2480,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <!--end::Content-->
     </div>
     <!--end::Demo Panel-->
-    <script>
-        var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!--begin::Global Config(global config for global JS scripts)-->
     <script>
         var KTAppSettings = {
@@ -2546,9 +2544,12 @@ License: You must have a valid license purchased only from themeforest(the above
     </script>
     <!--end::Global Config-->
     <!--begin::Global Theme Bundle(used by all pages)-->
+
+
     <script src="~/Areas/assets/plugins/global/plugins.bundle.js"></script>
     <script src="~/Areas/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
     <script src="~/Areas/assets/js/scripts.bundle.js"></script>
+    <!--Jquery-->
     <!--end::Global Theme Bundle-->
     <!--begin::Page Vendors(used by this page)-->
     <script src="~/Areas/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
@@ -2556,6 +2557,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!--begin::Page Scripts(used by this page)-->
     <script src="~/Areas/assets/js/pages/widgets.js"></script>
     <!--end::Page Scripts-->
+
 </body>
 <!--end::Body-->
 

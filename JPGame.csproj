@@ -152,6 +152,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountsAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginAdminController.cs" />
+    <Compile Include="Areas\Admin\Extension\PaginationExtension.cs" />
     <Compile Include="Areas\Security\SessionCheck.cs" />
     <Compile Include="Context.Context.cs">
       <AutoGen>True</AutoGen>
@@ -179,6 +180,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\assets\admin\accounts\AccountsTable.js" />
+    <Content Include="Areas\assets\admin\FormatDate.js" />
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
     <Content Include="Areas\assets\css\pages\error\error-3.css" />
     <Content Include="Areas\assets\css\pages\error\error-4.css" />
