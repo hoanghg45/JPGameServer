@@ -18,17 +18,17 @@ var KTLogin = function() {
 		        form,
 		        {
 		            fields: {
-						username: {
+						account: {
 							validators: {
 								notEmpty: {
-									message: 'Username is required'
+									message: 'Chưa Nhập Tài Khoản'
 								}
 							}
 						},
-						password: {
+						pass: {
 							validators: {
 								notEmpty: {
-									message: 'Password is required'
+									message: 'Chưa Nhập Mật Khẩu'
 								}
 							}
 						}
@@ -46,12 +46,39 @@ var KTLogin = function() {
 		    )
 		    .on('core.form.valid', function() {
 				// Show loading state on button
-				KTUtil.btnWait(formSubmitButton, _buttonSpinnerClasses, "Please wait");
+				KTUtil.btnWait(formSubmitButton, _buttonSpinnerClasses, "Kiểm Tra Thông Tin");
 
 				// Simulate Ajax request
 				setTimeout(function() {
-					KTUtil.btnRelease(formSubmitButton);
-				}, 2000);
+					var formData = {
+						AccountName: $('input[name="account"]').val().trim(),
+						Password: $('input[name="pass"]').val().trim(),
+					}
+					$.ajax({
+						url: '/Login/Logins',
+						type: 'post',
+						data: JSON.stringify(formData),
+						contentType: 'application/json',
+						success: function (data) {
+							if (data.code == 200) {
+								window.location.href = "/trang-chu/"
+							} else {
+								Swal.fire({
+									text: data.msg,
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Tiếp Tục!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-light-primary"
+									}
+								}).then(function () {
+									KTUtil.btnRelease(formSubmitButton);
+									$('input[name="pass"]').val('')
+								});
+							}
+						}
+					})
+				}, 1000);
 		    })
 			.on('core.form.invalid', function() {
 				Swal.fire({
@@ -150,6 +177,10 @@ var KTLogin = function() {
 							notEmpty: {
 								message: 'Yêu Cầu Nhập Tài Khoản'
 							},
+							regexp: {
+								regexp: /^[a-zA-Z0-9]+$/i,
+								message: 'Không Chứa Dấu Và Các Kí Tự Đặc Biệt',
+							},
 							stringLength: {
 								min:10,
 								max: 12,
@@ -161,7 +192,11 @@ var KTLogin = function() {
 						validators: {
 							notEmpty: {
 								message: 'Yêu Cầu Nhập Mật Khẩu'
-							}
+							},
+							stringLength: {
+								min: 6,
+								message: 'Mật Khẩu Lớn Hơn 6 Kí Tự',
+							},
 						}
 					},
 					pass_again: {
@@ -210,6 +245,11 @@ var KTLogin = function() {
 						validators: {
 							notEmpty: {
 								message: 'Yêu Cầu Nhập Số Điện Thoại'
+							},
+							stringLength: {
+								min: 9,
+								max: 11,
+								message: 'Nhập Đúng Số Điện Thoại',
 							},
 						}
 					},
@@ -397,27 +437,27 @@ var KTLogin = function() {
 				DateOfBirth: $('input[name="birth"]').val().trim(),
 			}
 			$.ajax({
-				url: '/Login/Add',
+				url: '/Login/Adds',
 				type: 'post',
 				data: JSON.stringify(formData),
 				contentType: 'application/json',
 				success: function (data) {
 					if (data.code == 200) {
 						Swal.fire({
-							title: 'Xóa Thành Công',
-							text: "",
-							icon: 'success',
+							text: "Đăng Kí Thành Công, Mời Bạn Đăng Nhập",
+							icon: "success",
 							showCancelButton: true,
-							confirmButtonColor: '#3085d6',
-							cancelButtonColor: '#d33',
-							confirmButtonText: 'Quay Về'
-						}).then((result) => {
-							if (result.isConfirmed) {
-								List(pagenum, seach, page)
-							} else {
-								List(pagenum, seach, page)
+							buttonsStyling: false,
+							confirmButtonText: "Đăng Nhập!",
+							customClass: {
+								confirmButton: "btn font-weight-bold btn-primary",
+								cancelButton: "btn font-weight-bold btn-default"
 							}
-						})
+						}).then(function (result) {
+							if (result.value) {
+								window.location.href = "/dang-nhap/"
+							}
+						});
 					} else {
 						Swal.fire(
 							data.msg,
@@ -427,32 +467,7 @@ var KTLogin = function() {
 					}
 				}
 			})
-			Swal.fire({
-				text: "All is good! Please confirm the form submission.",
-				icon: "success",
-				showCancelButton: true,
-				buttonsStyling: false,
-				confirmButtonText: "Yes, submit!",
-				cancelButtonText: "No, cancel",
-				customClass: {
-					confirmButton: "btn font-weight-bold btn-primary",
-					cancelButton: "btn font-weight-bold btn-default"
-				}
-			}).then(function (result) {
-				if (result.value) {
-					form.submit(); // Submit form
-				} else if (result.dismiss === 'cancel') {
-					Swal.fire({
-						text: "Your form has not been submitted!.",
-						icon: "error",
-						buttonsStyling: false,
-						confirmButtonText: "Ok, got it!",
-						customClass: {
-							confirmButton: "btn font-weight-bold btn-primary",
-						}
-					});
-				}
-			});
+	
 		});
     }
 

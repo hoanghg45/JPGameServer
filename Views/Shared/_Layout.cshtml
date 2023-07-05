@@ -20,11 +20,11 @@
     <header class="header-section">
         <div class="container">
             <!-- logo -->
-            <a class="site-logo" href="index.html">
-                <img src="img/logo.png" alt="">
+            <a class="site-logo" href="/trang-chu/">
+                <img src="~/img/logo.png" />
             </a>
             <div class="user-panel">
-                <a href="#">Login</a>  /  <a href="#">Register</a>
+                <a href="/dang-nhap/" id="login">Đăng Nhập</a>  /  <a id="register" href="/dang-ki/">Đăng Kí</a>
             </div>
             <!-- responsive -->
             <div class="nav-switch">
@@ -43,13 +43,11 @@
         </div>
     </header>
     <!-- Header section end -->
-    <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
-    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
@@ -59,6 +57,7 @@
     <script src="~/Scripts/main.js"></script>
     <script src="~/Scripts/map.js"></script>
     <script src="~/Scripts/owl.carousel.min.js"></script>
+    <script src="~/Scripts/layout.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

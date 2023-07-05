@@ -356,6 +356,10 @@
     <script>
         function KeyUpCopy(name) {
             var value = $('input[name="' + name + '"]').val()
+            if (name == "account") {
+                $('input[name="' + name + '"]').val(value.replace(" ",""))
+            }
+           
             $('div[name="' + name + 'copy"]').text(value)
         }
 

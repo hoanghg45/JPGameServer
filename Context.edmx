@@ -11,7 +11,7 @@
           </Key>
           <Property Name="AccountID" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="AccountName" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="FullName" Type="varchar(max)" />
+          <Property Name="FullName" Type="nvarchar(max)" />
           <Property Name="DateOfBirth" Type="date" />
           <Property Name="Email" Type="varchar(max)" />
           <Property Name="Phone" Type="varchar" MaxLength="50" />
@@ -26,10 +26,10 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="nchar" MaxLength="10" Nullable="false" />
-          <Property Name="UserName" Type="nchar" MaxLength="10" />
-          <Property Name="Name" Type="nchar" MaxLength="10" />
-          <Property Name="Password" Type="nchar" MaxLength="10" />
+          <Property Name="UserID" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserName" Type="nchar" MaxLength="100" />
+          <Property Name="Name" Type="nchar" MaxLength="200" />
+          <Property Name="Password" Type="nchar" MaxLength="200" />
           <Property Name="Role" Type="nchar" MaxLength="10" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
@@ -51,7 +51,7 @@
           </Key>
           <Property Name="AccountID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="AccountName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -66,10 +66,10 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="UserName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserID" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
           <Property Name="Role" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
