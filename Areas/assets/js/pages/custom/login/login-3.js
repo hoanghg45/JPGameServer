@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 // Class Definition
 var KTLogin = function() {
@@ -52,54 +52,13 @@ var KTLogin = function() {
 				setTimeout(function() {
 					KTUtil.btnRelease(formSubmitButton);
 				}, 2000);
-
-				// Form Validation & Ajax Submission: https://formvalidation.io/guide/examples/using-ajax-to-submit-the-form
-				/**
-		        FormValidation.utils.fetch(formSubmitUrl, {
-		            method: 'POST',
-					dataType: 'json',
-		            params: {
-		                name: form.querySelector('[name="username"]').value,
-		                email: form.querySelector('[name="password"]').value,
-		            },
-		        }).then(function(response) { // Return valid JSON
-					// Release button
-					KTUtil.btnRelease(formSubmitButton);
-
-					if (response && typeof response === 'object' && response.status && response.status == 'success') {
-						Swal.fire({
-			                text: "All is cool! Now you submit this form",
-			                icon: "success",
-			                buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
-							customClass: {
-								confirmButton: "btn font-weight-bold btn-light-primary"
-							}
-			            }).then(function() {
-							KTUtil.scrollTop();
-						});
-					} else {
-						Swal.fire({
-			                text: "Sorry, something went wrong, please try again.",
-			                icon: "error",
-			                buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
-							customClass: {
-								confirmButton: "btn font-weight-bold btn-light-primary"
-							}
-			            }).then(function() {
-							KTUtil.scrollTop();
-						});
-					}
-		        });
-				**/
 		    })
 			.on('core.form.invalid', function() {
 				Swal.fire({
-					text: "Sorry, looks like there are some errors detected, please try again.",
+					text: "Xin Lỗi, Nhập Đủ Và Đúng, Vui Lòng Thử Lại.",
 					icon: "error",
 					buttonsStyling: false,
-					confirmButtonText: "Ok, got it!",
+					confirmButtonText: "Tiếp Tục!",
 					customClass: {
 						confirmButton: "btn font-weight-bold btn-light-primary"
 					}
@@ -156,10 +115,10 @@ var KTLogin = function() {
 		    })
 			.on('core.form.invalid', function() {
 				Swal.fire({
-					text: "Sorry, looks like there are some errors detected, please try again.",
+					text: "Xin Lỗi, Nhập Đủ Và Đúng, Vui Lòng Thử Lại.",
 					icon: "error",
 					buttonsStyling: false,
-					confirmButtonText: "Ok, got it!",
+					confirmButtonText: "Tiếp Tục",
 					customClass: {
 						confirmButton: "btn font-weight-bold btn-light-primary"
 					}
@@ -186,37 +145,38 @@ var KTLogin = function() {
 			form,
 			{
 				fields: {
-					fname: {
+					account: {
 						validators: {
 							notEmpty: {
-								message: 'First name is required'
-							}
-						}
-					},
-					lname: {
-						validators: {
-							notEmpty: {
-								message: 'Last Name is required'
-							}
-						}
-					},
-					phone: {
-						validators: {
-							notEmpty: {
-								message: 'Phone is required'
-							}
-						}
-					},
-					email: {
-						validators: {
-							notEmpty: {
-								message: 'Email is required'
+								message: 'Yêu Cầu Nhập Tài Khoản'
 							},
-							emailAddress: {
-								message: 'The value is not a valid email address'
+							stringLength: {
+								min:10,
+								max: 12,
+								message: 'Tài khoản Từ 10-12 Kí Tự',
+							},
+						}
+					},
+					pass: {
+						validators: {
+							notEmpty: {
+								message: 'Yêu Cầu Nhập Mật Khẩu'
 							}
 						}
-					}
+					},
+					pass_again: {
+						validators: {
+							notEmpty: {
+								message: 'Nhập Lại Mật khẩu'
+							},
+							identical: {
+								compare: function () {
+									return form.querySelector('[name="pass"]').value;
+								},
+								message: 'Mật Khẩu Không Khớp'
+                            }
+						}
+					},
 				},
 				plugins: {
 					trigger: new FormValidation.plugins.Trigger(),
@@ -224,7 +184,12 @@ var KTLogin = function() {
 					bootstrap: new FormValidation.plugins.Bootstrap({
 						//eleInvalidClass: '',
 						eleValidClass: '',
-					})
+					}),
+					icon: new FormValidation.plugins.Icon({
+						valid: 'fa fa-check',
+						invalid: 'fa fa-times',
+						validating: 'fa fa-refresh',
+					}),
 				}
 			}
 		));
@@ -234,41 +199,37 @@ var KTLogin = function() {
 			form,
 			{
 				fields: {
-					address1: {
+					fullname: {
 						validators: {
 							notEmpty: {
-								message: 'Address is required'
+								message: 'Yêu Cầu Nhập Tên'
 							}
 						}
 					},
-					postcode: {
+					phone: {
 						validators: {
 							notEmpty: {
-								message: 'Postcode is required'
-							}
+								message: 'Yêu Cầu Nhập Số Điện Thoại'
+							},
 						}
 					},
-					city: {
+					email: {
 						validators: {
 							notEmpty: {
-								message: 'City is required'
-							}
+								message: 'Yêu Cầu Nhập Địa Chỉ Email'
+							},
+							emailAddress: {
+								message: 'Yêu Cầu Nhập Đúng Email',
+							},
+						},
+					},
+					birth: {
+						validators: {
+							notEmpty: {
+								message: 'Yêu Cầu Nhập Ngày Sinh'
+							},
 						}
 					},
-					state: {
-						validators: {
-							notEmpty: {
-								message: 'State is required'
-							}
-						}
-					},
-					country: {
-						validators: {
-							notEmpty: {
-								message: 'Country is required'
-							}
-						}
-					}
 				},
 				plugins: {
 					trigger: new FormValidation.plugins.Trigger(),
@@ -276,7 +237,7 @@ var KTLogin = function() {
 					bootstrap: new FormValidation.plugins.Bootstrap({
 						//eleInvalidClass: '',
 						eleValidClass: '',
-					})
+					}),
 				}
 			}
 		));
@@ -385,6 +346,9 @@ var KTLogin = function() {
 
 		// Validation before going to next page
 		wizardObj.on('change', function (wizard) {
+			//if ($('input[name="pass_again"]').val().trim() != $('input[name="pass"]').val().trim()) {
+			//	return;
+   //         }
 			if (wizard.getStep() > wizard.getNewStep()) {
 				return; // Skip if stepped back
 			}
@@ -400,10 +364,10 @@ var KTLogin = function() {
 						KTUtil.scrollTop();
 					} else {
 						Swal.fire({
-							text: "Sorry, looks like there are some errors detected, please try again.",
+							text: "Xin Lỗi, Nhập Đủ Và Đúng, Vui Lòng Thử Lại.",
 							icon: "error",
 							buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
+							confirmButtonText: "Tiếp Tục!",
 							customClass: {
 								confirmButton: "btn font-weight-bold btn-light"
 							}
@@ -424,6 +388,45 @@ var KTLogin = function() {
 
 		// Submit event
 		wizardObj.on('submit', function (wizard) {
+			var formData = {
+				AccountName: $('input[name="account"]').val().trim(),
+				Password: $('input[name="pass"]').val().trim(),
+				FullName: $('input[name="fullname"]').val().trim(),
+				Phone: $('input[name="phone"]').val().trim(),
+				Email: $('input[name="email"]').val().trim(),
+				DateOfBirth: $('input[name="birth"]').val().trim(),
+			}
+			$.ajax({
+				url: '/Login/Add',
+				type: 'post',
+				data: JSON.stringify(formData),
+				contentType: 'application/json',
+				success: function (data) {
+					if (data.code == 200) {
+						Swal.fire({
+							title: 'Xóa Thành Công',
+							text: "",
+							icon: 'success',
+							showCancelButton: true,
+							confirmButtonColor: '#3085d6',
+							cancelButtonColor: '#d33',
+							confirmButtonText: 'Quay Về'
+						}).then((result) => {
+							if (result.isConfirmed) {
+								List(pagenum, seach, page)
+							} else {
+								List(pagenum, seach, page)
+							}
+						})
+					} else {
+						Swal.fire(
+							data.msg,
+							'',
+							'erorr'
+						)
+					}
+				}
+			})
 			Swal.fire({
 				text: "All is good! Please confirm the form submission.",
 				icon: "success",
