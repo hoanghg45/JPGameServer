@@ -182,6 +182,7 @@
   <ItemGroup>
     <Content Include="Areas\assets\admin\accounts\AccountsTable.js" />
     <Content Include="Areas\assets\admin\FormatDate.js" />
+    <Content Include="Areas\assets\admin\layout.js" />
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
     <Content Include="Areas\assets\css\pages\error\error-3.css" />
     <Content Include="Areas\assets\css\pages\error\error-4.css" />
