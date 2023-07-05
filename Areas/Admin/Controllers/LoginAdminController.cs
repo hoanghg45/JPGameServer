@@ -16,9 +16,11 @@ namespace JPGame.Areas.Admin.Controllers
             return View();
         }
 
-        public JsonResult CheckLogin(string username, string password)
+        public JsonResult CheckLogin(FormCollection collection)
         {
 
+            var username = collection["username"];
+            var password = collection["password"];
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 return Json(
@@ -45,7 +47,7 @@ namespace JPGame.Areas.Admin.Controllers
 
             }
             var user = db.Users.Where(u => u.UserName.Trim().Equals(username)).FirstOrDefault();
-            var checkpass = BCrypt.Net.BCrypt.Verify(password, user.Password);
+            var checkpass = BCrypt.Net.BCrypt.Verify(password, user.Password.Trim());
             if (!checkpass)
             {
                 return Json(
@@ -58,6 +60,7 @@ namespace JPGame.Areas.Admin.Controllers
               , JsonRequestBehavior.AllowGet
               );
             }
+            Session["UserID"] = user.UserID;
 
 
             return Json(

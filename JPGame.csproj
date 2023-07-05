@@ -149,7 +149,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AccountsAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginAdminController.cs" />
+    <Compile Include="Areas\Security\SessionCheck.cs" />
     <Compile Include="Context.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -176,6 +179,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\assets\admin\login\AdminLogin.js" />
     <Content Include="Areas\assets\css\pages\error\error-3.css" />
     <Content Include="Areas\assets\css\pages\error\error-4.css" />
     <Content Include="Areas\assets\css\pages\error\error-5.css" />
@@ -2213,7 +2217,7 @@
     <Content Include="Areas\assets\plugins\global\fonts\summernote\summernote.woff2" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Admin\Views\Login\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\LoginAdmin\Index.cshtml" />
     <EntityDeploy Include="Context.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Context.Designer.cs</LastGenOutput>
@@ -2225,6 +2229,8 @@
     <Content Include="icon-fonts\fontawesome-webfont.eot" />
     <Content Include="icon-fonts\fontawesome-webfont.woff" />
     <Content Include="icon-fonts\fontawesome-webfont.woff2" />
+    <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\AccountsAdmin\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
