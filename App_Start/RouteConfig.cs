@@ -13,6 +13,11 @@ namespace JPGame
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
+name: "AccountInformation",
+url: "thong-tin-tai-khoan",
+defaults: new { controller = "Home", action = "AccountInformation", id = UrlParameter.Optional }
+);
+            routes.MapRoute(
 name: "Information",
 url: "thong-tin-nguoi-dung",
 defaults: new { controller = "Home", action = "Information", id = UrlParameter.Optional }
