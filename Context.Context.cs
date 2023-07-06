@@ -27,5 +27,6 @@ namespace JPGame
     
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Module> Modules { get; set; }
     }
 }

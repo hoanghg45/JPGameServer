@@ -7,6 +7,9 @@
       <Diagram DiagramId="0d5ecd61f773402b95cc67c13db5c68a" Name="Diagram1">
         <EntityTypeShape EntityType="Model.Account" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Module" Width="1.5" PointX="5" PointY="0.75" />
+        <AssociationConnector Association="Model.FK_Modules_Users" />
+        <AssociationConnector Association="Model.FK_Modules_Users1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

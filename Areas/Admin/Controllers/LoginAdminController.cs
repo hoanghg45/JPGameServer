@@ -89,7 +89,7 @@ namespace JPGame.Areas.Admin.Controllers
              new
              {
                  status = "error",
-                 message = "Vui lòng nhập đầy đủ thông tin!"
+                 message = "Tài khoản của bạn không tồn tại vui lòng kiểm tra lại!"
 
              }
              , JsonRequestBehavior.AllowGet
