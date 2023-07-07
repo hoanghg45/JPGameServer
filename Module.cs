@@ -11,15 +11,13 @@ namespace JPGame
 {
     using System;
     using System.Collections.Generic;
-    using System.Web.Mvc;
-
+    
     public partial class Module
     {
         public int ModulesID { get; set; }
         public string Address { get; set; }
         public string Hotline { get; set; }
         public string Email { get; set; }
-        [AllowHtml]
         public string AboutMe { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }

@@ -28,5 +28,8 @@ namespace JPGame
         public Nullable<bool> Status { get; set; }
         public string Avatar { get; set; }
         public Nullable<System.DateTime> Wedding { get; set; }
+        public string MemberCardLevelID { get; set; }
+    
+        public virtual MemberCardLevel MemberCardLevel { get; set; }
     }
 }

@@ -2,11 +2,12 @@
 var isLoadingData = false;
 var isFull = false;
 (function DataTable() {
-   
+
     ShowTable(page)
+    //Cuộn table
     $('.table-responsive').scroll(function () {
-       /* var element = $(this)[0];*/
-        var scrollTop = $(this).scrollTop()+3;
+        /* var element = $(this)[0];*/
+        var scrollTop = $(this).scrollTop() + 3;
         var scrollHeight = $(this)[0].scrollHeight;
         var windowHeight = $(this).outerHeight();
 
@@ -17,13 +18,15 @@ var isFull = false;
             ShowTable(page);
         }
     });
+    //Khởi tạo select
+    initSelect()
 })()
 
 function ShowTable(pagenumber) {
-    
+
     $.ajax({
         type: "GET",
-        url: "/AccountsAdmin/DataTable",
+        url: "/MemberCardLevel/DataTable",
         data: {
             page: pagenumber
         },
@@ -39,13 +42,11 @@ function ShowTable(pagenumber) {
                 $.each(data.data, function (i, v) {
                     let tr = `<tr>
                 <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
-                <td>${v.AccountName}</td>
-                <td>${v.FullName}</td>
-                <td>${formatDate(v.DateOfBirth)}</td>
-                <td>${v.Email}</td>
-                <td>${v.PhoneNumber}</td>
-                <td></td>
-                <td></td>
+                <td>${v.CardLevel}</td>
+                <td>${v.LevelFee}</td>
+                <td>${v.GiftLevelName}</td>
+                <td>${v.Vipzone}</td>
+               
 
                 </tr>`
                     body.append(tr)
@@ -61,9 +62,9 @@ function ShowTable(pagenumber) {
             $('.spinner').hide();
             isLoadingData = false;
             $('#QtyNote').text(`Displaying ${data.to} of ${data.total} records`)
-            
-            
-           
+
+
+
         },
         error: function () {
             // Xử lý lỗi (nếu cần thiết)
@@ -72,4 +73,10 @@ function ShowTable(pagenumber) {
             isLoadingData = false;
         }
     })
+}
+function CreateModal() {
+    $('#createModal').modal()
+}
+function initSelect() {
+    $('.select2').select2();
 }

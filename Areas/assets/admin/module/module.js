@@ -22,7 +22,7 @@ var Add = function () {
                     Address: {
                         validators: {
                             notEmpty: {
-                                message: 'Vui lòng nhập đị chỉ'
+                                message: 'Vui lòng nhập địa chỉ'
                             },
                             
                         }

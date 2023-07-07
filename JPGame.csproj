@@ -152,9 +152,13 @@
     <Compile Include="Areas\Admin\Controllers\AccountsAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MemberCardLevelController.cs" />
     <Compile Include="Areas\Admin\Controllers\ModulesAdminController.cs" />
     <Compile Include="Areas\Admin\Extension\PaginationExtension.cs" />
     <Compile Include="Areas\Security\SessionCheck.cs" />
+    <Compile Include="CardLevel.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="Context.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -172,8 +176,17 @@
     </Compile>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Gift.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GiftType.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="MemberCardLevel.cs">
+      <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="Module.cs">
       <DependentUpon>Context.tt</DependentUpon>
@@ -182,12 +195,16 @@
     <Compile Include="User.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="VIPGift.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\assets\admin\accounts\AccountsTable.js" />
     <Content Include="Areas\assets\admin\FormatDate.js" />
     <Content Include="Areas\assets\admin\layout.js" />
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
+    <Content Include="Areas\assets\admin\membercardlevel\MemberCardLevel.js" />
     <Content Include="Areas\assets\admin\module\module.js" />
     <Content Include="Areas\assets\css\pages\error\error-3.css" />
     <Content Include="Areas\assets\css\pages\error\error-4.css" />
@@ -2241,6 +2258,7 @@
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Areas\Admin\Views\AccountsAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ModulesAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCardLevel\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
