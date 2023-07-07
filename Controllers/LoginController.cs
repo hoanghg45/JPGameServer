@@ -86,6 +86,30 @@ namespace JPGame.Controllers
             }
         }
         [HttpPost]
+        public JsonResult ChangePass(string pass,string new_pass)
+        {
+            try
+            {
+                var user = (Account)Session["account"];
+                var account = db.Accounts.Find(user.AccountID);
+                if (BCrypt.Net.BCrypt.Verify(pass, account.Password))
+                {
+                    account.Password = BCrypt.Net.BCrypt.HashPassword(new_pass);
+                    db.SaveChanges();
+                    return Json(new { code = 200, msg = "Đổi Mật Khẩu Thành Công" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { code = 500,msg="Mật Khẩu Không Đúng!" }, JsonRequestBehavior.AllowGet);
+                }
+                
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
         public JsonResult Logins(Account formData)
         {
             try

@@ -1,0 +1,263 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Abel');
+@import url("https://cdn.streamelements.com/scripts/animate.min.css");
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+
+#container {
+    position: relative;
+    width: 100%;
+    height:100%;
+    overflow: hidden;
+    --font-mazi: Mazarini; /* Maziho font */
+    --font-mazi-rozbity: "Mazarini Logo"; /* Maziho font s posunutýma písmenkama */
+    --font-money-size: 50px; /* Velikost fontu */
+    --font-color: white; /* Barva textu */
+    --key-color: green; /* Barva klíčování pro efekty */
+    --space-between-money-and-nick: 50px; /* Mezera mezi nickem a penězi */
+    --max-width-message: 700px; /* Maximální šířka textu zprávy */
+    --text-shadow: 0px 0px 3px black; /* Stín písmenek */
+}
+
+
+.awsome-text-money-container {
+    color: transparent;
+    margin-bottom: var(--space-between-money-and-nick);
+}
+
+    .awsome-text-money-container > div.start, .awsome-text-money-container > div.midi {
+        color: var(--font-color);
+        text-shadow: var(--text-shadow);
+    }
+
+    .awsome-text-money-container > div > div {
+        font-size: var(--font-money-size);
+        font-family: var(--font-mazi);
+        position: absolute;
+        top: 0px;
+        text-transform: uppercase;
+    }
+
+        .awsome-text-money-container > div > div > * {
+            position: relative;
+            /*color: var(--font-color);*/
+        }
+
+            .awsome-text-money-container > div > div > *:nth-child(1) {
+                position: relative;
+            }
+
+    .awsome-text-money-container.ended > div > div > *:nth-child(2),
+    .awsome-text-money-container.ended > div > div > *:nth-child(3),
+    .awsome-text-money-container.ended > div > div > *:nth-child(4),
+    .awsome-text-money-container.ended > div > div > *:nth-child(5),
+    .awsome-text-money-container.ended > div > div > *:nth-child(6) {
+        font-family: var(--font-mazi-rozbity) !important;
+    }
+.white {
+    color: transparent;
+    text-shadow: none;
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+}
+.circle{
+    border-radius:50%
+}
+.card_info {
+    width: 450px;
+    height: 250px;
+    background-color: #fff;
+    background: linear-gradient(#f8f8f8, #fff);
+    box-shadow: 0 8px 16px -8px rgba(0,0,0,0.4);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    margin: 1.5rem;
+}
+
+    .card_info h1 {
+        text-align: center;
+    }
+
+    .card_info .additional {
+        position: absolute;
+        width: 150px;
+        height: 100%;
+        background: linear-gradient(silver, lightgray);
+        transition: width 0.4s;
+        overflow: hidden;
+        z-index: 2;
+    }
+
+    .card_info.green .additional {
+        background: linear-gradient(silver, lightgray);
+    }
+
+
+    .card_info:hover .additional {
+        width: 100%;
+        border-radius: 0 5px 5px 0;
+    }
+
+    .card_info .additional .user-card {
+        width: 150px;
+        height: 100%;
+        position: relative;
+        float: left;
+    }
+
+        .card_info .additional .user-card::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 10%;
+            right: -2px;
+            height: 80%;
+            border-left: 2px solid rgba(0,0,0,0.025);
+            
+        }
+
+        .card_info .additional .user-card .level,
+        .card_info .additional .user-card .points {
+            top: 15%;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 0.75em;
+            font-weight: bold;
+            background: rgba(0,0,0,0.15);
+            padding: 0.125rem 0.75rem;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+
+        .card_info .additional .user-card .points {
+            top: 85%;
+        }
+
+        .card_info .additional .user-card svg {
+            top: 50%;
+        }
+
+    .card_info .additional .more-info {
+        padding: 5%;
+        width: 300px;
+        float: left;
+        position: absolute;
+        left: 150px;
+        height: 100%;
+    }
+
+        .card_info .additional .more-info h1 {
+            color: #fff;
+            margin-bottom: 0;
+        }
+
+    .card_info.green .additional .more-info h1 {
+        color: #224C36;
+    }
+
+    .card_info .additional .coords {
+        margin: 0 1rem;
+        color: #fff;
+        font-size: 1rem;
+    }
+
+    .card_info.green .additional .coords {
+        color: #325C46;
+    }
+
+    .card_info .additional .coords span + span {
+        float: right;
+    }
+
+    .card_info .additional .stats {
+        font-size: 2rem;
+        display: flex;
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        right: 1rem;
+        top: auto;
+        color: #fff;
+    }
+
+    .card_info.green .additional .stats {
+        color: #325C46;
+    }
+
+    .card_info .additional .stats > div {
+        flex: 1;
+        text-align: center;
+    }
+
+    .card_info .additional .stats i {
+        display: block;
+    }
+
+    .card_info .additional .stats div.title {
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .card_info .additional .stats div.value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+        .card_info .additional .stats div.value.infinity {
+            font-size: 2.5rem;
+        }
+
+    .card_info .general {
+        background: linear-gradient(silver, lightgray);
+        width: 300px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        box-sizing: border-box;
+        padding: 5%;
+    }
+
+        .card_info .general .more {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 0.9em;
+        }
+@media screen and (max-width: 600px) {
+    .card_info {
+        width: 100%;
+        height: auto;
+    }
+
+        .card_info .additional,
+        .card_info .general {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .card_info:hover .additional {
+            width: 100%;
+            height: 100%;
+        }
+        .card_info:hover .user-card {
+            display:none
+        }
+        .card_info .additional .more-info {
+            left: 0;
+            width: 100%;
+            padding: 2%;
+        }
+
+        .card_info .general {
+            padding: 2%;
+        }
+}
