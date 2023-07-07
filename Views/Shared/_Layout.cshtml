@@ -33,7 +33,7 @@
             <!-- site menu -->
             <nav class="main-menu">
                 <ul>
-                    <li><a href="">Home</a></li>
+                    <li><a href="/trang-chu/">Trang Chủ</a></li>
                     <li><a href="">Games</a></li>
                     <li><a href="">Blog</a></li>
                     <li><a href="">Forums</a></li>
@@ -49,15 +49,14 @@
         <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
     </footer>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/jquery.marquee.min.js"></script>
+    @RenderSection("scripts", required: false)
     <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/owl.carousel.min.js"></script>
+    <script src="~/Scripts/jquery.marquee.min.js"></script>
     <script src="~/Scripts/main.js"></script>
     <script src="~/Scripts/map.js"></script>
-    <script src="~/Scripts/owl.carousel.min.js"></script>
     <script src="~/Scripts/layout.js"></script>
-    @RenderSection("scripts", required: false)
+
 </body>
 </html>

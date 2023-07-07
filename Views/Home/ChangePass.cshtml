@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Thông Tin Tài Khoản";
+    ViewBag.Title = "Đổi Mật Khẩu";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -47,7 +47,7 @@
                             <!--begin::User-->
                             <div class="d-flex align-items-center">
                                 <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
-                                    <div name="avatar" class="symbol-label" style="background-image:url('')"></div>
+                                    <div class="symbol-label" name="avatar" style="background-image:url('')"></div>
                                     <i class="symbol-badge bg-success"></i>
                                 </div>
                                 <div>
@@ -89,7 +89,7 @@
                                     </a>
                                 </div>
                                 <div class="navi-item mb-2">
-                                    <a href="/thong-tin-tai-khoan/" class="navi-link py-4 active">
+                                    <a href="/thong-tin-tai-khoan/" class="navi-link py-4 ">
                                         <span class="navi-icon mr-2">
                                             <span class="svg-icon">
                                                 <!--begin::Svg Icon | path:assets/media/svg/icons/Code/Compiling.svg-->
@@ -107,7 +107,7 @@
                                     </a>
                                 </div>
                                 <div class="navi-item mb-2">
-                                    <a href="/doi-mat-khau/" class="navi-link py-4 ">
+                                    <a href="/doi-mat-khau/" class="navi-link py-4 active">
                                         <span class="navi-icon mr-2">
                                             <span class="svg-icon">
                                                 <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Shield-user.svg-->
@@ -122,12 +122,13 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                         </span>
-                                        <span class="navi-text font-size-lg">Đổi Mật Khẩu</span>
+                                        <span class="navi-text font-size-lg">Đổi Mật khẩu</span>
                                         <span class="navi-label">
                                             <span class="label label-light-danger label-rounded font-weight-bold">5</span>
                                         </span>
                                     </a>
                                 </div>
+
                                 <div class="navi-item mb-2">
                                     <a href="#" class="navi-link py-4" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                         <span class="navi-icon mr-2">
@@ -146,6 +147,7 @@
                                         <span class="navi-text font-size-lg">Thẻ Ngân Hàng</span>
                                     </a>
                                 </div>
+
                             </div>
                             <!--end::Nav-->
                         </div>
@@ -157,8 +159,18 @@
                 <div class="flex-row-fluid ml-lg-8">
                     <!--begin::Card-->
                     <div class="card card-custom card-stretch">
+                        <!--begin::Header-->
+                        <div class="card-header py-3">
+                            <div class="card-title align-items-start flex-column">
+                                <h3 class="card-label font-weight-bolder text-dark">Đổi Mật Khẩu</h3>
+                                <span class="text-muted font-weight-bold font-size-sm mt-1">Cập Nhật Mật Khẩu Người Dùng</span>
+                            </div>
+                            <div class="card-toolbar">
+                                <button type="reset" class="btn btn-success mr-2" onclick="Update()">Cập Nhật</button>
+                            </div>
+                        </div>
+                        <!--end::Header-->
                         <!--begin::Form-->
-                        <link href="~/Content/Card.css" rel="stylesheet" />
                         <form class="form">
                             <!--begin::Body-->
                             <div class="card-body">
@@ -169,64 +181,22 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    @*<label class="col-xl-3 col-lg-3 col-form-label">Họ Và Tên</label>
-                                        <div class="col-lg-9 col-xl-6">
-                                            <input class="form-control form-control-lg form-control-solid" type="text" value="" name="fullname">
-                                        </div>*@
-                                    <div class="card_info" id="hover">
-                                        <div class="additional">
-                                            <div class="user-card">
-                                                <div class="level center">
-                                                    Level 13
-                                                </div>
-                                                <div class="points center">
-                                                    5,312 Points
-                                                </div>
-                                            </div>
-                                            <div class="more-info">
-                                                <h1 name="fullname"></h1>
-                                                <div class="coords">
-                                                    <span>Level</span>
-                                                    <span>Points</span>
-                                                </div>
-                                                <div class="coords">
-                                                    <span>1</span>
-                                                    <span>1,234</span>
-                                                </div>
-                                         
-                                                <div class="stats">
-                                                    <div>
-                                                        <div class="title">Awards</div>
-                                                        <i class="fa fa-trophy"></i>
-                                                        <div class="value">2</div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="title">Matches</div>
-                                                        <i class="fa fa-gamepad"></i>
-                                                        <div class="value">27</div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="title">Pals</div>
-                                                        <i class="fa fa-group"></i>
-                                                        <div class="value">123</div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="title">Coffee</div>
-                                                        <i class="fa fa-coffee"></i>
-                                                        <div class="value infinity">∞</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="general">
-                                            <h1 style="color:white" name="fullname"></h1>
-                                            <h4 style="text-align:center;color:white">Số Dư Tài Khoản:</h4>
-                                            <div id="container">
-                                                <div class="awsome-text-money-container">
-                                                    <div>500</div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <label class="col-xl-3 col-lg-3 col-form-label text-alert">Mật Khẩu Hiện Tại</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <input type="password" class="form-control form-control-lg form-control-solid mb-2" name="pass" value="" placeholder="Mật Khẩu Hiện Tại">
+                                        <a class="text-sm font-weight-bold">Quên Mật Khẩu Liên Hệ Hotline:</a>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Mật Khẩu Mới</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <input class="form-control form-control-lg form-control-solid" type="password" placeholder="Mật Khẩu Mới" name="new_pass">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Nhập Lại Mật Khẩu Mới</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <input class="form-control form-control-lg form-control-solid" type="password" placeholder="Nhập Lại Mật Khẩu Mới" name="pass_again">
                                     </div>
                                 </div>
                             </div>
@@ -243,7 +213,6 @@
     <!--end::Entry-->
 </div>
 
-
 <script src="~/Areas/assets/plugins/global/plugins.bundle.js"></script>
 <script src="~/Areas/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
 <script src="~/Areas/assets/js/scripts.bundle.js"></script>
@@ -252,4 +221,34 @@
 <script src="~/Areas/assets/js/pages/widgets.js"></script>
 <script src="~/Areas/assets/js/pages/custom/profile/profile.js"></script>
 <script src="~/Areas/assets/admin/FormatDate.js"></script>
-<script src="~/Scripts/textMoney.js"></script>
+<script>
+    function Update() {
+        var pass = $('input[name="pass"]').val().trim()
+        var new_pass = $('input[name="new_pass"]').val().trim()
+        var pass_again = $('input[name="pass_again"]').val().trim()
+        if (new_pass.length < 6) {
+            toastr.error("Mật Khẩu Phải Lớn Hơn 6 Kí Tự!");
+            return;
+        }
+        if (new_pass != pass_again) {
+            toastr.error("Mật Khẩu Nhập Lại Không Khớp!");
+            return;
+        }
+        $.ajax({
+            url: '/Login/ChangePass',
+            type: 'post',
+            data: { pass, new_pass},
+            success: function (data) {
+                if (data.code == 200) {
+                    toastr.success(data.msg)
+                    setTimeout(function () {
+                        window.location.href = "/doi-mat-khau/"
+                    },1000)
+                } else {
+                    toastr.error(data.msg);
+                }
+            }
+        })
+    }
+</script>
+

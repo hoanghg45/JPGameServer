@@ -27,5 +27,11 @@ namespace JPGame
     
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<CardLevel> CardLevels { get; set; }
+        public virtual DbSet<Gift> Gifts { get; set; }
+        public virtual DbSet<GiftType> GiftTypes { get; set; }
+        public virtual DbSet<MemberCardLevel> MemberCardLevels { get; set; }
+        public virtual DbSet<Module> Modules { get; set; }
+        public virtual DbSet<VIPGift> VIPGifts { get; set; }
     }
 }

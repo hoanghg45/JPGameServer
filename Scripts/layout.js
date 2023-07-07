@@ -4,14 +4,15 @@
         type: 'get',
         success: function (data) {
             if (data.code == 200) {
-                $('#login').text("Thông Tin Của " + data.user.FullName).attr("href", "/thong-tin-nguoi-dung/")
+                $('#login').text("Thông Tin").attr("href", "/thong-tin-nguoi-dung/")
                 $('#register').text("Đăng Xuất").attr("href", "").attr('name', 'logout')
-                $('a[name="fullname"],input[name = "fullname"]').text(data.user.FullName).val(data.user.FullName)
+                $('a[name="fullname"],input[name="fullname"],h1[name="fullname"]').text(data.user.FullName).val(data.user.FullName)
                 $('a[name="email"],input[name="email"]').text(data.user.Email).val(data.user.Email)
                 $('a[name="phone"],input[name="phone"]').text(data.user.Phone).val(data.user.Phone)
                 $('input[name="birth"]').val(formatDate(data.user.DateOfBirth))
                 $('input[name="wedding"]').val(formatDate(data.user.Wedding))
                 $('div[name="avatar"]').css("background-image", "url('" + data.user.Avatar + "')")
+                $('img[name="avatar"]').attr("src", data.user.Avatar)
                 $('#picturefile').val(data.user.Avatar)
             } else {
                $('#login').text("Đăng Nhập").attr("href","/dang-nhap/")
@@ -44,3 +45,21 @@ function formatDate(jsonDate) {
         padTo2Digits(date.getDate()),
     ].join('-');
 }
+
+toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": true,
+    "positionClass": "toast-top-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "show",
+    "hideMethod": "slideUp"
+};
