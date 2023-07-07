@@ -13,7 +13,6 @@
           <Property Name="AccountName" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Avatar" Type="nvarchar(max)" />
           <Property Name="FullName" Type="nvarchar(max)" />
-          <Property Name="MemberCardLevelID" Type="varchar" MaxLength="50" />
           <Property Name="DateOfBirth" Type="date" />
           <Property Name="Wedding" Type="date" />
           <Property Name="Email" Type="varchar(max)" />
@@ -24,46 +23,6 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
-        </EntityType>
-        <EntityType Name="CardLevel">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="LevelName" Type="nvarchar" MaxLength="200" />
-          <Property Name="LevelFee" Type="float" />
-          <Property Name="Color" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="Gift">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="GiftLevelName" Type="nvarchar(max)" />
-          <Property Name="GiftTypeID" Type="varchar" MaxLength="50" />
-          <Property Name="RewardRate" Type="float" />
-          <Property Name="PointPlus" Type="float" />
-        </EntityType>
-        <EntityType Name="GiftType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="SpecialDay" Type="bit" />
-          <Property Name="Holiday" Type="bit" />
-          <Property Name="Personal" Type="bit" />
-        </EntityType>
-        <EntityType Name="MemberCardLevel">
-          <Key>
-            <PropertyRef Name="LevelID" />
-          </Key>
-          <Property Name="LevelID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="CardLevelID" Type="varchar" MaxLength="50" />
-          <Property Name="GiftLevelID" Type="varchar" MaxLength="50" />
-          <Property Name="VIP" Type="bit" />
-          <Property Name="VIPGiftID" Type="varchar" MaxLength="50" />
-          <Property Name="Balance" Type="float" />
-          <Property Name="Points" Type="float" />
         </EntityType>
         <EntityType Name="Modules">
           <Key>
@@ -95,75 +54,6 @@
           <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
         </EntityType>
-        <EntityType Name="VIPGift">
-          <Key>
-            <PropertyRef Name="VIPGiftID" />
-          </Key>
-          <Property Name="VIPGiftID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Moctail" Type="bit" />
-          <Property Name="VipRoom" Type="bit" />
-          <Property Name="Discount" Type="float" />
-        </EntityType>
-        <Association Name="FK_Account_MemberCardLevel">
-          <End Role="MemberCardLevel" Type="Self.MemberCardLevel" Multiplicity="0..1" />
-          <End Role="Account" Type="Self.Account" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberCardLevel">
-              <PropertyRef Name="LevelID" />
-            </Principal>
-            <Dependent Role="Account">
-              <PropertyRef Name="MemberCardLevelID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Gift_GitType">
-          <End Role="GiftType" Type="Self.GiftType" Multiplicity="0..1" />
-          <End Role="Gift" Type="Self.Gift" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GiftType">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Gift">
-              <PropertyRef Name="GiftTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardLevel_CardLevel">
-          <End Role="CardLevel" Type="Self.CardLevel" Multiplicity="0..1" />
-          <End Role="MemberCardLevel" Type="Self.MemberCardLevel" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CardLevel">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="MemberCardLevel">
-              <PropertyRef Name="CardLevelID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardLevel_Gift">
-          <End Role="Gift" Type="Self.Gift" Multiplicity="0..1" />
-          <End Role="MemberCardLevel" Type="Self.MemberCardLevel" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Gift">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="MemberCardLevel">
-              <PropertyRef Name="GiftLevelID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardLevel_VIPGift">
-          <End Role="VIPGift" Type="Self.VIPGift" Multiplicity="0..1" />
-          <End Role="MemberCardLevel" Type="Self.MemberCardLevel" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="VIPGift">
-              <PropertyRef Name="VIPGiftID" />
-            </Principal>
-            <Dependent Role="MemberCardLevel">
-              <PropertyRef Name="VIPGiftID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Modules_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Modules" Type="Self.Modules" Multiplicity="*" />
@@ -190,33 +80,8 @@
         </Association>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CardLevel" EntityType="Self.CardLevel" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Gift" EntityType="Self.Gift" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="GiftType" EntityType="Self.GiftType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MemberCardLevel" EntityType="Self.MemberCardLevel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modules" EntityType="Self.Modules" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="VIPGift" EntityType="Self.VIPGift" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Account_MemberCardLevel" Association="Self.FK_Account_MemberCardLevel">
-            <End Role="MemberCardLevel" EntitySet="MemberCardLevel" />
-            <End Role="Account" EntitySet="Account" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Gift_GitType" Association="Self.FK_Gift_GitType">
-            <End Role="GiftType" EntitySet="GiftType" />
-            <End Role="Gift" EntitySet="Gift" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
-            <End Role="CardLevel" EntitySet="CardLevel" />
-            <End Role="MemberCardLevel" EntitySet="MemberCardLevel" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardLevel_Gift" Association="Self.FK_MemberCardLevel_Gift">
-            <End Role="Gift" EntitySet="Gift" />
-            <End Role="MemberCardLevel" EntitySet="MemberCardLevel" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardLevel_VIPGift" Association="Self.FK_MemberCardLevel_VIPGift">
-            <End Role="VIPGift" EntitySet="VIPGift" />
-            <End Role="MemberCardLevel" EntitySet="MemberCardLevel" />
-          </AssociationSet>
           <AssociationSet Name="FK_Modules_Users" Association="Self.FK_Modules_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Modules" EntitySet="Modules" />
@@ -248,8 +113,6 @@
           <Property Name="Status" Type="Boolean" />
           <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Wedding" Type="DateTime" Precision="0" />
-          <Property Name="MemberCardLevelID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="MemberCardLevel" Relationship="Model.FK_Account_MemberCardLevel" FromRole="Account" ToRole="MemberCardLevel" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -271,32 +134,7 @@
         <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Accounts" EntityType="Self.Account" />
           <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="CardLevels" EntityType="Model.CardLevel" />
-          <EntitySet Name="Gifts" EntityType="Model.Gift" />
-          <EntitySet Name="GiftTypes" EntityType="Model.GiftType" />
-          <EntitySet Name="MemberCardLevels" EntityType="Model.MemberCardLevel" />
           <EntitySet Name="Modules" EntityType="Model.Module" />
-          <EntitySet Name="VIPGifts" EntityType="Model.VIPGift" />
-          <AssociationSet Name="FK_Account_MemberCardLevel" Association="Model.FK_Account_MemberCardLevel">
-            <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
-            <End Role="Account" EntitySet="Accounts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Model.FK_MemberCardLevel_CardLevel">
-            <End Role="CardLevel" EntitySet="CardLevels" />
-            <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Gift_GitType" Association="Model.FK_Gift_GitType">
-            <End Role="GiftType" EntitySet="GiftTypes" />
-            <End Role="Gift" EntitySet="Gifts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardLevel_Gift" Association="Model.FK_MemberCardLevel_Gift">
-            <End Role="Gift" EntitySet="Gifts" />
-            <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardLevel_VIPGift" Association="Model.FK_MemberCardLevel_VIPGift">
-            <End Role="VIPGift" EntitySet="VIPGifts" />
-            <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
-          </AssociationSet>
           <AssociationSet Name="FK_Modules_Users" Association="Model.FK_Modules_Users">
             <End Role="User" EntitySet="Users" />
             <End Role="Module" EntitySet="Modules" />
@@ -306,54 +144,6 @@
             <End Role="Module" EntitySet="Modules" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="CardLevel">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LevelName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="LevelFee" Type="Double" />
-          <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_CardLevel" FromRole="CardLevel" ToRole="MemberCardLevel" />
-        </EntityType>
-        <EntityType Name="Gift">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="GiftLevelName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GiftTypeID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="RewardRate" Type="Double" />
-          <Property Name="PointPlus" Type="Double" />
-          <NavigationProperty Name="GiftType" Relationship="Model.FK_Gift_GitType" FromRole="Gift" ToRole="GiftType" />
-          <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_Gift" FromRole="Gift" ToRole="MemberCardLevel" />
-        </EntityType>
-        <EntityType Name="GiftType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SpecialDay" Type="Boolean" />
-          <Property Name="Holiday" Type="Boolean" />
-          <Property Name="Personal" Type="Boolean" />
-          <NavigationProperty Name="Gifts" Relationship="Model.FK_Gift_GitType" FromRole="GiftType" ToRole="Gift" />
-        </EntityType>
-        <EntityType Name="MemberCardLevel">
-          <Key>
-            <PropertyRef Name="LevelID" />
-          </Key>
-          <Property Name="LevelID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CardLevelID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="GiftLevelID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="VIP" Type="Boolean" />
-          <Property Name="VIPGiftID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Balance" Type="Double" />
-          <Property Name="Points" Type="Double" />
-          <NavigationProperty Name="Accounts" Relationship="Model.FK_Account_MemberCardLevel" FromRole="MemberCardLevel" ToRole="Account" />
-          <NavigationProperty Name="CardLevel" Relationship="Model.FK_MemberCardLevel_CardLevel" FromRole="MemberCardLevel" ToRole="CardLevel" />
-          <NavigationProperty Name="Gift" Relationship="Model.FK_MemberCardLevel_Gift" FromRole="MemberCardLevel" ToRole="Gift" />
-          <NavigationProperty Name="VIPGift" Relationship="Model.FK_MemberCardLevel_VIPGift" FromRole="MemberCardLevel" ToRole="VIPGift" />
-        </EntityType>
         <EntityType Name="Module">
           <Key>
             <PropertyRef Name="ModulesID" />
@@ -368,79 +158,9 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="User" Relationship="Model.FK_Modules_Users" FromRole="Module" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="Model.FK_Modules_Users1" FromRole="Module" ToRole="User" />
+          <NavigationProperty Name="CreateUser" Relationship="Model.FK_Modules_Users" FromRole="Module" ToRole="User" />
+          <NavigationProperty Name="ModifyUser" Relationship="Model.FK_Modules_Users1" FromRole="Module" ToRole="User" />
         </EntityType>
-        <EntityType Name="VIPGift">
-          <Key>
-            <PropertyRef Name="VIPGiftID" />
-          </Key>
-          <Property Name="VIPGiftID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Moctail" Type="Boolean" />
-          <Property Name="VipRoom" Type="Boolean" />
-          <Property Name="Discount" Type="Double" />
-          <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_VIPGift" FromRole="VIPGift" ToRole="MemberCardLevel" />
-        </EntityType>
-        <Association Name="FK_Account_MemberCardLevel">
-          <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="0..1" />
-          <End Type="Model.Account" Role="Account" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberCardLevel">
-              <PropertyRef Name="LevelID" />
-            </Principal>
-            <Dependent Role="Account">
-              <PropertyRef Name="MemberCardLevelID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardLevel_CardLevel">
-          <End Type="Model.CardLevel" Role="CardLevel" Multiplicity="0..1" />
-          <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CardLevel">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="MemberCardLevel">
-              <PropertyRef Name="CardLevelID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Gift_GitType">
-          <End Type="Model.GiftType" Role="GiftType" Multiplicity="0..1" />
-          <End Type="Model.Gift" Role="Gift" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GiftType">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Gift">
-              <PropertyRef Name="GiftTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardLevel_Gift">
-          <End Type="Model.Gift" Role="Gift" Multiplicity="0..1" />
-          <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Gift">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="MemberCardLevel">
-              <PropertyRef Name="GiftLevelID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardLevel_VIPGift">
-          <End Type="Model.VIPGift" Role="VIPGift" Multiplicity="0..1" />
-          <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="VIPGift">
-              <PropertyRef Name="VIPGiftID" />
-            </Principal>
-            <Dependent Role="MemberCardLevel">
-              <PropertyRef Name="VIPGiftID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Modules_Users">
           <End Type="Model.User" Role="User" Multiplicity="0..1" />
           <End Type="Model.Module" Role="Module" Multiplicity="*" />
@@ -474,7 +194,6 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="Model.Account">
               <MappingFragment StoreEntitySet="Account">
-                <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
                 <ScalarProperty Name="Wedding" ColumnName="Wedding" />
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
@@ -508,50 +227,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CardLevels">
-            <EntityTypeMapping TypeName="Model.CardLevel">
-              <MappingFragment StoreEntitySet="CardLevel">
-                <ScalarProperty Name="Color" ColumnName="Color" />
-                <ScalarProperty Name="LevelFee" ColumnName="LevelFee" />
-                <ScalarProperty Name="LevelName" ColumnName="LevelName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Gifts">
-            <EntityTypeMapping TypeName="Model.Gift">
-              <MappingFragment StoreEntitySet="Gift">
-                <ScalarProperty Name="PointPlus" ColumnName="PointPlus" />
-                <ScalarProperty Name="RewardRate" ColumnName="RewardRate" />
-                <ScalarProperty Name="GiftTypeID" ColumnName="GiftTypeID" />
-                <ScalarProperty Name="GiftLevelName" ColumnName="GiftLevelName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="GiftTypes">
-            <EntityTypeMapping TypeName="Model.GiftType">
-              <MappingFragment StoreEntitySet="GiftType">
-                <ScalarProperty Name="Personal" ColumnName="Personal" />
-                <ScalarProperty Name="Holiday" ColumnName="Holiday" />
-                <ScalarProperty Name="SpecialDay" ColumnName="SpecialDay" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MemberCardLevels">
-            <EntityTypeMapping TypeName="Model.MemberCardLevel">
-              <MappingFragment StoreEntitySet="MemberCardLevel">
-                <ScalarProperty Name="Points" ColumnName="Points" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="VIPGiftID" ColumnName="VIPGiftID" />
-                <ScalarProperty Name="VIP" ColumnName="VIP" />
-                <ScalarProperty Name="GiftLevelID" ColumnName="GiftLevelID" />
-                <ScalarProperty Name="CardLevelID" ColumnName="CardLevelID" />
-                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Modules">
             <EntityTypeMapping TypeName="Model.Module">
               <MappingFragment StoreEntitySet="Modules">
@@ -565,16 +240,6 @@
                 <ScalarProperty Name="Hotline" ColumnName="Hotline" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="ModulesID" ColumnName="ModulesID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VIPGifts">
-            <EntityTypeMapping TypeName="Model.VIPGift">
-              <MappingFragment StoreEntitySet="VIPGift">
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="VipRoom" ColumnName="VipRoom" />
-                <ScalarProperty Name="Moctail" ColumnName="Moctail" />
-                <ScalarProperty Name="VIPGiftID" ColumnName="VIPGiftID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -8,6 +8,8 @@ function padTo2Digits(num) {
 }
 
 function formatDate(jsonDate) {
+    if (jsonDate == null)
+        return ""
     jsonDate = jsonDate.substr(6)
     var date = jsonTodDate(jsonDate)
     return [

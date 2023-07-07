@@ -1,5 +1,6 @@
 ﻿var page = 1;
 var isLoadingData = false;
+var isFull = false;
 (function DataTable() {
    
     ShowTable(page)
@@ -9,7 +10,7 @@ var isLoadingData = false;
         var scrollHeight = $(this)[0].scrollHeight;
         var windowHeight = $(this).outerHeight();
 
-        if (scrollTop + windowHeight >= scrollHeight && !isLoadingData) {
+        if (scrollTop + windowHeight >= scrollHeight && !isLoadingData && !isFull) {
             // Đạt đến cuối trang và không đang lấy dữ liệu
             $('.spinner').show();
             // Gọi hàm để lấy dữ liệu tiếp theo
@@ -18,13 +19,13 @@ var isLoadingData = false;
     });
 })()
 
-function ShowTable(page) {
+function ShowTable(pagenumber) {
     
     $.ajax({
         type: "GET",
         url: "/AccountsAdmin/DataTable",
         data: {
-            page
+            page: pagenumber
         },
 
         datatype: 'json',
@@ -34,10 +35,10 @@ function ShowTable(page) {
 
             //Hiển thị dữ liệu trong bảng
 
-
-            $.each(data.data, function (i, v) {
-                let tr = `<tr>
-                <th scope="row">${(i + 1)}</th>
+            if (data.data && data.data.length > 0) {
+                $.each(data.data, function (i, v) {
+                    let tr = `<tr>
+                <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
                 <td>${v.AccountName}</td>
                 <td>${v.FullName}</td>
                 <td>${formatDate(v.DateOfBirth)}</td>
@@ -47,14 +48,22 @@ function ShowTable(page) {
                 <td></td>
 
                 </tr>`
-                body.append(tr)         
-            })
-            page++
-            console.log(page)
+                    body.append(tr)
+                })
+                pagenumber++
+                page = pagenumber
+                console.log(page)
+
+
+            } else {
+                isFull = true
+            }
             $('.spinner').hide();
             isLoadingData = false;
-            
             $('#QtyNote').text(`Displaying ${data.to} of ${data.total} records`)
+            
+            
+           
         },
         error: function () {
             // Xử lý lỗi (nếu cần thiết)

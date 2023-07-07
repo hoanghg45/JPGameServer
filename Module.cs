@@ -11,13 +11,15 @@ namespace JPGame
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web.Mvc;
+
     public partial class Module
     {
         public int ModulesID { get; set; }
         public string Address { get; set; }
         public string Hotline { get; set; }
         public string Email { get; set; }
+        [AllowHtml]
         public string AboutMe { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
@@ -25,7 +27,7 @@ namespace JPGame
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
     
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
+        public virtual User CreateUser { get; set; }
+        public virtual User ModifyUser { get; set; }
     }
 }

@@ -7,17 +7,7 @@
       <Diagram DiagramId="0d5ecd61f773402b95cc67c13db5c68a" Name="Diagram1">
         <EntityTypeShape EntityType="Model.Account" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.CardLevel" Width="1.5" PointX="0.75" PointY="18.375" />
-        <EntityTypeShape EntityType="Model.Gift" Width="1.5" PointX="0.75" PointY="7.25" />
-        <EntityTypeShape EntityType="Model.GiftType" Width="1.5" PointX="0.75" PointY="15.5" />
-        <EntityTypeShape EntityType="Model.MemberCardLevel" Width="1.5" PointX="0.75" PointY="10.625" />
         <EntityTypeShape EntityType="Model.Module" Width="1.5" PointX="5" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.VIPGift" Width="1.5" PointX="0.75" PointY="21.125" />
-        <AssociationConnector Association="Model.FK_Account_MemberCardLevel" />
-        <AssociationConnector Association="Model.FK_MemberCardLevel_CardLevel" />
-        <AssociationConnector Association="Model.FK_Gift_GitType" />
-        <AssociationConnector Association="Model.FK_MemberCardLevel_Gift" />
-        <AssociationConnector Association="Model.FK_MemberCardLevel_VIPGift" />
         <AssociationConnector Association="Model.FK_Modules_Users" />
         <AssociationConnector Association="Model.FK_Modules_Users1" />
       </Diagram>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JPGame.Areas.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -74,6 +75,69 @@ namespace JPGame.Areas.Admin.Controllers
               );
 
 
+
+        }
+        [SessionCheck]
+        [HttpGet]
+        public JsonResult GetUserInfor()
+        {
+            string UserID = Session["UserID"].ToString();
+
+            if (string.IsNullOrEmpty(UserID))
+            {
+                return Json(
+             new
+             {
+                 status = "error",
+                 message = "Tài khoản của bạn không tồn tại vui lòng kiểm tra lại!"
+
+             }
+             , JsonRequestBehavior.AllowGet
+             );
+            }
+            if (!db.Users.Any(u => u.UserID.Trim().Equals(UserID)))
+            {
+                return Json(
+                new
+                {
+                    status = "error",
+                    message = "Tài khoản của bạn không tồn tại vui lòng kiểm tra lại!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+
+            }
+            var user = db.Users.Where(u => u.UserID.Trim().Equals(UserID)).Select(u => new
+            {
+                UserID = u.UserID.Trim(),
+                UserName = u.UserName.Trim(),
+                Name = u.Name.Trim(),
+                u.Role
+            }).FirstOrDefault();
+           
+
+
+
+            return Json(
+              new
+              {
+                  status = "success",
+                  user
+
+              }
+              , JsonRequestBehavior.AllowGet
+              );
+
+
+
+        }
+        
+        public ActionResult LogOut()
+        {
+           
+            Session.Abandon();
+            return RedirectToAction("Index", "LoginAdmin", new {area = "Admin"});
 
         }
     }
