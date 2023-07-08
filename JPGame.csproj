@@ -2294,6 +2294,7 @@
     <Content Include="Views\Login\SignIn.cshtml" />
     <Content Include="Views\Home\Information.cshtml" />
     <Content Include="Views\Home\AccountInformation.cshtml" />
+    <Content Include="Views\Home\ChangePass.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
