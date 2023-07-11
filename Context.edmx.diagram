@@ -11,13 +11,18 @@
         <AssociationConnector Association="Model.FK_Modules_Users" />
         <AssociationConnector Association="Model.FK_Modules_Users1" />
         <EntityTypeShape EntityType="Model.CardLevel" Width="1.5" PointX="0.75" PointY="6.625" />
-        <EntityTypeShape EntityType="Model.Gift" Width="2.125" PointX="0.75" PointY="14.25" />
-        <EntityTypeShape EntityType="Model.GiftType" Width="1.5" PointX="0.75" PointY="17.375" />
-        <EntityTypeShape EntityType="Model.MemberCardLevel" Width="1.5" PointX="0.75" PointY="10.125" />
         <EntityTypeShape EntityType="Model.VIPGift" Width="1.5" PointX="0.75" PointY="20.375" />
+        <EntityTypeShape EntityType="Model.Gift" Width="1.5" PointX="0.75" PointY="26.625" />
+        <EntityTypeShape EntityType="Model.PersonalGift" Width="1.5" PointX="0.75" PointY="23.875" />
+        <EntityTypeShape EntityType="Model.Slider" Width="1.5" PointX="5.625" PointY="5.875" />
+        <EntityTypeShape EntityType="Model.SpecialMemory" Width="1.5" PointX="0.75" PointY="15.375" />
+        <EntityTypeShape EntityType="Model.TypeSlider" Width="1.5" PointX="3.375" PointY="6.25" />
+        <AssociationConnector Association="Model.FK_Slider_TypeSlider" />
+        <EntityTypeShape EntityType="Model.MemberCardLevel" Width="1.5" PointX="3" PointY="16.5" />
         <AssociationConnector Association="Model.FK_Account_MemberCardLevel" />
         <AssociationConnector Association="Model.FK_MemberCardLevel_CardLevel" />
-        <AssociationConnector Association="Model.FK_Gift_GitType" />
+        <AssociationConnector Association="Model.FK_Gift_PersonalGift" />
+        <AssociationConnector Association="Model.FK_Gift_SpecialMemory" />
         <AssociationConnector Association="Model.FK_MemberCardLevel_Gift" />
         <AssociationConnector Association="Model.FK_MemberCardLevel_VIPGift" />
       </Diagram>

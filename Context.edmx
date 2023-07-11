@@ -32,6 +32,7 @@
           <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LevelName" Type="nvarchar" MaxLength="200" />
           <Property Name="LevelFee" Type="float" />
+          <Property Name="Color" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Gift">
           <Key>
@@ -42,15 +43,8 @@
           <Property Name="GiftTypeID" Type="varchar" MaxLength="50" />
           <Property Name="RewardRate" Type="float" />
           <Property Name="PointPlus" Type="float" />
-        </EntityType>
-        <EntityType Name="GiftType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="SpecialDay" Type="bit" />
-          <Property Name="Holiday" Type="bit" />
-          <Property Name="Personal" Type="bit" />
+          <Property Name="SpecialMemoryID" Type="varchar" MaxLength="50" />
+          <Property Name="PersonalGiftID" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MemberCardLevel">
           <Key>
@@ -61,6 +55,8 @@
           <Property Name="GiftLevelID" Type="varchar" MaxLength="50" />
           <Property Name="VIP" Type="bit" />
           <Property Name="VIPGiftID" Type="varchar" MaxLength="50" />
+          <Property Name="Balance" Type="float" />
+          <Property Name="Points" Type="float" />
         </EntityType>
         <EntityType Name="Modules">
           <Key>
@@ -75,6 +71,50 @@
           <Property Name="CreateBy" Type="nchar" MaxLength="50" />
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="PersonalGift">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SpecialDay" Type="bit" Nullable="false" />
+          <Property Name="Holiday" Type="bit" />
+          <Property Name="Personal" Type="bit" />
+        </EntityType>
+        <EntityType Name="Slider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeSlider" Type="int" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Des" Type="nvarchar(max)" />
+          <Property Name="TypeGame" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="SpecialMemory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AvailableTemplates" Type="bit" />
+          <Property Name="CustomizeAvailableTemplate" Type="bit" />
+        </EntityType>
+        <EntityType Name="TypeSlider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameType" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
         </EntityType>
         <EntityType Name="Users">
@@ -113,15 +153,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Gift_GitType">
-          <End Role="GiftType" Type="Self.GiftType" Multiplicity="0..1" />
+        <Association Name="FK_Gift_PersonalGift">
+          <End Role="PersonalGift" Type="Self.PersonalGift" Multiplicity="0..1" />
           <End Role="Gift" Type="Self.Gift" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="GiftType">
+            <Principal Role="PersonalGift">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Gift">
-              <PropertyRef Name="GiftTypeID" />
+              <PropertyRef Name="PersonalGiftID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Gift_SpecialMemory">
+          <End Role="SpecialMemory" Type="Self.SpecialMemory" Multiplicity="0..1" />
+          <End Role="Gift" Type="Self.Gift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecialMemory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Gift">
+              <PropertyRef Name="SpecialMemoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -185,21 +237,40 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Slider_TypeSlider">
+          <End Role="TypeSlider" Type="Self.TypeSlider" Multiplicity="0..1" />
+          <End Role="Slider" Type="Self.Slider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeSlider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slider">
+              <PropertyRef Name="TypeSlider" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardLevel" EntityType="Self.CardLevel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gift" EntityType="Self.Gift" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="GiftType" EntityType="Self.GiftType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCardLevel" EntityType="Self.MemberCardLevel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modules" EntityType="Self.Modules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonalGift" EntityType="Self.PersonalGift" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Slider" EntityType="Self.Slider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpecialMemory" EntityType="Self.SpecialMemory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypeSlider" EntityType="Self.TypeSlider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VIPGift" EntityType="Self.VIPGift" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Account_MemberCardLevel" Association="Self.FK_Account_MemberCardLevel">
             <End Role="MemberCardLevel" EntitySet="MemberCardLevel" />
             <End Role="Account" EntitySet="Account" />
           </AssociationSet>
-          <AssociationSet Name="FK_Gift_GitType" Association="Self.FK_Gift_GitType">
-            <End Role="GiftType" EntitySet="GiftType" />
+          <AssociationSet Name="FK_Gift_PersonalGift" Association="Self.FK_Gift_PersonalGift">
+            <End Role="PersonalGift" EntitySet="PersonalGift" />
+            <End Role="Gift" EntitySet="Gift" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Gift_SpecialMemory" Association="Self.FK_Gift_SpecialMemory">
+            <End Role="SpecialMemory" EntitySet="SpecialMemory" />
             <End Role="Gift" EntitySet="Gift" />
           </AssociationSet>
           <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
@@ -221,6 +292,10 @@
           <AssociationSet Name="FK_Modules_Users1" Association="Self.FK_Modules_Users1">
             <End Role="Users" EntitySet="Users" />
             <End Role="Modules" EntitySet="Modules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slider_TypeSlider" Association="Self.FK_Slider_TypeSlider">
+            <End Role="TypeSlider" EntitySet="TypeSlider" />
+            <End Role="Slider" EntitySet="Slider" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -278,10 +353,17 @@
             <End Role="Module" EntitySet="Modules" />
           </AssociationSet>
           <EntitySet Name="CardLevels" EntityType="Model.CardLevel" />
-          <EntitySet Name="Gifts" EntityType="Model.Gift" />
-          <EntitySet Name="GiftTypes" EntityType="Model.GiftType" />
-          <EntitySet Name="MemberCardLevels" EntityType="Model.MemberCardLevel" />
           <EntitySet Name="VIPGifts" EntityType="Model.VIPGift" />
+          <EntitySet Name="Gifts" EntityType="Model.Gift" />
+          <EntitySet Name="PersonalGifts" EntityType="Model.PersonalGift" />
+          <EntitySet Name="Sliders" EntityType="Model.Slider" />
+          <EntitySet Name="SpecialMemories" EntityType="Model.SpecialMemory" />
+          <EntitySet Name="TypeSliders" EntityType="Model.TypeSlider" />
+          <AssociationSet Name="FK_Slider_TypeSlider" Association="Model.FK_Slider_TypeSlider">
+            <End Role="TypeSlider" EntitySet="TypeSliders" />
+            <End Role="Slider" EntitySet="Sliders" />
+          </AssociationSet>
+          <EntitySet Name="MemberCardLevels" EntityType="Model.MemberCardLevel" />
           <AssociationSet Name="FK_Account_MemberCardLevel" Association="Model.FK_Account_MemberCardLevel">
             <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
             <End Role="Account" EntitySet="Accounts" />
@@ -290,8 +372,12 @@
             <End Role="CardLevel" EntitySet="CardLevels" />
             <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
           </AssociationSet>
-          <AssociationSet Name="FK_Gift_GitType" Association="Model.FK_Gift_GitType">
-            <End Role="GiftType" EntitySet="GiftTypes" />
+          <AssociationSet Name="FK_Gift_PersonalGift" Association="Model.FK_Gift_PersonalGift">
+            <End Role="PersonalGift" EntitySet="PersonalGifts" />
+            <End Role="Gift" EntitySet="Gifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Gift_SpecialMemory" Association="Model.FK_Gift_SpecialMemory">
+            <End Role="SpecialMemory" EntitySet="SpecialMemories" />
             <End Role="Gift" EntitySet="Gifts" />
           </AssociationSet>
           <AssociationSet Name="FK_MemberCardLevel_Gift" Association="Model.FK_MemberCardLevel_Gift">
@@ -351,43 +437,8 @@
           <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LevelName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="LevelFee" Type="Double" />
+          <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_CardLevel" FromRole="CardLevel" ToRole="MemberCardLevel" />
-        </EntityType>
-        <EntityType Name="Gift">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="GiftLevelName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GiftTypeID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="RewardRate" Type="Double" />
-          <Property Name="PointPlus" Type="Double" />
-          <NavigationProperty Name="GiftType" Relationship="Model.FK_Gift_GitType" FromRole="Gift" ToRole="GiftType" />
-          <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_Gift" FromRole="Gift" ToRole="MemberCardLevel" />
-        </EntityType>
-        <EntityType Name="GiftType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SpecialDay" Type="Boolean" />
-          <Property Name="Holiday" Type="Boolean" />
-          <Property Name="Personal" Type="Boolean" />
-          <NavigationProperty Name="Gifts" Relationship="Model.FK_Gift_GitType" FromRole="GiftType" ToRole="Gift" />
-        </EntityType>
-        <EntityType Name="MemberCardLevel">
-          <Key>
-            <PropertyRef Name="LevelID" />
-          </Key>
-          <Property Name="LevelID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CardLevelID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="GiftLevelID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="VIP" Type="Boolean" />
-          <Property Name="VIPGiftID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Accounts" Relationship="Model.FK_Account_MemberCardLevel" FromRole="MemberCardLevel" ToRole="Account" />
-          <NavigationProperty Name="CardLevel" Relationship="Model.FK_MemberCardLevel_CardLevel" FromRole="MemberCardLevel" ToRole="CardLevel" />
-          <NavigationProperty Name="Gift" Relationship="Model.FK_MemberCardLevel_Gift" FromRole="MemberCardLevel" ToRole="Gift" />
-          <NavigationProperty Name="VIPGift" Relationship="Model.FK_MemberCardLevel_VIPGift" FromRole="MemberCardLevel" ToRole="VIPGift" />
         </EntityType>
         <EntityType Name="VIPGift">
           <Key>
@@ -398,6 +449,97 @@
           <Property Name="VipRoom" Type="Boolean" />
           <Property Name="Discount" Type="Double" />
           <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_VIPGift" FromRole="VIPGift" ToRole="MemberCardLevel" />
+        </EntityType>
+        <EntityType Name="Gift">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GiftLevelName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GiftTypeID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RewardRate" Type="Double" />
+          <Property Name="PointPlus" Type="Double" />
+          <Property Name="SpecialMemoryID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PersonalGiftID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PersonalGift" Relationship="Model.FK_Gift_PersonalGift" FromRole="Gift" ToRole="PersonalGift" />
+          <NavigationProperty Name="SpecialMemory" Relationship="Model.FK_Gift_SpecialMemory" FromRole="Gift" ToRole="SpecialMemory" />
+          <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_Gift" FromRole="Gift" ToRole="MemberCardLevel" />
+        </EntityType>
+        <EntityType Name="PersonalGift">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SpecialDay" Type="Boolean" Nullable="false" />
+          <Property Name="Holiday" Type="Boolean" />
+          <Property Name="Personal" Type="Boolean" />
+          <NavigationProperty Name="Gifts" Relationship="Model.FK_Gift_PersonalGift" FromRole="PersonalGift" ToRole="Gift" />
+        </EntityType>
+        <EntityType Name="Slider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeSlider" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Des" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TypeGame" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TypeSlider1" Relationship="Model.FK_Slider_TypeSlider" FromRole="Slider" ToRole="TypeSlider" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SpecialMemory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AvailableTemplates" Type="Boolean" />
+          <Property Name="CustomizeAvailableTemplate" Type="Boolean" />
+          <NavigationProperty Name="Gifts" Relationship="Model.FK_Gift_SpecialMemory" FromRole="SpecialMemory" ToRole="Gift" />
+        </EntityType>
+        <EntityType Name="TypeSlider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Sliders" Relationship="Model.FK_Slider_TypeSlider" FromRole="TypeSlider" ToRole="Slider" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_Slider_TypeSlider">
+          <End Type="Model.TypeSlider" Role="TypeSlider" Multiplicity="0..1" />
+          <End Type="Model.Slider" Role="Slider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeSlider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Slider">
+              <PropertyRef Name="TypeSlider" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MemberCardLevel">
+          <Key>
+            <PropertyRef Name="LevelID" />
+          </Key>
+          <Property Name="LevelID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CardLevelID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GiftLevelID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VIP" Type="Boolean" />
+          <Property Name="VIPGiftID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Balance" Type="Double" />
+          <Property Name="Points" Type="Double" />
+          <NavigationProperty Name="Accounts" Relationship="Model.FK_Account_MemberCardLevel" FromRole="MemberCardLevel" ToRole="Account" />
+          <NavigationProperty Name="CardLevel" Relationship="Model.FK_MemberCardLevel_CardLevel" FromRole="MemberCardLevel" ToRole="CardLevel" />
+          <NavigationProperty Name="Gift" Relationship="Model.FK_MemberCardLevel_Gift" FromRole="MemberCardLevel" ToRole="Gift" />
+          <NavigationProperty Name="VIPGift" Relationship="Model.FK_MemberCardLevel_VIPGift" FromRole="MemberCardLevel" ToRole="VIPGift" />
         </EntityType>
         <Association Name="FK_Account_MemberCardLevel">
           <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="0..1" />
@@ -423,15 +565,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Gift_GitType">
-          <End Type="Model.GiftType" Role="GiftType" Multiplicity="0..1" />
+        <Association Name="FK_Gift_PersonalGift">
+          <End Type="Model.PersonalGift" Role="PersonalGift" Multiplicity="0..1" />
           <End Type="Model.Gift" Role="Gift" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="GiftType">
+            <Principal Role="PersonalGift">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Gift">
-              <PropertyRef Name="GiftTypeID" />
+              <PropertyRef Name="PersonalGiftID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Gift_SpecialMemory">
+          <End Type="Model.SpecialMemory" Role="SpecialMemory" Multiplicity="0..1" />
+          <End Type="Model.Gift" Role="Gift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecialMemory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Gift">
+              <PropertyRef Name="SpecialMemoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -521,41 +675,10 @@
           <EntitySetMapping Name="CardLevels">
             <EntityTypeMapping TypeName="Model.CardLevel">
               <MappingFragment StoreEntitySet="CardLevel">
+                <ScalarProperty Name="Color" ColumnName="Color" />
                 <ScalarProperty Name="LevelFee" ColumnName="LevelFee" />
                 <ScalarProperty Name="LevelName" ColumnName="LevelName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Gifts">
-            <EntityTypeMapping TypeName="Model.Gift">
-              <MappingFragment StoreEntitySet="Gift">
-                <ScalarProperty Name="PointPlus" ColumnName="PointPlus" />
-                <ScalarProperty Name="RewardRate" ColumnName="RewardRate" />
-                <ScalarProperty Name="GiftTypeID" ColumnName="GiftTypeID" />
-                <ScalarProperty Name="GiftLevelName" ColumnName="GiftLevelName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="GiftTypes">
-            <EntityTypeMapping TypeName="Model.GiftType">
-              <MappingFragment StoreEntitySet="GiftType">
-                <ScalarProperty Name="Personal" ColumnName="Personal" />
-                <ScalarProperty Name="Holiday" ColumnName="Holiday" />
-                <ScalarProperty Name="SpecialDay" ColumnName="SpecialDay" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MemberCardLevels">
-            <EntityTypeMapping TypeName="Model.MemberCardLevel">
-              <MappingFragment StoreEntitySet="MemberCardLevel">
-                <ScalarProperty Name="VIPGiftID" ColumnName="VIPGiftID" />
-                <ScalarProperty Name="VIP" ColumnName="VIP" />
-                <ScalarProperty Name="GiftLevelID" ColumnName="GiftLevelID" />
-                <ScalarProperty Name="CardLevelID" ColumnName="CardLevelID" />
-                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -566,6 +689,80 @@
                 <ScalarProperty Name="VipRoom" ColumnName="VipRoom" />
                 <ScalarProperty Name="Moctail" ColumnName="Moctail" />
                 <ScalarProperty Name="VIPGiftID" ColumnName="VIPGiftID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Gifts">
+            <EntityTypeMapping TypeName="Model.Gift">
+              <MappingFragment StoreEntitySet="Gift">
+                <ScalarProperty Name="PersonalGiftID" ColumnName="PersonalGiftID" />
+                <ScalarProperty Name="SpecialMemoryID" ColumnName="SpecialMemoryID" />
+                <ScalarProperty Name="PointPlus" ColumnName="PointPlus" />
+                <ScalarProperty Name="RewardRate" ColumnName="RewardRate" />
+                <ScalarProperty Name="GiftTypeID" ColumnName="GiftTypeID" />
+                <ScalarProperty Name="GiftLevelName" ColumnName="GiftLevelName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonalGifts">
+            <EntityTypeMapping TypeName="Model.PersonalGift">
+              <MappingFragment StoreEntitySet="PersonalGift">
+                <ScalarProperty Name="Personal" ColumnName="Personal" />
+                <ScalarProperty Name="Holiday" ColumnName="Holiday" />
+                <ScalarProperty Name="SpecialDay" ColumnName="SpecialDay" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sliders">
+            <EntityTypeMapping TypeName="Model.Slider">
+              <MappingFragment StoreEntitySet="Slider">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="TypeGame" ColumnName="TypeGame" />
+                <ScalarProperty Name="Des" ColumnName="Des" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TypeSlider" ColumnName="TypeSlider" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecialMemories">
+            <EntityTypeMapping TypeName="Model.SpecialMemory">
+              <MappingFragment StoreEntitySet="SpecialMemory">
+                <ScalarProperty Name="CustomizeAvailableTemplate" ColumnName="CustomizeAvailableTemplate" />
+                <ScalarProperty Name="AvailableTemplates" ColumnName="AvailableTemplates" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypeSliders">
+            <EntityTypeMapping TypeName="Model.TypeSlider">
+              <MappingFragment StoreEntitySet="TypeSlider">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="NameType" ColumnName="NameType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberCardLevels">
+            <EntityTypeMapping TypeName="Model.MemberCardLevel">
+              <MappingFragment StoreEntitySet="MemberCardLevel">
+                <ScalarProperty Name="Points" ColumnName="Points" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="VIPGiftID" ColumnName="VIPGiftID" />
+                <ScalarProperty Name="VIP" ColumnName="VIP" />
+                <ScalarProperty Name="GiftLevelID" ColumnName="GiftLevelID" />
+                <ScalarProperty Name="CardLevelID" ColumnName="CardLevelID" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

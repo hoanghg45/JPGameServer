@@ -12,26 +12,23 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class MemberCardLevel
+    public partial class TypeSlider
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public MemberCardLevel()
+        public TypeSlider()
         {
-            this.Accounts = new HashSet<Account>();
+            this.Sliders = new HashSet<Slider>();
         }
     
-        public string LevelID { get; set; }
-        public string CardLevelID { get; set; }
-        public string GiftLevelID { get; set; }
-        public Nullable<bool> VIP { get; set; }
-        public string VIPGiftID { get; set; }
-        public Nullable<double> Balance { get; set; }
-        public Nullable<double> Points { get; set; }
+        public int Id { get; set; }
+        public string NameType { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public string CreateBy { get; set; }
+        public Nullable<System.DateTime> ModifyDate { get; set; }
+        public string ModifyBy { get; set; }
+        public Nullable<bool> Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Account> Accounts { get; set; }
-        public virtual CardLevel CardLevel { get; set; }
-        public virtual Gift Gift { get; set; }
-        public virtual VIPGift VIPGift { get; set; }
+        public virtual ICollection<Slider> Sliders { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using JPGame.Areas.Admin.Extension;
+using JPGame.Areas.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 
 namespace JPGame.Areas.Admin.Controllers
 {
+    [SessionCheck]
     public class MemberCardLevelController : Controller
     {
         // GET: Admin/MemberCardLevel
@@ -69,6 +71,108 @@ namespace JPGame.Areas.Admin.Controllers
           }
           , JsonRequestBehavior.AllowGet
           );
+        }
+
+        public JsonResult GetLevelFee(string LevelID)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(LevelID) || !db.CardLevels.Any(l => l.ID.Equals(LevelID)))
+                {
+                    return this.Json(
+                    new
+                    {
+                        status = "Error",
+                        message = "Level không tồn tại vui lòng thử lại"
+
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
+                }
+                var level = db.CardLevels.Find(LevelID);
+                var cardlevel = new
+                {
+                    level.ID,
+                    level.LevelFee,
+                    level.MemberCardLevels,
+                    level.Color
+                };
+                    return this.Json(
+                new
+                {
+                    status = "Success",
+                    cardlevel
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+
+            }
+            catch(Exception e)
+            {
+                    return this.Json(
+              new
+              {
+                status = "Error",
+                message =e.InnerException
+
+              }
+              , JsonRequestBehavior.AllowGet
+              );
+                }
+        }
+        public JsonResult GetGiftInformation(string GiftID)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(GiftID) || !db.Gifts.Any(l => l.ID.Equals(GiftID)))
+                {
+                    return this.Json(
+                    new
+                    {
+                        status = "Error",
+                        message = "Quà tặng không tồn tại vui lòng thử lại"
+
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
+                }
+                var Gift = db.Gifts.Find(GiftID);
+                var gift = new
+                {
+                   Gift.ID,
+                   Gift.PointPlus,
+                    RewardRate= Math.Round(Gift.RewardRate.Value * 100),
+                    Personal = Gift.PersonalGift != null && Gift.PersonalGift.Personal.Value,
+                    Holiday = Gift.PersonalGift != null && Gift.PersonalGift.Holiday.Value,
+                    Special = Gift.PersonalGift != null && Gift.PersonalGift.SpecialDay,
+                    AvailableTemplates = Gift.SpecialMemory != null && Gift.SpecialMemory.AvailableTemplates.Value,
+                    CustomizeAvailableTemplate= Gift.SpecialMemory != null && Gift.SpecialMemory.CustomizeAvailableTemplate.Value,
+                   
+                };
+                    return this.Json(
+                new
+                {
+                    status = "Success",
+                    gift
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+
+            }
+            catch(Exception e)
+            {
+                    return this.Json(
+              new
+              {
+                status = "Error",
+                message =e.InnerException
+
+              }
+              , JsonRequestBehavior.AllowGet
+              );
+                }
         }
     }
 
