@@ -20,6 +20,7 @@ var isFull = false;
     });
     //Khởi tạo select
     initSelect()
+    
 })()
 
 function ShowTable(pagenumber) {
@@ -79,4 +80,66 @@ function CreateModal() {
 }
 function initSelect() {
     $('.select2').select2();
+    
+    GetLevelFee($('#SelectLevel').val())
+    $('#SelectLevel').change(function () {
+        GetLevelFee($('#SelectLevel').val())
+    })
+
+    GetGiftInfomation($('#SelectGift').val())
+    $('#SelectGift').change(function () {
+        GetGiftInfomation($('#SelectGift').val())
+    })
+}
+function GetLevelFee(LevelID) {
+    $.ajax({
+        type: "GET",
+        url: "/MemberCardLevel/GetLevelFee",
+        data: {
+            LevelID
+        },
+
+        datatype: 'json',
+        success: function (data) {
+            if (data.status == "Success") {
+                $('input[name="LevelFee"]').val(data.cardlevel.LevelFee.toLocaleString())
+            }
+            
+        },
+        error: function () {
+            // Xử lý lỗi (nếu cần thiết)
+            // Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
+            $('.spinner').hide();
+            isLoadingData = false;
+        }
+    })
+}
+function GetGiftInfomation(GiftID) {
+    $.ajax({
+        type: "GET",
+        url: "/MemberCardLevel/GetGiftInformation",
+        data: {
+            GiftID
+        },
+
+        datatype: 'json',
+        success: function (data) {
+            if (data.status == "Success") {
+                $('input[name="PointPlus"]').val(data.gift.PointPlus)
+                $('input[name="RewardRate"]').val(data.gift.RewardRate)
+                $('#Personal').prop("checked", data.gift.Personal);
+                $('#Holiday').prop("checked", data.gift.Holiday);
+                $('#Special').prop("checked", data.gift.Special);
+                $('#AvailableTemplates').prop("checked", data.gift.AvailableTemplates);
+                $('#CustomizeAvailableTemplate').prop("checked", data.gift.CustomizeAvailableTemplate);
+            }
+            
+        },
+        error: function () {
+            // Xử lý lỗi (nếu cần thiết)
+            // Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
+            $('.spinner').hide();
+            isLoadingData = false;
+        }
+    })
 }

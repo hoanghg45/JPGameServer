@@ -317,26 +317,78 @@
                         </div>
                         <div class="form-group">
 
-                            <label>Cấp độ thẻ:</label>
-                            <select class="form-control select2" style="width:100%" id="SelectLevel" name="param">
-                                @foreach (var level in ViewBag.levels)
-                                {
-                                    <option value="@level.ID">@level.LevelName</option>
-                                }
-                            </select>
+                            <label>Mức lên cấp:</label>
+                            <div class="input-group">
+                                <input type="text" readonly name="LevelFee" class="form-control" aria-describedby="basic-addon2" />
+                                <div class="input-group-append"><span class="input-group-text"><i class="la la-edit"></i></span></div>
+                            </div>
 
                         </div>
 
                         <div class="form-group">
                             <label>Quà tặng:</label>
                             <select class="form-control select2" style="width:100%" id="SelectGift" name="param">
-                                @foreach (var level in ViewBag.levels)
+                                @foreach (var gift in ViewBag.gifts)
                                 {
-                                    <option value="@level.ID">@level.LevelName</option>
+                                    <option value="@gift.ID">@gift.GiftLevelName</option>
                                 }
                             </select>
                         </div>
-                        
+                        <div class="form-group row">
+                            <div class="col-lg-6">
+                                <label>Tỉ lệ tiền tặng:</label>
+                                <div class="input-group">
+                                    <input type="text" readonly name="RewardRate" class="form-control" aria-describedby="basic-addon2" />
+                                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
+                                </div>
+                            </div> 
+                            <div class="col-lg-6">
+                                <label>Số điểm cộng:</label>
+                                <div class="input-group">
+                                    <input type="text" readonly name="PointPlus" class="form-control" aria-describedby="basic-addon2" />
+                                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group ">
+                            <div class="form-group">
+                                <label>Quà tặng đặc biệt</label>
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-disabled">
+                                        <input type="checkbox" id="Personal" disabled="disabled" name="CheckGifs" />
+                                        <span></span>
+                                        Quà tặng cá nhân
+                                    </label>
+                                    <label class="checkbox checkbox-disabled">
+                                        <input type="checkbox" id="Holiday" disabled="disabled" name="CheckGifs" />
+                                        <span></span>
+                                        Quà tặng ngày lễ
+                                    </label>
+                                    <label class="checkbox checkbox-disabled">
+                                        <input type="checkbox" id="Special" disabled="disabled" name="CheckGifs" />
+                                        <span></span>
+                                        Quà tặng dịp đặc biệt (sinh nhật,..)
+                                    </label>
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <label>Kỉ niệm đặt biệt</label>
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-disabled">
+                                        <input type="checkbox" id="AvailableTemplates" disabled="disabled" name="CheckMemory" />
+                                        <span></span>
+                                        Tự tại mẫu
+                                    </label>
+                                    <label class="checkbox checkbox-disabled">
+                                        <input type="checkbox" id="CustomizeAvailableTemplate" disabled="disabled" name="CheckMemory" />
+                                        <span></span>
+                                        Chọn những mẫu có sẵn
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
                         <div class="form-group">
                             <label>VIP</label>
                             <div class="checkbox-list">
@@ -347,7 +399,22 @@
                                 </label>
                             </div>
                         </div>
-                                                
+                        <div class="form-group">
+                            <label>Đặc quyền VIP</label>
+                            <div class="checkbox-inline">
+                                <label class="checkbox checkbox-disabled">
+                                    <input type="checkbox" disabled="disabled" name="CheckVIP" />
+                                    <span></span>
+                                    Ưu đãi Mocktail
+                                </label>
+                                <label class="checkbox checkbox-disabled">
+                                    <input type="checkbox" disabled="disabled" name="CheckVIP" />
+                                    <span></span>
+                                    Ưu đãi bàn và phòng VVIP
+                                </label>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
