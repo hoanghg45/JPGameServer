@@ -1,0 +1,245 @@
+﻿@model JPGame.Slider
+@{
+    ViewBag.Title = "Sửa hình ảnh " +Model.Name;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <div class="d-flex align-items-center flex-wrap mr-1">
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <h5 class="text-dark font-weight-bold my-1 mr-5">Sửa Hình Ảnh @Model.Name</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-custom gutter-b example example-compact">
+                        <div class="card-header">
+                            <h3 class="card-title">Thông tin</h3>
+                        </div>
+                        <form id="Form" class="form">
+                            <input name="Id" hidden type="text" class="form-control form-control-solid" value="@Model.Id" required />
+                            <input name="TypeSlider" hidden type="text" class="form-control form-control-solid" value="@Model.TypeSlider" required />
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Hình ảnh</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <div class="image-input image-input-outline" id="kt_profile_avatar">
+                                            <div class="image-input-wrapper" name="avatar" style="background-image:url('@Model.Image')"></div>
+                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                                <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
+                                                <input type="text" hidden name="Image" value="@Model.Image">
+                                                <input type="hidden" name="profile_avatar_remove">
+                                            </label>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="" data-original-title="Remove avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                        </div>
+                                        <span class="form-text text-muted">Allowed file types: png, jpg, jpeg.</span>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Tên Loại:</label>
+                                        <input name="Name" type="text" class="form-control form-control-solid" value="@Model.Name" required placeholder="Tên hình ảnh" />
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Mô tả:</label>
+                                        <textarea class="" required id="summernote" name="Des">@Model.Des</textarea>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="button" class="btn btn-primary mr-2 btnCreate">Sửa</button>
+                                </div>
+                        </form>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Card-->
+                </div>
+            </div>
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+@section scripts{
+    <script>
+        $('#summernote').summernote({
+            placeholder: 'Nhập mô tả',
+        });
+        //----------------------chon file-------------------------
+        $('input[name="profile_avatar"]').change(function () {
+            if (window.FormData !== undefined) {
+                let fileUpload = $('input[name="profile_avatar"]').get(0);
+                let files = fileUpload.files;
+                let formdata = new FormData();
+                formdata.append('file', files[0]);
+                $.ajax({
+                    type: 'post',
+                    url: '/Admin/SliderAdmin/UploadImage',
+                    contentType: false,
+                    processData: false,
+                    data: formdata,
+                    success: function (urlImage) {
+                        $('input[name="Image"]').val(urlImage);
+                        $('div[name="avatar"]').css("background-image", "url('" + urlImage + "')");
+                    }
+                })
+            }
+        });
+        "use strict";
+
+        // Class Definition
+        var Add = function () {
+            var _handleSignInForm = function () {
+                var validation;
+                const form = document.getElementById('Form');
+                // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+                validation = FormValidation.formValidation(
+                    KTUtil.getById('Form'),
+                    {
+                        fields: {
+                            Name: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Vui lòng nhập tên hình ảnh'
+                                    },
+
+                                }
+                            },
+                            Des: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Vui lòng nhập mô tả hình ảnh',
+                                            callback: function (input) {
+                                                const code = $('[name="Des"]').summernote('isEmpty');
+                                            // <p><br> is code generated by Summernote for empty content
+                                            return !code;
+                                        },
+                                    },
+
+                                }
+                            },
+                            Image: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Vui lòng chọn hình ảnh'
+                                    },
+
+                                }
+                            },
+                        },
+                        plugins: {
+                            trigger: new FormValidation.plugins.Trigger(),
+                            submitButton: new FormValidation.plugins.SubmitButton(),
+                            //defaultSubmit: new FormValidation.plugins.DefaultSubmit(), // Uncomment this line to enable normal button submit after form validation
+                            bootstrap: new FormValidation.plugins.Bootstrap(),
+                            icon: new FormValidation.plugins.Icon({
+                                valid: 'fa fa-check',
+                                invalid: 'fa fa-times',
+                                validating: 'fa fa-refresh',
+                            }),
+                        }
+                    }
+                );
+
+
+                $('.btnCreate').click(function () {
+                    let data = $('#Form').serialize()
+                    validation.validate().then(function (status) {
+                        if (status == 'Valid') {
+                            Add(data)
+                        } else {
+                            swal.fire({
+                                text: "Vui lòng điền đầy đủ thông tin.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                heightAuto: false,
+                                confirmButtonText: "Ok!",
+                                customClass: {
+                                    confirmButton: "btn font-weight-bold btn-light-primary"
+                                }
+                            }).then(function () {
+                                KTUtil.scrollTop();
+                            });
+                        }
+                    });
+
+                })
+
+
+
+
+                function Add(data) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Admin/SliderAdmin/Edits",
+                        data: data,
+                        datatype: "json",
+                        success: function (result) {
+                            if (result.status == "success") {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Sửa thành công!',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function () {
+                                    window.location.href = "/Admin/SliderAdmin/Index/@Model.TypeSlider"
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Đã có lỗi xảy ra, vui lòng thử lại!',
+                                    text: result.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+
+                                icon: 'error',
+                                title: 'Something wrong!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+                    })
+                }
+            }
+
+
+
+            // Public Functions
+            return {
+                // public functions
+                init: function () {
+
+
+                    _handleSignInForm();
+
+                }
+            };
+        }();
+
+        // Class Initialization
+        jQuery(document).ready(function () {
+            Add.init();
+        });
+
+    </script>
+}
+
+

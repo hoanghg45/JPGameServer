@@ -25,8 +25,11 @@ namespace JPGame
         public string GiftTypeID { get; set; }
         public Nullable<double> RewardRate { get; set; }
         public Nullable<double> PointPlus { get; set; }
+        public string SpecialMemoryID { get; set; }
+        public string PersonalGiftID { get; set; }
     
-        public virtual GiftType GiftType { get; set; }
+        public virtual PersonalGift PersonalGift { get; set; }
+        public virtual SpecialMemory SpecialMemory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MemberCardLevel> MemberCardLevels { get; set; }
     }

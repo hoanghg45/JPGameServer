@@ -12,20 +12,20 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class Module
+    public partial class Slider
     {
-        public int ModulesID { get; set; }
-        public string Address { get; set; }
-        public string Hotline { get; set; }
-        public string Email { get; set; }
-        public string AboutMe { get; set; }
+        public int Id { get; set; }
+        public Nullable<int> TypeSlider { get; set; }
+        public string Name { get; set; }
+        public string Des { get; set; }
+        public string Image { get; set; }
+        public string TypeGame { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
     
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
+        public virtual TypeSlider TypeSlider1 { get; set; }
     }
 }

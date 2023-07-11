@@ -12,18 +12,17 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class GiftType
+    public partial class SpecialMemory
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public GiftType()
+        public SpecialMemory()
         {
             this.Gifts = new HashSet<Gift>();
         }
     
         public string ID { get; set; }
-        public Nullable<bool> SpecialDay { get; set; }
-        public Nullable<bool> Holiday { get; set; }
-        public Nullable<bool> Personal { get; set; }
+        public Nullable<bool> AvailableTemplates { get; set; }
+        public Nullable<bool> CustomizeAvailableTemplate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Gift> Gifts { get; set; }

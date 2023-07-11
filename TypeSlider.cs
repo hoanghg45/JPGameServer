@@ -12,20 +12,23 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class Module
+    public partial class TypeSlider
     {
-        public int ModulesID { get; set; }
-        public string Address { get; set; }
-        public string Hotline { get; set; }
-        public string Email { get; set; }
-        public string AboutMe { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TypeSlider()
+        {
+            this.Sliders = new HashSet<Slider>();
+        }
+    
+        public int Id { get; set; }
+        public string NameType { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
     
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Slider> Sliders { get; set; }
     }
 }

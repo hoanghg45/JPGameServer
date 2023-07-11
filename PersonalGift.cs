@@ -12,26 +12,20 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class MemberCardLevel
+    public partial class PersonalGift
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public MemberCardLevel()
+        public PersonalGift()
         {
-            this.Accounts = new HashSet<Account>();
+            this.Gifts = new HashSet<Gift>();
         }
     
-        public string LevelID { get; set; }
-        public string CardLevelID { get; set; }
-        public string GiftLevelID { get; set; }
-        public Nullable<bool> VIP { get; set; }
-        public string VIPGiftID { get; set; }
-        public Nullable<double> Balance { get; set; }
-        public Nullable<double> Points { get; set; }
+        public string ID { get; set; }
+        public bool SpecialDay { get; set; }
+        public Nullable<bool> Holiday { get; set; }
+        public Nullable<bool> Personal { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Account> Accounts { get; set; }
-        public virtual CardLevel CardLevel { get; set; }
-        public virtual Gift Gift { get; set; }
-        public virtual VIPGift VIPGift { get; set; }
+        public virtual ICollection<Gift> Gifts { get; set; }
     }
 }

@@ -11,7 +11,14 @@ namespace JPGame.Controllers
         private DBEntities db = new DBEntities();
         public ActionResult Index()
         {
-            return View();
+            //var data = db.Sliders.Where(x => x.TypeSlider1.NameType == "Banner trang chủ").Select(a => new
+            //{
+            //    a.Id,
+            //    a.Name,
+            //    a.Des,
+            //    a.Image
+            //});
+            return View(db.Sliders.Where(x => x.TypeSlider1.NameType == "Banner trang chủ").ToList());
         }
         public ActionResult Information()
         {
@@ -55,6 +62,25 @@ namespace JPGame.Controllers
                     return Json(new { code = 500, }, JsonRequestBehavior.AllowGet);
                 }
                
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Thất Bại" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public JsonResult Banner()
+        {
+            try
+            {
+                var data = db.Sliders.Where(x=>x.TypeSlider1.NameType== "Banner trang chủ").Select(a => new
+                {
+                    a.Id,
+                    a.Name,
+                    a.Des,
+                    a.Image
+                });
+                return Json(new { code = 200, data }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
