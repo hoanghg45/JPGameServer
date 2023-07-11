@@ -55,6 +55,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.49.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlAgilityPack.1.11.49\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -150,7 +153,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountsAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BlogAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Admin\Controllers\GameAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCardLevelController.cs" />
     <Compile Include="Areas\Admin\Controllers\ModulesAdminController.cs" />
@@ -158,6 +163,9 @@
     <Compile Include="Areas\Admin\Controllers\TypeSliderAdminController.cs" />
     <Compile Include="Areas\Admin\Extension\PaginationExtension.cs" />
     <Compile Include="Areas\Security\SessionCheck.cs" />
+    <Compile Include="Blog.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="CardLevel.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -176,13 +184,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Context.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Game.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="Gift.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="MemberCard.cs">
+      <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="MemberCardLevel.cs">
       <DependentUpon>Context.tt</DependentUpon>
@@ -191,6 +206,9 @@
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="PersonalGift.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Promotion.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2276,6 +2294,12 @@
     <Content Include="Areas\Admin\Views\TypeSliderAdmin\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SliderAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\SliderAdmin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\GameAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\GameAdmin\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\GameAdmin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\BlogAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\BlogAdmin\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\BlogAdmin\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2312,6 +2336,7 @@
     <Content Include="Views\Home\Information.cshtml" />
     <Content Include="Views\Home\AccountInformation.cshtml" />
     <Content Include="Views\Home\ChangePass.cshtml" />
+    <Content Include="Views\Game\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
