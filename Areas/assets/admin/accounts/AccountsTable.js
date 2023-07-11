@@ -61,9 +61,6 @@ function ShowTable(pagenumber) {
             $('.spinner').hide();
             isLoadingData = false;
             $('#QtyNote').text(`Displaying ${data.to} of ${data.total} records`)
-            
-            
-           
         },
         error: function () {
             // Xử lý lỗi (nếu cần thiết)

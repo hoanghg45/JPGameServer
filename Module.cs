@@ -25,7 +25,7 @@ namespace JPGame
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
     
-        public virtual User CreateUser { get; set; }
-        public virtual User ModifyUser { get; set; }
+        public virtual User User { get; set; }
+        public virtual User User1 { get; set; }
     }
 }

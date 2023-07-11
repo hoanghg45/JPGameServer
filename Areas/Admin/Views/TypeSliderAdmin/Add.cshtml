@@ -1,0 +1,186 @@
+﻿
+@{
+    ViewBag.Title = "Thêm Loại Trình Chiếu";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Subheader-->
+    <div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center flex-wrap mr-1">
+                <!--begin::Page Heading-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <!--begin::Page Title-->
+                    <h5 class="text-dark font-weight-bold my-1 mr-5">Thêm Loại Trình Chiếu</h5>
+                    <!--end::Page Title-->
+                </div>
+                <!--end::Page Heading-->
+            </div>
+            <!--end::Info-->
+        </div>
+    </div>
+    <!--end::Subheader-->
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--begin::Card-->
+                    <div class="card card-custom gutter-b example example-compact">
+                        <div class="card-header">
+                            <h3 class="card-title">Thông tin</h3>
+                        </div>
+                        <!--begin::Form-->
+                        <form id="Form" class="form">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Tên Loại:</label>
+                                    <input name="NameType" type="text" class="form-control form-control-solid" required placeholder="Tên Loại" />
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary mr-2 btnCreate">Tạo</button>
+                            </div>
+                        </form>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Card-->
+                </div>
+            </div>
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+@section scripts{
+    <script>
+        "use strict";
+
+        // Class Definition
+        var Add = function () {
+
+
+
+
+            var _handleSignInForm = function () {
+                var validation;
+                const form = document.getElementById('Form');
+                // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+                validation = FormValidation.formValidation(
+                    KTUtil.getById('Form'),
+                    {
+                        fields: {
+                            NameType: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Vui lòng nhập tên loại'
+                                    },
+
+                                }
+                            },
+                        },
+                        plugins: {
+                            trigger: new FormValidation.plugins.Trigger(),
+                            submitButton: new FormValidation.plugins.SubmitButton(),
+                            //defaultSubmit: new FormValidation.plugins.DefaultSubmit(), // Uncomment this line to enable normal button submit after form validation
+                            bootstrap: new FormValidation.plugins.Bootstrap(),
+                            icon: new FormValidation.plugins.Icon({
+                                valid: 'fa fa-check',
+                                invalid: 'fa fa-times',
+                                validating: 'fa fa-refresh',
+                            }),
+                        }
+                    }
+                );
+
+
+                $('.btnCreate').click(function () {
+                    let data = $('#Form').serialize()
+                    validation.validate().then(function (status) {
+                        if (status == 'Valid') {
+                            Add(data)
+                        } else {
+                            swal.fire({
+                                text: "Vui lòng điền đầy đủ thông tin.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                heightAuto: false,
+                                confirmButtonText: "Ok!",
+                                customClass: {
+                                    confirmButton: "btn font-weight-bold btn-light-primary"
+                                }
+                            }).then(function () {
+                                KTUtil.scrollTop();
+                            });
+                        }
+                    });
+
+                })
+
+
+
+
+                function Add(data) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Admin/TypeSliderAdmin/Adds",
+                        data: data,
+                        datatype: "json",
+                        success: function (result) {
+                            if (result.status == "success") {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Thêm thành công!',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(function () {
+                                    window.location.href ="/Admin/TypeSliderAdmin/Index"
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Đã có lỗi xảy ra, vui lòng thử lại!',
+                                    text: result.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+
+                                icon: 'error',
+                                title: 'Something wrong!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+                    })
+                }
+            }
+
+
+
+            // Public Functions
+            return {
+                // public functions
+                init: function () {
+
+
+                    _handleSignInForm();
+
+                }
+            };
+        }();
+
+        // Class Initialization
+        jQuery(document).ready(function () {
+            Add.init();
+        });
+
+    </script>
+    }
+
+

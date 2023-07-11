@@ -18,6 +18,7 @@ namespace JPGame
         public Nullable<int> TypeSlider { get; set; }
         public string Name { get; set; }
         public string Des { get; set; }
+        public string Image { get; set; }
         public string TypeGame { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }

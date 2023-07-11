@@ -154,6 +154,8 @@
     <Compile Include="Areas\Admin\Controllers\LoginAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCardLevelController.cs" />
     <Compile Include="Areas\Admin\Controllers\ModulesAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SliderAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\TypeSliderAdminController.cs" />
     <Compile Include="Areas\Admin\Extension\PaginationExtension.cs" />
     <Compile Include="Areas\Security\SessionCheck.cs" />
     <Compile Include="CardLevel.cs">
@@ -2268,6 +2270,12 @@
     <Content Include="Areas\Admin\Views\AccountsAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ModulesAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\MemberCardLevel\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SliderAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\TypeSliderAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\TypeSliderAdmin\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\TypeSliderAdmin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SliderAdmin\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\SliderAdmin\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

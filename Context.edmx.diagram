@@ -25,6 +25,9 @@
         <AssociationConnector Association="Model.FK_Gift_SpecialMemory" />
         <AssociationConnector Association="Model.FK_MemberCardLevel_Gift" />
         <AssociationConnector Association="Model.FK_MemberCardLevel_VIPGift" />
+        <AssociationConnector Association="Model.FK_Modules_Users" />
+        <AssociationConnector Association="Model.FK_Modules_Users1" />
+        <AssociationConnector Association="Model.FK_Slider_TypeSlider" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
