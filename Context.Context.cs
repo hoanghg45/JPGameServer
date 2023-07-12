@@ -40,7 +40,5 @@ namespace JPGame
         public virtual DbSet<TypeSlider> TypeSliders { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<VIPGift> VIPGifts { get; set; }
-        public virtual DbSet<Blog> Blogs { get; set; }
-        public virtual DbSet<Promotion> Promotions { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using JPGame.Areas.Admin.Extension;
 using JPGame.Areas.Security;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +74,7 @@ namespace JPGame.Areas.Admin.Controllers
           , JsonRequestBehavior.AllowGet
           );
         }
-
+        
         public JsonResult GetLevelFee(string LevelID)
         {
             try
@@ -95,14 +96,14 @@ namespace JPGame.Areas.Admin.Controllers
                 {
                     level.ID,
                     level.LevelFee,
-                    level.MemberCardLevels,
+                    //level.MemberCardLevels,
                     level.Color
                 };
                     return this.Json(
                 new
                 {
                     status = "Success",
-                    cardlevel
+                    cardlevel = cardlevel
 
                 }
                 , JsonRequestBehavior.AllowGet
