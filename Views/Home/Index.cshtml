@@ -1,64 +1,76 @@
 ﻿@model IEnumerable<JPGame.Slider>
 @{ ViewBag.Title = "Trang Chủ";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
-
 <section class="hero-section">
     <div class="hero-slider owl-carousel" name="banner">
         @foreach (var item in Model)
         {
-        <div class="hs-item set-bg" data-setbg="@item.Image" style="background-image:url('@item.Image')">
-            <div class="hs-text">
-                <div class="container">
-                    <h2>@item.Name</h2>
-                    <p>@(new HtmlString(item.Des))</p>
-                    <a href="#" class="site-btn">Read More</a>
-                </div>
-            </div>
-        </div>}
-        @*<div class="hs-item set-bg" data-setbg="/img/slider-1.jpg">
-                <div class="hs-text">
-                    <div class="container">
-                        <h2>The Best <span>Games</span> Out There</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada <br> lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. <br>Suspendisse cursus faucibus finibus.</p>
-                        <a href="#" class="site-btn">Read More</a>
-                    </div>
-                </div>
-            </div>*@
+<div class="hs-item set-bg" data-setbg="@item.Image" style="background-image:url('@item.Image')">
+    <div class="hs-text">
+        <div class="container">
+            <h2>@item.Name</h2>
+            <p>@(new HtmlString(item.Des))</p>
+            <a href="#" class="site-btn">Read More</a>
+        </div>
+    </div>
+</div>}
+    </div>
+</section>
+<div class="latest-news-section">
+    <div class="ln-title">Latest News</div>
+    <div class="news-ticker">
+        <div class="news-ticker-contant">
+            <div class="nt-item"><span class="new">new</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
+            <div class="nt-item"><span class="strategy">strategy</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+            <div class="nt-item"><span class="racing">racing</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+        </div>
+    </div>
+</div>
 
+<section class="recent-game-section spad set-bg" data-setbg="/img/recent-game-bg.png">
+    <div class="container">
+        <div class="section-title">
+            <div class="cata new">Trò chơi mới</div>
+            <h2>Các trò chơi</h2>
+        </div>
+        <div class="row" name="game">
+            @*@foreach (var item in ViewData["Game"])
+            {
+
+        }*@
+
+        </div>
     </div>
 </section>
 @section scripts{
     <script>
-
-        function Banner() {
+        $(function Game() {
             $.ajax({
-                url: '/Home/Banner',
                 type: 'get',
+                url: '/Home/Game',
                 success: function (data) {
-                    if (data.code == 200) {
-                        var div = ``
-                        $.each(data.data, function (k, v) {
-                            div += `<div class="hs-item set-bg" data-setbg="${v.Image}">
-                                                <div class="hs-text">
-                                                    <div class="container">
-                                                        <h2>${v.Name}</h2>
-                                                        <p>${v.Des}</p>
-                                                        <a href="#" class="site-btn">Read More</a>
-                                                    </div>
-                                                </div>
-                                            </div>`
-                        })
-                        $('div[name="banner"]').append(div)
-                    } else {
-                        Swal.fire(
-                            data.msg,
-                            '',
-                            'erorr'
-                        )
-                    }
+                    var div =``
+                    $.each(data.data, function (k, v) {
+                        div +=` <div class="col-lg-4 col-md-6">
+                                <div class="recent-game-item">
+                                    <div class="rgi-thumb set-bg" data-setbg="${v.Image}" style="background-image:url('${v.Image}')">
+                                        <div class="cata new">${v.Name}</div>
+                                    </div>
+                                    <div class="rgi-content">
+                                        <h5>${v.Title}</h5>
+                                        <p>${v.Des.substring(0, 300)}<a href="">...</a></p>
+                                        <div class="rgi-extra">
+                                            <div class="rgi-star"><img src="/img/icons/star.png" alt=""></div>
+                                            <div class="rgi-heart"><img src="/img/icons/heart.png" alt=""></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                    })
+                    $('div[name="game"]').append(div)
                 }
             })
-        }
+        })
     </script>
-    <script src="~/Scripts/owl.carousel.min.js"></script>
+
 }

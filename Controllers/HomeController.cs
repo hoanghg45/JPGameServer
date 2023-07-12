@@ -11,13 +11,6 @@ namespace JPGame.Controllers
         private DBEntities db = new DBEntities();
         public ActionResult Index()
         {
-            //var data = db.Sliders.Where(x => x.TypeSlider1.NameType == "Banner trang chủ").Select(a => new
-            //{
-            //    a.Id,
-            //    a.Name,
-            //    a.Des,
-            //    a.Image
-            //});
             return View(db.Sliders.Where(x => x.TypeSlider1.NameType == "Banner trang chủ").ToList());
         }
         public ActionResult Information()
@@ -69,17 +62,19 @@ namespace JPGame.Controllers
             }
         }
         [HttpGet]
-        public JsonResult Banner()
+        public JsonResult Game()
         {
             try
             {
-                var data = db.Sliders.Where(x=>x.TypeSlider1.NameType== "Banner trang chủ").Select(a => new
+                var data = db.Games.Select(a => new
                 {
                     a.Id,
                     a.Name,
                     a.Des,
-                    a.Image
-                });
+                    a.Image,
+                    a.Title,
+                    a.ModifyDate
+                }).OrderByDescending(x=>x.ModifyDate).Take(3);
                 return Json(new { code = 200, data }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
