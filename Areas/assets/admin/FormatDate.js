@@ -48,3 +48,21 @@ function getDateWithString(str) {
     return date
 
 }
+
+function dateTimeFormat(datetime) {
+
+    datetime = parseInt(datetime.substr(6)); // Lấy giá trị milliseconds từ chuỗi
+
+    var date = new Date(datetime); // Tạo đối tượng Date từ milliseconds
+
+    // Định dạng ngày giờ theo định dạng "DD/MM/YYYY hh:mm A"
+    var formattedDate = (date.getDate() < 10 ? '0' : '') + date.getDate() + '/' +
+        ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '/' +
+        date.getFullYear() + ' ' +
+        (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
+        (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + ' ' +
+        (date.getHours() < 12 ? 'AM' : 'PM');
+
+    return formattedDate
+
+}

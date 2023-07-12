@@ -48,7 +48,14 @@ function ShowTable(pagenumber) {
                 <td>${formatDate(v.From)}-${formatDate(v.To)}</td>
                 <td>${v.Rate}</td>
                 <td>${v.Status}</td>
-               
+                <td nowrap="nowrap">
+					<a href="/Admin/PromotionAdmin/EditPromotion/${v.ID}" class="btn btn-sm btn-clean btn-icon" title="Sửa">
+                <i class="la la-edit"></i>
+                </a>
+                 <a href="javascript:Delete('${v.ID}');" class="btn btn-sm btn-clean btn-icon deleteBtn" title="Xóa">
+                        <i class="la la-trash"></i>
+                        </a>
+                </td>
 
                 </tr>`
                     body.append(tr)
@@ -65,7 +72,8 @@ function ShowTable(pagenumber) {
             isLoadingData = false;
             $('#QtyNote').text(`Displaying ${data.to} of ${data.total} records`)
 
-
+            ///
+           
 
         },
         error: function () {
@@ -118,6 +126,50 @@ function initSelect() {
         })
     }
     GetVIPGifts(SetVipGiftCheck)
+}
+
+function Delete(ID) {
+    Swal.fire({
+        title: 'Bạn có muốn xóa dữ liệu này?',
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: 'Có, xóa!',
+        
+        customClass: {
+            actions: 'my-actions',
+            cancelButton: 'order-1 right-gap',
+            confirmButton: 'order-2',
+            denyButton: 'order-3',
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "/PromotionAdmin/DeletePromotion",
+                data: {
+                    id: ID
+                },
+
+                datatype: 'json',
+                success: function (data) {
+                    if (data.status == "success") {
+                        toastr.success('Thành công!')
+                        location.reload()
+                    } else {
+                        toastr.error(data.message, 'Đã có lỗi xảy ra vui lòng thử lại!')
+                    }
+
+                },
+                error: function () {
+
+                }
+            })
+        } else if (result.isDenied) {
+            Swal.fire('Changes are not saved', '', 'info')
+        }
+    })
+
+   
 }
 function GetLevelFee(LevelID) {
     $.ajax({
