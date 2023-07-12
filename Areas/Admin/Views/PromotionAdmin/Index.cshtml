@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
@@ -193,7 +194,7 @@
                 </div>
                 @*end::Dropdown
                     begin::Button*@
-                <a href="javascript:CreateModal();" class="btn btn-primary font-weight-bolder">
+                <a href="@Url.Action("CreatePromotion","PromotionAdmin",new {area ="Admin" })" class="btn btn-primary font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         @*begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg*@
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -266,10 +267,12 @@
                     <thead style="position: sticky; top: 0px; background: white">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Cấp độ thẻ</th>
-                            <th scope="col">Mức nạp để đạt</th>
-                            <th scope="col">Mức quà</th>
-                            <th scope="col">Vipzone</th>
+                            <th scope="col">Tiêu đề</th>
+                            <th scope="col">Nội dung</th>
+                            <th scope="col">Khoảng thời gian</th>
+                            <th scope="col">Tỉ lệ</th>
+                            <th scope="col">Trạng thái</th>
+
 
                         </tr>
                     </thead>
@@ -307,10 +310,6 @@
 
                             <label>Cấp độ thẻ:</label>
                             <select class="form-control select2" style="width:100%" id="SelectLevel" name="CardLevel">
-                                @foreach (var level in ViewBag.levels)
-                                {
-                                    <option value="@level.ID">@level.LevelName</option>
-                                }
                             </select>
 
                         </div>
@@ -327,10 +326,6 @@
                         <div class="form-group">
                             <label>Quà tặng:</label>
                             <select class="form-control select2" style="width:100%" id="SelectGift" name="Gift">
-                                @foreach (var gift in ViewBag.gifts)
-                                {
-                                    <option value="@gift.ID">@gift.GiftLevelName</option>
-                                }
                             </select>
                         </div>
                         <div class="form-group row">
@@ -338,7 +333,7 @@
                                 <label>Tỉ lệ tiền tặng:</label>
                                 <div class="input-group">
                                     <input type="text" readonly name="RewardRate" class="form-control" aria-describedby="basic-addon2" />
-                                    <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -404,7 +399,7 @@
                                 <label class="checkbox checkbox-disabled" id="labelMocktail">
                                     <input type="checkbox" id="Mocktail" disabled="disabled" name="CheckVIPGifts" />
                                     <span></span>
-                                    Ưu đãi Mocktail  
+                                    Ưu đãi Mocktail
                                 </label>
                                 <label class="checkbox checkbox-disabled">
                                     <input type="checkbox" id="VipRoom" disabled="disabled" name="CheckVIPGifts" />
@@ -418,7 +413,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary font-weight-bold btnCreate" >Tạo</button>
+                    <button type="button" class="btn btn-primary font-weight-bold btnCreate">Tạo</button>
                 </div>
             </div>
         </div>
@@ -428,5 +423,4 @@
 <script src="~/Areas/assets/plugins/global/plugins.bundle.js"></script>
 <script src="~/Areas/assets/js/pages/crud/forms/widgets/select2.js"></script>
 <script src="~/Areas/assets/admin/FormatDate.js"></script>
-<script src="~/Areas/assets/admin/membercardlevel/MemberCardLevel.js"></script>
-<script src="~/Areas/assets/admin/membercardlevel/AddMemberCard.js"></script>
+<script src="~/Areas/assets/admin/promotion/Promotion.js"></script>

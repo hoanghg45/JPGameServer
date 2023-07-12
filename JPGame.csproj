@@ -159,6 +159,7 @@
     <Compile Include="Areas\Admin\Controllers\LoginAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCardLevelController.cs" />
     <Compile Include="Areas\Admin\Controllers\ModulesAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PromotionAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\SliderAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\TypeSliderAdminController.cs" />
     <Compile Include="Areas\Admin\Extension\PaginationExtension.cs" />
@@ -234,8 +235,11 @@
     <Content Include="Areas\assets\admin\FormatDate.js" />
     <Content Include="Areas\assets\admin\layout.js" />
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
+    <Content Include="Areas\assets\admin\membercardlevel\AddMemberCard.js" />
     <Content Include="Areas\assets\admin\membercardlevel\MemberCardLevel.js" />
     <Content Include="Areas\assets\admin\module\module.js" />
+    <Content Include="Areas\assets\admin\promotion\AddPromotion.js" />
+    <Content Include="Areas\assets\admin\promotion\Promotion.js" />
     <Content Include="Areas\assets\css\pages\error\error-3.css" />
     <Content Include="Areas\assets\css\pages\error\error-4.css" />
     <Content Include="Areas\assets\css\pages\error\error-5.css" />
@@ -2274,13 +2278,6 @@
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\LoginAdmin\Index.cshtml" />
-    <EntityDeploy Include="Context.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Context.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Context.edmx.diagram">
-      <DependentUpon>Context.edmx</DependentUpon>
-    </Content>
     <Content Include="img\tournament\3DLayer.obj" />
     <Content Include="icon-fonts\fontawesome-webfont.eot" />
     <Content Include="icon-fonts\fontawesome-webfont.woff" />
@@ -2295,6 +2292,15 @@
     <Content Include="Areas\Admin\Views\TypeSliderAdmin\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SliderAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\SliderAdmin\Edit.cshtml" />
+    <EntityDeploy Include="Context.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Context.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Context.edmx.diagram">
+      <DependentUpon>Context.edmx</DependentUpon>
+    </Content>
+    <Content Include="Areas\Admin\Views\PromotionAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\PromotionAdmin\CreatePromotion.cshtml" />
     <Content Include="Areas\Admin\Views\GameAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\GameAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\GameAdmin\Edit.cshtml" />

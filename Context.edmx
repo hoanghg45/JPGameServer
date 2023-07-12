@@ -133,17 +133,17 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="From" Type="datetime" />
           <Property Name="To" Type="datetime" />
           <Property Name="Title" Type="nvarchar(max)" />
           <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="Rate" Type="float" />
           <Property Name="Status" Type="bit" />
           <Property Name="ModifyBy" Type="nchar" MaxLength="50" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="CreateBy" Type="nchar" MaxLength="50" />
           <Property Name="ModifyDate" Type="datetime" />
-          <Property Name="Rate" Type="float" />
         </EntityType>
         <EntityType Name="Slider">
           <Key>
@@ -467,8 +467,8 @@
           <Key>
             <PropertyRef Name="AccountID" />
           </Key>
-          <Property Name="AccountID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="AccountName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AccountID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AccountName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="MemberCardLevelID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -504,11 +504,29 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LevelName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="LevelFee" Type="Double" />
           <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_CardLevel" FromRole="CardLevel" ToRole="MemberCardLevel" />
+          <NavigationProperty Name="MemberCardLevels" Relationship="Self.FK_MemberCardLevel_CardLevel" FromRole="CardLevel" ToRole="MemberCardLevel" />
+        </EntityType>
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Slug" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Des" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Hot" Type="Boolean" />
+          <Property Name="PointReview" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Game">
           <Key>
@@ -532,16 +550,33 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="GiftLevelName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="GiftTypeID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="RewardRate" Type="Double" />
           <Property Name="PointPlus" Type="Double" />
           <Property Name="SpecialMemoryID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="PersonalGiftID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="PersonalGift" Relationship="Model.FK_Gift_PersonalGift" FromRole="Gift" ToRole="PersonalGift" />
-          <NavigationProperty Name="SpecialMemory" Relationship="Model.FK_Gift_SpecialMemory" FromRole="Gift" ToRole="SpecialMemory" />
-          <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_Gift" FromRole="Gift" ToRole="MemberCardLevel" />
+          <NavigationProperty Name="PersonalGift" Relationship="Self.FK_Gift_PersonalGift" FromRole="Gift" ToRole="PersonalGift" />
+          <NavigationProperty Name="SpecialMemory" Relationship="Self.FK_Gift_SpecialMemory" FromRole="Gift" ToRole="SpecialMemory" />
+          <NavigationProperty Name="MemberCardLevels" Relationship="Self.FK_MemberCardLevel_Gift" FromRole="Gift" ToRole="MemberCardLevel" />
+        </EntityType>
+        <EntityType Name="MemberCard">
+          <Key>
+            <PropertyRef Name="AccountID" />
+            <PropertyRef Name="MemberCardLevelID" />
+          </Key>
+          <Property Name="AccountID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MemberCardLevelID" Type="Int32" Nullable="false" />
+          <Property Name="Points" Type="Double" />
+          <Property Name="Balance" Type="Double" />
+          <Property Name="ModifyBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_MemberCard_Account" FromRole="MemberCard" ToRole="Account" />
+          <NavigationProperty Name="MemberCardLevel" Relationship="Self.FK_MemberCard_MemberCardLevel" FromRole="MemberCard" ToRole="MemberCardLevel" />
         </EntityType>
         <EntityType Name="MemberCard">
           <Key>
@@ -588,18 +623,18 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="User" Relationship="Model.FK_Modules_Users" FromRole="Module" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="Model.FK_Modules_Users1" FromRole="Module" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Modules_Users" FromRole="Modules" ToRole="Users" />
+          <NavigationProperty Name="User1" Relationship="Self.FK_Modules_Users1" FromRole="Modules" ToRole="Users" />
         </EntityType>
         <EntityType Name="PersonalGift">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="SpecialDay" Type="Boolean" Nullable="false" />
           <Property Name="Holiday" Type="Boolean" />
           <Property Name="Personal" Type="Boolean" />
-          <NavigationProperty Name="Gifts" Relationship="Model.FK_Gift_PersonalGift" FromRole="PersonalGift" ToRole="Gift" />
+          <NavigationProperty Name="Gifts" Relationship="Self.FK_Gift_PersonalGift" FromRole="PersonalGift" ToRole="Gift" />
         </EntityType>
         <EntityType Name="Promotion">
           <Key>
@@ -633,16 +668,16 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="TypeSlider1" Relationship="Model.FK_Slider_TypeSlider" FromRole="Slider" ToRole="TypeSlider" />
+          <NavigationProperty Name="TypeSlider1" Relationship="Self.FK_Slider_TypeSlider" FromRole="Slider" ToRole="TypeSlider" />
         </EntityType>
         <EntityType Name="SpecialMemory">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AvailableTemplates" Type="Boolean" />
           <Property Name="CustomizeAvailableTemplate" Type="Boolean" />
-          <NavigationProperty Name="Gifts" Relationship="Model.FK_Gift_SpecialMemory" FromRole="SpecialMemory" ToRole="Gift" />
+          <NavigationProperty Name="Gifts" Relationship="Self.FK_Gift_SpecialMemory" FromRole="SpecialMemory" ToRole="Gift" />
         </EntityType>
         <EntityType Name="TypeSlider">
           <Key>
@@ -655,13 +690,13 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="Sliders" Relationship="Model.FK_Slider_TypeSlider" FromRole="TypeSlider" ToRole="Slider" />
+          <NavigationProperty Name="Sliders" Relationship="Self.FK_Slider_TypeSlider" FromRole="TypeSlider" ToRole="Slider" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="UserID" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
@@ -671,23 +706,23 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="Modules" Relationship="Model.FK_Modules_Users" FromRole="User" ToRole="Module" />
-          <NavigationProperty Name="Modules1" Relationship="Model.FK_Modules_Users1" FromRole="User" ToRole="Module" />
+          <NavigationProperty Name="Modules" Relationship="Self.FK_Modules_Users" FromRole="Users" ToRole="Modules" />
+          <NavigationProperty Name="Modules1" Relationship="Self.FK_Modules_Users1" FromRole="Users" ToRole="Modules" />
           <NavigationProperty Name="Promotions" Relationship="Model.FK_Promotion_Users" FromRole="User" ToRole="Promotion" />
         </EntityType>
         <EntityType Name="VIPGift">
           <Key>
             <PropertyRef Name="VIPGiftID" />
           </Key>
-          <Property Name="VIPGiftID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VIPGiftID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Moctail" Type="Boolean" />
           <Property Name="VipRoom" Type="Boolean" />
           <Property Name="Discount" Type="Double" />
-          <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_VIPGift" FromRole="VIPGift" ToRole="MemberCardLevel" />
+          <NavigationProperty Name="MemberCardLevels" Relationship="Self.FK_MemberCardLevel_VIPGift" FromRole="VIPGift" ToRole="MemberCardLevel" />
         </EntityType>
         <Association Name="FK_MemberCard_Account">
-          <End Type="Model.Account" Role="Account" Multiplicity="1" />
-          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="*" />
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="MemberCard" Type="Self.MemberCard" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Account">
               <PropertyRef Name="AccountID" />
@@ -698,8 +733,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MemberCardLevel_CardLevel">
-          <End Type="Model.CardLevel" Role="CardLevel" Multiplicity="0..1" />
-          <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="*" />
+          <End Role="CardLevel" Type="Self.CardLevel" Multiplicity="0..1" />
+          <End Role="MemberCardLevel" Type="Self.MemberCardLevel" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CardLevel">
               <PropertyRef Name="ID" />
@@ -710,8 +745,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Gift_PersonalGift">
-          <End Type="Model.PersonalGift" Role="PersonalGift" Multiplicity="0..1" />
-          <End Type="Model.Gift" Role="Gift" Multiplicity="*" />
+          <End Role="PersonalGift" Type="Self.PersonalGift" Multiplicity="0..1" />
+          <End Role="Gift" Type="Self.Gift" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PersonalGift">
               <PropertyRef Name="ID" />
@@ -722,8 +757,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Gift_SpecialMemory">
-          <End Type="Model.SpecialMemory" Role="SpecialMemory" Multiplicity="0..1" />
-          <End Type="Model.Gift" Role="Gift" Multiplicity="*" />
+          <End Role="SpecialMemory" Type="Self.SpecialMemory" Multiplicity="0..1" />
+          <End Role="Gift" Type="Self.Gift" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SpecialMemory">
               <PropertyRef Name="ID" />
@@ -734,8 +769,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MemberCardLevel_Gift">
-          <End Type="Model.Gift" Role="Gift" Multiplicity="0..1" />
-          <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="*" />
+          <End Role="Gift" Type="Self.Gift" Multiplicity="0..1" />
+          <End Role="MemberCardLevel" Type="Self.MemberCardLevel" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Gift">
               <PropertyRef Name="ID" />
@@ -746,8 +781,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MemberCard_MemberCardLevel">
-          <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="1" />
-          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="*" />
+          <End Role="MemberCardLevel" Type="Self.MemberCardLevel" Multiplicity="1" />
+          <End Role="MemberCard" Type="Self.MemberCard" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="MemberCardLevel">
               <PropertyRef Name="LevelID" />
@@ -758,8 +793,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MemberCardLevel_VIPGift">
-          <End Type="Model.VIPGift" Role="VIPGift" Multiplicity="0..1" />
-          <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="*" />
+          <End Role="VIPGift" Type="Self.VIPGift" Multiplicity="0..1" />
+          <End Role="MemberCardLevel" Type="Self.MemberCardLevel" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VIPGift">
               <PropertyRef Name="VIPGiftID" />
@@ -770,25 +805,25 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Modules_Users">
-          <End Type="Model.User" Role="User" Multiplicity="0..1" />
-          <End Type="Model.Module" Role="Module" Multiplicity="*" />
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Modules" Type="Self.Module" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="User">
+            <Principal Role="Users">
               <PropertyRef Name="UserID" />
             </Principal>
-            <Dependent Role="Module">
+            <Dependent Role="Modules">
               <PropertyRef Name="CreateBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Modules_Users1">
-          <End Type="Model.User" Role="User" Multiplicity="0..1" />
-          <End Type="Model.Module" Role="Module" Multiplicity="*" />
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Modules" Type="Self.Module" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="User">
+            <Principal Role="Users">
               <PropertyRef Name="UserID" />
             </Principal>
-            <Dependent Role="Module">
+            <Dependent Role="Modules">
               <PropertyRef Name="ModifyBy" />
             </Dependent>
           </ReferentialConstraint>
@@ -806,8 +841,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Slider_TypeSlider">
-          <End Type="Model.TypeSlider" Role="TypeSlider" Multiplicity="0..1" />
-          <End Type="Model.Slider" Role="Slider" Multiplicity="*" />
+          <End Role="TypeSlider" Type="Self.TypeSlider" Multiplicity="0..1" />
+          <End Role="Slider" Type="Self.Slider" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TypeSlider">
               <PropertyRef Name="Id" />
@@ -817,7 +852,113 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        </Schema>
+        <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="CardLevels" EntityType="Self.CardLevel" />
+          <EntitySet Name="Games" EntityType="Self.Game" />
+          <EntitySet Name="Gifts" EntityType="Self.Gift" />
+          <EntitySet Name="MemberCards" EntityType="Self.MemberCard" />
+          <EntitySet Name="MemberCardLevels" EntityType="Self.MemberCardLevel" />
+          <EntitySet Name="Modules" EntityType="Self.Module" />
+          <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGift" />
+          <EntitySet Name="Sliders" EntityType="Self.Slider" />
+          <EntitySet Name="SpecialMemories" EntityType="Self.SpecialMemory" />
+          <EntitySet Name="TypeSliders" EntityType="Self.TypeSlider" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="VIPGifts" EntityType="Self.VIPGift" />
+          <AssociationSet Name="FK_MemberCard_Account" Association="Self.FK_MemberCard_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="MemberCard" EntitySet="MemberCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
+            <End Role="CardLevel" EntitySet="CardLevels" />
+            <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Gift_PersonalGift" Association="Self.FK_Gift_PersonalGift">
+            <End Role="PersonalGift" EntitySet="PersonalGifts" />
+            <End Role="Gift" EntitySet="Gifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Gift_SpecialMemory" Association="Self.FK_Gift_SpecialMemory">
+            <End Role="SpecialMemory" EntitySet="SpecialMemories" />
+            <End Role="Gift" EntitySet="Gifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardLevel_Gift" Association="Self.FK_MemberCardLevel_Gift">
+            <End Role="Gift" EntitySet="Gifts" />
+            <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCard_MemberCardLevel" Association="Self.FK_MemberCard_MemberCardLevel">
+            <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
+            <End Role="MemberCard" EntitySet="MemberCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardLevel_VIPGift" Association="Self.FK_MemberCardLevel_VIPGift">
+            <End Role="VIPGift" EntitySet="VIPGifts" />
+            <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Modules_Users" Association="Self.FK_Modules_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Modules" EntitySet="Modules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Modules_Users1" Association="Self.FK_Modules_Users1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Modules" EntitySet="Modules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slider_TypeSlider" Association="Self.FK_Slider_TypeSlider">
+            <End Role="TypeSlider" EntitySet="TypeSliders" />
+            <End Role="Slider" EntitySet="Sliders" />
+          </AssociationSet>
+          <EntitySet Name="Blogs" EntityType="Model.Blog" />
+          <EntitySet Name="Promotions" EntityType="Model.Promotion" />
+          <AssociationSet Name="FK_Promotion_Users" Association="Model.FK_Promotion_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Promotion" EntitySet="Promotions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Blog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Slug" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Des" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Promotion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="From" Type="DateTime" Precision="3" />
+          <Property Name="To" Type="DateTime" Precision="3" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Rate" Type="Double" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="ModifyBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="Model.FK_Promotion_Users" FromRole="Promotion" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Promotion_Users">
+          <End Type="Model.User" Role="User" Multiplicity="0..1" />
+          <End Type="Model.Promotion" Role="Promotion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Promotion">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -826,21 +967,21 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="Model.Account">
               <MappingFragment StoreEntitySet="Account">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Wedding" ColumnName="Wedding" />
-                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
-                <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
-                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
                 <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Wedding" ColumnName="Wedding" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -864,10 +1005,29 @@
           <EntitySetMapping Name="CardLevels">
             <EntityTypeMapping TypeName="Model.CardLevel">
               <MappingFragment StoreEntitySet="CardLevel">
-                <ScalarProperty Name="Color" ColumnName="Color" />
-                <ScalarProperty Name="LevelFee" ColumnName="LevelFee" />
-                <ScalarProperty Name="LevelName" ColumnName="LevelName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LevelName" ColumnName="LevelName" />
+                <ScalarProperty Name="LevelFee" ColumnName="LevelFee" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Games">
+            <EntityTypeMapping TypeName="Model.Game">
+              <MappingFragment StoreEntitySet="Games">
+                <ScalarProperty Name="PointReview" ColumnName="PointReview" />
+                <ScalarProperty Name="Hot" ColumnName="Hot" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Des" ColumnName="Des" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -893,13 +1053,28 @@
           <EntitySetMapping Name="Gifts">
             <EntityTypeMapping TypeName="Model.Gift">
               <MappingFragment StoreEntitySet="Gift">
-                <ScalarProperty Name="PersonalGiftID" ColumnName="PersonalGiftID" />
-                <ScalarProperty Name="SpecialMemoryID" ColumnName="SpecialMemoryID" />
-                <ScalarProperty Name="PointPlus" ColumnName="PointPlus" />
-                <ScalarProperty Name="RewardRate" ColumnName="RewardRate" />
-                <ScalarProperty Name="GiftTypeID" ColumnName="GiftTypeID" />
-                <ScalarProperty Name="GiftLevelName" ColumnName="GiftLevelName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GiftLevelName" ColumnName="GiftLevelName" />
+                <ScalarProperty Name="GiftTypeID" ColumnName="GiftTypeID" />
+                <ScalarProperty Name="RewardRate" ColumnName="RewardRate" />
+                <ScalarProperty Name="PointPlus" ColumnName="PointPlus" />
+                <ScalarProperty Name="SpecialMemoryID" ColumnName="SpecialMemoryID" />
+                <ScalarProperty Name="PersonalGiftID" ColumnName="PersonalGiftID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberCards">
+            <EntityTypeMapping TypeName="Model.MemberCard">
+              <MappingFragment StoreEntitySet="MemberCard">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
+                <ScalarProperty Name="Points" ColumnName="Points" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -926,32 +1101,36 @@
                 <ScalarProperty Name="GiftLevelID" ColumnName="GiftLevelID" />
                 <ScalarProperty Name="CardLevelID" ColumnName="CardLevelID" />
                 <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="CardLevelID" ColumnName="CardLevelID" />
+                <ScalarProperty Name="GiftLevelID" ColumnName="GiftLevelID" />
+                <ScalarProperty Name="VIP" ColumnName="VIP" />
+                <ScalarProperty Name="VIPGiftID" ColumnName="VIPGiftID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Modules">
             <EntityTypeMapping TypeName="Model.Module">
               <MappingFragment StoreEntitySet="Modules">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="AboutMe" ColumnName="AboutMe" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Hotline" ColumnName="Hotline" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="ModulesID" ColumnName="ModulesID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Hotline" ColumnName="Hotline" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AboutMe" ColumnName="AboutMe" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PersonalGifts">
             <EntityTypeMapping TypeName="Model.PersonalGift">
               <MappingFragment StoreEntitySet="PersonalGift">
-                <ScalarProperty Name="Personal" ColumnName="Personal" />
-                <ScalarProperty Name="Holiday" ColumnName="Holiday" />
-                <ScalarProperty Name="SpecialDay" ColumnName="SpecialDay" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SpecialDay" ColumnName="SpecialDay" />
+                <ScalarProperty Name="Holiday" ColumnName="Holiday" />
+                <ScalarProperty Name="Personal" ColumnName="Personal" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -986,54 +1165,98 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="TypeSlider" ColumnName="TypeSlider" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TypeSlider" ColumnName="TypeSlider" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Des" ColumnName="Des" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="TypeGame" ColumnName="TypeGame" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SpecialMemories">
             <EntityTypeMapping TypeName="Model.SpecialMemory">
               <MappingFragment StoreEntitySet="SpecialMemory">
-                <ScalarProperty Name="CustomizeAvailableTemplate" ColumnName="CustomizeAvailableTemplate" />
-                <ScalarProperty Name="AvailableTemplates" ColumnName="AvailableTemplates" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AvailableTemplates" ColumnName="AvailableTemplates" />
+                <ScalarProperty Name="CustomizeAvailableTemplate" ColumnName="CustomizeAvailableTemplate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TypeSliders">
             <EntityTypeMapping TypeName="Model.TypeSlider">
               <MappingFragment StoreEntitySet="TypeSlider">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="NameType" ColumnName="NameType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NameType" ColumnName="NameType" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="Model.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Role" ColumnName="Role" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="VIPGifts">
             <EntityTypeMapping TypeName="Model.VIPGift">
               <MappingFragment StoreEntitySet="VIPGift">
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="VipRoom" ColumnName="VipRoom" />
-                <ScalarProperty Name="Moctail" ColumnName="Moctail" />
                 <ScalarProperty Name="VIPGiftID" ColumnName="VIPGiftID" />
+                <ScalarProperty Name="Moctail" ColumnName="Moctail" />
+                <ScalarProperty Name="VipRoom" ColumnName="VipRoom" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Blogs">
+            <EntityTypeMapping TypeName="Model.Blog">
+              <MappingFragment StoreEntitySet="Blog">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Des" ColumnName="Des" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Promotions">
+            <EntityTypeMapping TypeName="Model.Promotion">
+              <MappingFragment StoreEntitySet="Promotion">
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

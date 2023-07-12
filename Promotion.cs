@@ -19,12 +19,12 @@ namespace JPGame
         public Nullable<System.DateTime> To { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+        public Nullable<double> Rate { get; set; }
         public Nullable<bool> Status { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> ModifyDate { get; set; }
-        public Nullable<double> Rate { get; set; }
     
         public virtual User User { get; set; }
     }
