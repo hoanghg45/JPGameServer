@@ -65,6 +65,8 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
+          <Property Name="Hot" Type="bit" />
+          <Property Name="PointReview" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Gift">
           <Key>
@@ -523,6 +525,8 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="Hot" Type="Boolean" />
+          <Property Name="PointReview" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Gift">
           <Key>
@@ -870,6 +874,8 @@
           <EntitySetMapping Name="Games">
             <EntityTypeMapping TypeName="Model.Game">
               <MappingFragment StoreEntitySet="Games">
+                <ScalarProperty Name="PointReview" ColumnName="PointReview" />
+                <ScalarProperty Name="Hot" ColumnName="Hot" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />

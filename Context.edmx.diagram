@@ -7,7 +7,7 @@
       <Diagram DiagramId="0d5ecd61f773402b95cc67c13db5c68a" Name="Diagram1">
         <EntityTypeShape EntityType="Model.Account" Width="1.5" PointX="5.25" PointY="7.375" />
         <EntityTypeShape EntityType="Model.Blog" Width="1.5" PointX="0.75" PointY="10.75" />
-        <EntityTypeShape EntityType="Model.CardLevel" Width="1.5" PointX="3" PointY="5.25" />
+        <EntityTypeShape EntityType="Model.CardLevel" Width="1.5" PointX="3" PointY="8" />
         <EntityTypeShape EntityType="Model.Game" Width="1.5" PointX="2.75" PointY="12.75" />
         <EntityTypeShape EntityType="Model.Gift" Width="1.5" PointX="3" PointY="1.125" />
         <EntityTypeShape EntityType="Model.MemberCard" Width="1.5" PointX="7.5" PointY="1" />
@@ -19,7 +19,7 @@
         <EntityTypeShape EntityType="Model.SpecialMemory" Width="1.5" PointX="0.75" PointY="5.625" />
         <EntityTypeShape EntityType="Model.TypeSlider" Width="1.5" PointX="9.75" PointY="1.375" />
         <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="7.75" PointY="8.125" />
-        <EntityTypeShape EntityType="Model.VIPGift" Width="1.5" PointX="3" PointY="8" />
+        <EntityTypeShape EntityType="Model.VIPGift" Width="1.5" PointX="3" PointY="5.25" />
         <AssociationConnector Association="Model.FK_MemberCard_Account" />
         <AssociationConnector Association="Model.FK_MemberCardLevel_CardLevel" />
         <AssociationConnector Association="Model.FK_Gift_PersonalGift" />

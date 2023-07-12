@@ -62,6 +62,7 @@
                             <th scope="col">Ngày Sửa</th>
                             <th scope="col">Người Sửa</th>
                             <th scope="col">Trạng Thái</th>
+                            <th scope="col">Hot</th>
                             <th scope="col">Hành Động</th>
                         </tr>
                     </thead>
@@ -143,6 +144,7 @@ function ShowTable(pagenumber,search) {
                 <td>${formatDate(v.ModifyDate)}</td>
                 <td>${v.ModifyBy}</td>
                 <td>${v.Status}</td>
+                <td>${v.Hot}</td>
                 <td nowrap="nowrap">
 					<a href="/Admin/GameAdmin/Edit/${v.Id}" class="btn btn-sm btn-clean btn-icon" title="Sửa">
     <i class="la la-edit"></i>

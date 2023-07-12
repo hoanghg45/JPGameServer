@@ -62,7 +62,8 @@ namespace JPGame.Areas.Admin.Controllers
                 a.CreateBy,
                 a.ModifyDate,
                 a.ModifyBy,
-                a.Status
+                a.Status,
+                a.Hot
             }).Where(x => x.Name.Contains(search) || x.Name.ToLower().Contains(search));
 
 
@@ -103,11 +104,14 @@ namespace JPGame.Areas.Admin.Controllers
         [HttpPost,ValidateInput(false)]
         public JsonResult Adds(Game game)
         {
-            
             try
             {
                 string UserID = Session["UserID"].ToString();
                 var user = db.Users.Find(UserID);
+                if (game.Hot == null)
+                {
+                    game.Hot = false;
+                }
                 game.Des = documentHTML(game.Des, "games");
                 game.CreateDate = DateTime.Now;
                 game.ModifyDate = DateTime.Now;
@@ -148,6 +152,12 @@ namespace JPGame.Areas.Admin.Controllers
                 string UserID = Session["UserID"].ToString();
                 var user = db.Users.Find(UserID);
                 var data = db.Games.Find(game.Id);
+                if (game.Hot == null)
+                {
+                    game.Hot = false;
+                }
+                data.Hot = game.Hot;
+                data.PointReview = game.PointReview;
                 data.Name = game.Name;
                 data.Slug = game.Slug;
                 data.Title = game.Title;
