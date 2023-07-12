@@ -2292,13 +2292,6 @@
     <Content Include="Areas\Admin\Views\TypeSliderAdmin\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SliderAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\SliderAdmin\Edit.cshtml" />
-    <EntityDeploy Include="Context.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Context.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Context.edmx.diagram">
-      <DependentUpon>Context.edmx</DependentUpon>
-    </Content>
     <Content Include="Areas\Admin\Views\PromotionAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\PromotionAdmin\CreatePromotion.cshtml" />
     <Content Include="Areas\Admin\Views\GameAdmin\Index.cshtml" />
@@ -2307,6 +2300,13 @@
     <Content Include="Areas\Admin\Views\BlogAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\BlogAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\BlogAdmin\Edit.cshtml" />
+    <EntityDeploy Include="Context.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Context.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Context.edmx.diagram">
+      <DependentUpon>Context.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

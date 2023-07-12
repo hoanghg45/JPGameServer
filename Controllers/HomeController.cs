@@ -75,7 +75,17 @@ namespace JPGame.Controllers
                     a.Title,
                     a.ModifyDate
                 }).OrderByDescending(x=>x.ModifyDate).Take(3);
-                return Json(new { code = 200, data }, JsonRequestBehavior.AllowGet);
+                var dataHot = db.Games.Where(x=>x.Hot==true).Select(a => new
+                {
+                    a.Id,
+                    a.Name,
+                    a.Des,
+                    a.PointReview,
+                    a.Image,
+                    a.Title,
+                    a.ModifyDate
+                }).OrderByDescending(x => x.ModifyDate).Take(4);
+                return Json(new { code = 200, data, dataHot }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
