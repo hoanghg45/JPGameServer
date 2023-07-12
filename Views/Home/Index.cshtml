@@ -34,10 +34,15 @@
             <h2>Các trò chơi</h2>
         </div>
         <div class="row" name="game">
-            @*@foreach (var item in ViewData["Game"])
-            {
 
-        }*@
+        </div>
+    </div>
+</section>
+
+<section class="tournaments-section spad">
+    <div class="container">
+        <div class="tournament-title">Tin Mới</div>
+        <div class="row" name="blog">
 
         </div>
     </div>
@@ -68,6 +73,34 @@
                             </div>`
                     })
                     $('div[name="game"]').append(div)
+                }
+            })
+        })
+        $(function Blog() {
+            $.ajax({
+                type: 'get',
+                url: '/Home/Blog',
+                success: function (data) {
+                    var div = ``
+                    $.each(data.data, function (k, v) {
+                        div += `<div class="col-md-6">
+                                    <div class="tournament-item mb-4 mb-lg-0">
+                                        <div class="ti-notic">${v.Title}</div>
+                                        <div class="ti-content">
+                                            <div class="ti-thumb set-bg" data-setbg="${v.Image}"style="background-image:url('${v.Image}')"></div>
+                                            <div class="ti-text">
+                                                <h4>${v.Name}</h4>
+                                                <ul>
+                                                    <li><span>Ngày viết:</span>${formatDate(v.ModifyDate)}</li>
+                                                    <li><span>Người viết:</span> ${v.ModifyBy}</li>
+                                                </ul>
+                                                <p>${v.Des.substring(0,200)}...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`
+                    })
+                    $('div[name="blog"]').append(div)
                 }
             })
         })

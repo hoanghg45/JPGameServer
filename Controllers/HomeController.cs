@@ -83,6 +83,28 @@ namespace JPGame.Controllers
             }
         }
         [HttpGet]
+        public JsonResult Blog()
+        {
+            try
+            {
+                var data = db.Blogs.Select(a => new
+                {
+                    a.Id,
+                    a.Name,
+                    a.Des,
+                    a.Image,
+                    a.Title,
+                    a.ModifyDate,
+                    a.ModifyBy,
+                }).OrderByDescending(x => x.ModifyDate).Take(2);
+                return Json(new { code = 200, data }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Thất Bại" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
         public JsonResult LogOut()
         {
             try

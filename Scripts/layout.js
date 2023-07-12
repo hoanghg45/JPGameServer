@@ -36,15 +36,7 @@ $(document).on('click', 'a[name = "logout"]', function (e) {
         }
     })
 })
-function formatDate(jsonDate) {
-    jsonDate = jsonDate.substr(6)
-    var date = jsonTodDate(jsonDate)
-    return [
-        date.getFullYear(),
-        padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
-    ].join('-');
-}
+
 
 toastr.options = {
     "closeButton": true,
