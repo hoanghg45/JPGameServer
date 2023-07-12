@@ -27,12 +27,18 @@ namespace JPGame
     
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<CardLevel> CardLevels { get; set; }
-        public virtual DbSet<VIPGift> VIPGifts { get; set; }
+        public virtual DbSet<Game> Games { get; set; }
         public virtual DbSet<Gift> Gifts { get; set; }
+        public virtual DbSet<MemberCard> MemberCards { get; set; }
+        public virtual DbSet<MemberCardLevel> MemberCardLevels { get; set; }
+        public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<PersonalGift> PersonalGifts { get; set; }
         public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<SpecialMemory> SpecialMemories { get; set; }
         public virtual DbSet<TypeSlider> TypeSliders { get; set; }
-        public virtual DbSet<MemberCardLevel> MemberCardLevels { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<VIPGift> VIPGifts { get; set; }
+        public virtual DbSet<Blog> Blogs { get; set; }
+        public virtual DbSet<Promotion> Promotions { get; set; }
     }
 }

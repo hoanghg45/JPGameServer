@@ -27,7 +27,7 @@ function ShowTable(pagenumber) {
 
     $.ajax({
         type: "GET",
-        url: "/MemberCardLevel/DataTable",
+        url: "/PromotionAdmin/DataTable",
         data: {
             page: pagenumber
         },
@@ -43,10 +43,11 @@ function ShowTable(pagenumber) {
                 $.each(data.data, function (i, v) {
                     let tr = `<tr>
                 <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
-                <td>${v.CardLevel}</td>
-                <td>${v.LevelFee}</td>
-                <td>${v.GiftLevelName}</td>
-                <td>${v.Vipzone}</td>
+                <td>${v.Title}</td>
+                <td>${v.Content}</td>
+                <td>${formatDate(v.From)}-${formatDate(v.To)}</td>
+                <td>${v.Rate}</td>
+                <td>${v.Status}</td>
                
 
                 </tr>`

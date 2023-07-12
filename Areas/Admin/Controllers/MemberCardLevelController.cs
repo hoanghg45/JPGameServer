@@ -21,7 +21,8 @@ namespace JPGame.Areas.Admin.Controllers
             ViewBag.levels = levels;
             var gifts = db.Gifts.ToList();
             ViewBag.gifts = gifts;
-
+            var vip = db.VIPGifts.FirstOrDefault();
+            ViewBag.vip = vip;
             return View();
         }
         [HttpGet]
@@ -121,40 +122,25 @@ namespace JPGame.Areas.Admin.Controllers
               );
                 }
         }
-        public JsonResult GetGiftInformation(string GiftID)
+        [HttpGet]
+        public JsonResult GetVipGifts()
         {
             try
             {
-                if (string.IsNullOrEmpty(GiftID) || !db.Gifts.Any(l => l.ID.Equals(GiftID)))
+               
+                var vip = db.VIPGifts.FirstOrDefault();
+                var vipgift = new
                 {
-                    return this.Json(
-                    new
-                    {
-                        status = "Error",
-                        message = "Quà tặng không tồn tại vui lòng thử lại"
-
-                    }
-                    , JsonRequestBehavior.AllowGet
-                    );
-                }
-                var Gift = db.Gifts.Find(GiftID);
-                var gift = new
-                {
-                   Gift.ID,
-                   Gift.PointPlus,
-                    RewardRate= Math.Round(Gift.RewardRate.Value * 100),
-                    Personal = Gift.PersonalGift != null && Gift.PersonalGift.Personal.Value,
-                    Holiday = Gift.PersonalGift != null && Gift.PersonalGift.Holiday.Value,
-                    Special = Gift.PersonalGift != null && Gift.PersonalGift.SpecialDay,
-                    AvailableTemplates = Gift.SpecialMemory != null && Gift.SpecialMemory.AvailableTemplates.Value,
-                    CustomizeAvailableTemplate= Gift.SpecialMemory != null && Gift.SpecialMemory.CustomizeAvailableTemplate.Value,
-                   
+                    vip.VIPGiftID,
+                    vip.Moctail,
+                    vip.VipRoom,
+                    vip.Discount
                 };
                     return this.Json(
                 new
                 {
                     status = "Success",
-                    gift
+                    vipgift
 
                 }
                 , JsonRequestBehavior.AllowGet
@@ -174,6 +160,100 @@ namespace JPGame.Areas.Admin.Controllers
               );
                 }
         }
+        public JsonResult GetGiftInformation(string GiftID)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(GiftID) || !db.Gifts.Any(l => l.ID.Equals(GiftID)))
+                {
+                    return this.Json(
+                    new
+                    {
+                        status = "Error",
+                        message = "Quà tặng không tồn tại vui lòng thử lại"
+
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
+                }
+                var Gift = db.Gifts.Find(GiftID);
+                var gift = new
+                {
+                    Gift.ID,
+                    Gift.PointPlus,
+                    RewardRate = Math.Round(Gift.RewardRate.Value * 100),
+                    Personal = Gift.PersonalGift != null && Gift.PersonalGift.Personal.Value,
+                    Holiday = Gift.PersonalGift != null && Gift.PersonalGift.Holiday.Value,
+                    Special = Gift.PersonalGift != null && Gift.PersonalGift.SpecialDay,
+                    AvailableTemplates = Gift.SpecialMemory != null && Gift.SpecialMemory.AvailableTemplates.Value,
+                    CustomizeAvailableTemplate = Gift.SpecialMemory != null && Gift.SpecialMemory.CustomizeAvailableTemplate.Value,
+
+                };
+                return this.Json(
+            new
+            {
+                status = "Success",
+                gift
+
+            }
+            , JsonRequestBehavior.AllowGet
+            );
+
+            }
+            catch (Exception e)
+            {
+                return this.Json(
+          new
+          {
+              status = "Error",
+              message = e.InnerException
+
+          }
+          , JsonRequestBehavior.AllowGet
+          );
+            }
+        }
+    [HttpPost]
+    public JsonResult AddMemberCard(FormCollection collection)
+        {
+            try
+            {
+
+                bool vip = !string.IsNullOrEmpty(collection["CheckVIP"]) && collection["CheckVIP"].Equals("on");
+                var MemberCard = new MemberCardLevel
+                {
+                    CardLevelID = collection["CardLevel"],
+                    GiftLevelID = collection["Gift"],
+                    VIP = vip,
+                };
+                db.MemberCardLevels.Add(MemberCard);
+                db.SaveChanges();
+                return this.Json(
+                new
+                {
+                    status = "Success",
+                    
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+                
+            }
+            catch(Exception e)
+            {
+                    return this.Json(
+              new
+              {
+                status = "Error",
+                message =e.InnerException
+
+              }
+              , JsonRequestBehavior.AllowGet
+              );
+                }
+        }
+
+
     }
 
 }

@@ -19,6 +19,7 @@ namespace JPGame
         {
             this.Modules = new HashSet<Module>();
             this.Modules1 = new HashSet<Module>();
+            this.Promotions = new HashSet<Promotion>();
         }
     
         public string UserID { get; set; }
@@ -36,5 +37,7 @@ namespace JPGame
         public virtual ICollection<Module> Modules { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Module> Modules1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Promotion> Promotions { get; set; }
     }
 }

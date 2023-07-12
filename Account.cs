@@ -14,6 +14,12 @@ namespace JPGame
     
     public partial class Account
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Account()
+        {
+            this.MemberCards = new HashSet<MemberCard>();
+        }
+    
         public string AccountID { get; set; }
         public string AccountName { get; set; }
         public string Avatar { get; set; }
@@ -30,6 +36,7 @@ namespace JPGame
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
     
-        public virtual MemberCardLevel MemberCardLevel { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MemberCard> MemberCards { get; set; }
     }
 }
