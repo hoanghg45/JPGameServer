@@ -39,14 +39,27 @@ namespace JPGame.Controllers
             return View();
         }
         [HttpGet]
+        public JsonResult Module()
+        {
+            try
+            {
+                var module = db.Modules.Find(1);
+                return Json(new { code = 200, logo = module.Logo }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Thất Bại" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
         public JsonResult CheckSession()
         {
             try
             {
                 var account = (Account)Session["account"];
-
-                if(account != null)
+                if (account != null)
                 {
+                  
                     var user = db.Accounts.Find(account.AccountID);
                     return Json(new { code = 200, user = user}, JsonRequestBehavior.AllowGet);
                 }
@@ -93,6 +106,26 @@ namespace JPGame.Controllers
             }
         }
         [HttpGet]
+        public JsonResult Promotion()
+        {
+            try
+            {
+                var data = db.Promotions.Select(a => new
+                {
+                    a.ID,
+                    a.Content,
+                    a.Title,
+                    a.ModifyDate,
+                    a.ModifyBy,
+                }).OrderByDescending(x => x.ModifyDate);
+                return Json(new { code = 200, data }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Thất Bại" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
         public JsonResult Blog()
         {
             try
@@ -107,7 +140,17 @@ namespace JPGame.Controllers
                     a.ModifyDate,
                     a.ModifyBy,
                 }).OrderByDescending(x => x.ModifyDate).Take(2);
-                return Json(new { code = 200, data }, JsonRequestBehavior.AllowGet);
+                var dataHot = db.Blogs.Where(x=>x.Hot==true).Select(a => new
+                {
+                    a.Id,
+                    a.Name,
+                    a.Des,
+                    a.Image,
+                    a.Title,
+                    a.ModifyDate,
+                    a.ModifyBy,
+                }).OrderByDescending(x => x.ModifyDate).Take(3);
+                return Json(new { code = 200, data, dataHot }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {

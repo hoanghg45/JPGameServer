@@ -40,7 +40,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <link href="~/Areas/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />
     <link href="~/Areas/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
     <!--end::Layout Themes-->
-    <link rel="shortcut icon" href="" />
+    <link rel="shortcut icon" href="" name="logo"/>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -55,7 +55,7 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="d-flex flex-column-auto flex-column pt-lg-40 pt-15">
                     <!--begin::Aside header-->
                     <a href="trang-chu" class="login-logo text-center pt-lg-25 pb-10">
-                        <img src="~/Areas/assets/media/logos/logo-1.png" class="max-h-70px" alt="" />
+                        <img style="width:100%" class="max-h-70px" alt="" name="logo" />
                     </a>
                     <!--end::Aside header-->
                 </div>
@@ -125,6 +125,21 @@ License: You must have a valid license purchased only from themeforest(the above
     <!--end::Global Theme Bundle-->
     <!--begin::Page Scripts(used by this page)-->
     <script src="~/Areas/assets/js/pages/custom/login/login-3.js"></script>
+    <script>
+        $(function Module() {
+            $.ajax({
+                url: '/Home/Module',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('link[name="logo"]').attr("href", data.logo)
+                        $('img[name="logo"]').attr("src", data.logo)
+                    } else {
+                    }
+                }
+            })
+        })
+    </script>
     <!--end::Page Scripts-->
 </body>
 <!--end::Body-->

@@ -15,6 +15,7 @@ namespace JPGame
     public partial class Module
     {
         public int ModulesID { get; set; }
+        public string Logo { get; set; }
         public string Address { get; set; }
         public string Hotline { get; set; }
         public string Email { get; set; }

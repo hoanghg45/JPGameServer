@@ -26,7 +26,7 @@
     <link href="~/Areas/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <!--end::Layout Themes-->
-    <link rel="shortcut icon" href="" />
+    <link rel="shortcut icon" href="" name="logo"/>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -41,7 +41,7 @@
                 <div class="d-flex flex-column-auto flex-column pt-15 px-30">
                     <!--begin::Aside header-->
                     <a href="#" class="login-logo py-6">
-                        <img src="~/Areas/assets/media/logos/logo-1.png" class="max-h-70px" alt="" />
+                        <img style="width:100%" name="logo" class="max-h-70px" alt="" />
                     </a>
                     <!--end::Aside header-->
                     <!--begin: Wizard Nav-->
@@ -78,17 +78,17 @@
                             <!--end::Wizard Step 2 Nav-->
                             <!--begin::Wizard Step 3 Nav-->
                             @*<div class="wizard-step" data-wizard-type="step">
-                                <div class="wizard-wrapper">
-                                    <div class="wizard-icon">
-                                        <i class="wizard-check ki ki-check"></i>
-                                        <span class="wizard-number">3</span>
+                                    <div class="wizard-wrapper">
+                                        <div class="wizard-icon">
+                                            <i class="wizard-check ki ki-check"></i>
+                                            <span class="wizard-number">3</span>
+                                        </div>
+                                        <div class="wizard-label">
+                                            <h3 class="wizard-title">Make Payment</h3>
+                                            <div class="wizard-desc">Use Credit or Debit Cards</div>
+                                        </div>
                                     </div>
-                                    <div class="wizard-label">
-                                        <h3 class="wizard-title">Make Payment</h3>
-                                        <div class="wizard-desc">Use Credit or Debit Cards</div>
-                                    </div>
-                                </div>
-                            </div>*@
+                                </div>*@
                             <!--end::Wizard Step 3 Nav-->
                             <!--begin::Wizard Step 4 Nav-->
                             <div class="wizard-step" data-wizard-type="step">
@@ -143,13 +143,13 @@
                                 <!--begin::Form Group-->
                                 <div class="form-group">
                                     <label class="font-size-h6 font-weight-bolder text-dark">Mật Khẩu</label>
-                                    <input type="password" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"onkeyup="KeyUpCopy('pass')" name="pass" placeholder="Mật Khẩu" value="" />
+                                    <input type="password" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" onkeyup="KeyUpCopy('pass')" name="pass" placeholder="Mật Khẩu" value="" />
                                 </div>
                                 <!--end::Form Group-->
                                 <!--begin::Form Group-->
                                 <div class="form-group">
                                     <label class="font-size-h6 font-weight-bolder text-dark">Nhập Lại Mật Khẩu</label>
-                                    <input type="password" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"onkeyup="KeyUpCopy('pass_again')" name="pass_again" placeholder="Mật Khẩu" value="" />
+                                    <input type="password" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" onkeyup="KeyUpCopy('pass_again')" name="pass_again" placeholder="Mật Khẩu" value="" />
                                 </div>
                                 <!--end::Form Group-->
                             </div>
@@ -167,7 +167,7 @@
                                         <!--begin::Input-->
                                         <div class="form-group">
                                             <label class="font-size-h6 font-weight-bolder text-dark">Họ Và Tên</label>
-                                            <input type="text" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"onkeyup="KeyUpCopy('fullname')" name="fullname" placeholder="Họ Và Tên" value="" />
+                                            <input type="text" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" onkeyup="KeyUpCopy('fullname')" name="fullname" placeholder="Họ Và Tên" value="" />
                                         </div>
                                         <!--end::Input-->
                                     </div>
@@ -175,7 +175,7 @@
                                         <!--begin::Input-->
                                         <div class="form-group">
                                             <label class="font-size-h6 font-weight-bolder text-dark">Số Điện Thoại</label>
-                                            <input type="tel" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"onkeyup="KeyUpCopy('phone')" name="phone" placeholder="Số Điện Thoại" value="" />
+                                            <input type="tel" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" onkeyup="KeyUpCopy('phone')" name="phone" placeholder="Số Điện Thoại" value="" />
                                         </div>
                                         <!--end::Input-->
                                     </div>
@@ -187,7 +187,7 @@
                                         <!--begin::Input-->
                                         <div class="form-group">
                                             <label class="font-size-h6 font-weight-bolder text-dark">Địa Chỉ Email</label>
-                                            <input type="email" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6"onkeyup="KeyUpCopy('email')" name="email" placeholder="email" value="" />
+                                            <input type="email" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6" onkeyup="KeyUpCopy('email')" name="email" placeholder="email" value="" />
                                         </div>
                                         <!--end::Input-->
                                     </div>
@@ -205,46 +205,46 @@
                             <!--end: Wizard Step 2-->
                             <!--begin: Wizard Step 3-->
                             <!--<div class="pb-5" data-wizard-type="step-content">-->
-                                <!--begin::Title-->
-                                <!--<div class="pt-lg-0 pt-5 pb-15">
-                                    <h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Support Channels</h3>
-                                    <div class="text-muted font-weight-bold font-size-h4">Specify Your Support Channels</div>
-                                </div>-->
-                                <!--end::Title-->
-                                <!--begin::Form Group-->
-                                <!--<div class="form-group">
-                                    <label class="font-size-h6 font-weight-bolder text-dark">Delivery Type:</label>
-                                    <select name="delivery" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
-                                        <option value="">Select a Service Type Option</option>
-                                        <option value="overnight" selected="selected">Overnight Delivery (within 48 hours)</option>
-                                        <option value="express">Express Delivery (within 5 working days)</option>
-                                        <option value="basic">Basic Delivery (within 5 - 10 working days)</option>
-                                    </select>
-                                </div>-->
-                                <!--end::Form Group-->
-                                <!--begin::Form Group-->
-                                <!--<div class="form-group">
-                                    <label class="font-size-h6 font-weight-bolder text-dark">Packaging Type:</label>
-                                    <select name="packaging" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
-                                        <option value="">Select a Packaging Type Option</option>
-                                        <option value="regular" selected="selected">Regular Packaging</option>
-                                        <option value="oversized">Oversized Packaging</option>
-                                        <option value="fragile">Fragile Packaging</option>
-                                        <option value="frozen">Frozen Packaging</option>
-                                    </select>
-                                </div>-->
-                                <!--end::Form Group-->
-                                <!--begin::Form Group-->
-                                <!--<div class="form-group">
-                                    <label class="font-size-h6 font-weight-bolder text-dark">Preferred Delivery Window:</label>
-                                    <select name="preferreddelivery" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
-                                        <option value="">Select a Preferred Delivery Option</option>
-                                        <option value="morning" selected="selected">Morning Delivery (8:00AM - 11:00AM)</option>
-                                        <option value="afternoon">Afternoon Delivery (11:00AM - 3:00PM)</option>
-                                        <option value="evening">Evening Delivery (3:00PM - 7:00PM)</option>
-                                    </select>
-                                </div>-->
-                                <!--end::Form Group-->
+                            <!--begin::Title-->
+                            <!--<div class="pt-lg-0 pt-5 pb-15">
+                                <h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Support Channels</h3>
+                                <div class="text-muted font-weight-bold font-size-h4">Specify Your Support Channels</div>
+                            </div>-->
+                            <!--end::Title-->
+                            <!--begin::Form Group-->
+                            <!--<div class="form-group">
+                                <label class="font-size-h6 font-weight-bolder text-dark">Delivery Type:</label>
+                                <select name="delivery" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
+                                    <option value="">Select a Service Type Option</option>
+                                    <option value="overnight" selected="selected">Overnight Delivery (within 48 hours)</option>
+                                    <option value="express">Express Delivery (within 5 working days)</option>
+                                    <option value="basic">Basic Delivery (within 5 - 10 working days)</option>
+                                </select>
+                            </div>-->
+                            <!--end::Form Group-->
+                            <!--begin::Form Group-->
+                            <!--<div class="form-group">
+                                <label class="font-size-h6 font-weight-bolder text-dark">Packaging Type:</label>
+                                <select name="packaging" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
+                                    <option value="">Select a Packaging Type Option</option>
+                                    <option value="regular" selected="selected">Regular Packaging</option>
+                                    <option value="oversized">Oversized Packaging</option>
+                                    <option value="fragile">Fragile Packaging</option>
+                                    <option value="frozen">Frozen Packaging</option>
+                                </select>
+                            </div>-->
+                            <!--end::Form Group-->
+                            <!--begin::Form Group-->
+                            <!--<div class="form-group">
+                                <label class="font-size-h6 font-weight-bolder text-dark">Preferred Delivery Window:</label>
+                                <select name="preferreddelivery" class="form-control h-auto py-7 px-6 border-0 rounded-lg font-size-h6">
+                                    <option value="">Select a Preferred Delivery Option</option>
+                                    <option value="morning" selected="selected">Morning Delivery (8:00AM - 11:00AM)</option>
+                                    <option value="afternoon">Afternoon Delivery (11:00AM - 3:00PM)</option>
+                                    <option value="evening">Evening Delivery (3:00PM - 7:00PM)</option>
+                                </select>
+                            </div>-->
+                            <!--end::Form Group-->
                             <!--</div>-->
                             <!--end: Wizard Step 3-->
                             <!--begin: Wizard Step 4-->
@@ -357,12 +357,27 @@
         function KeyUpCopy(name) {
             var value = $('input[name="' + name + '"]').val()
             if (name == "account") {
-                $('input[name="' + name + '"]').val(value.replace(" ",""))
+                $('input[name="' + name + '"]').val(value.replace(" ", ""))
             }
-           
+
             $('div[name="' + name + 'copy"]').text(value)
         }
 
+    </script>
+    <script>
+        $(function Module() {
+            $.ajax({
+                url: '/Home/Module',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('link[name="logo"]').attr("href", data.logo)
+                        $('img[name="logo"]').attr("src", data.logo)
+                    } else {
+                    }
+                }
+            })
+        })
     </script>
     <!--end::Page Scripts-->
 </body>

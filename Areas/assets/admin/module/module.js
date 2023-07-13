@@ -19,6 +19,14 @@ var Add = function () {
             KTUtil.getById('ModuleForm'),
             {
                 fields: {
+                    Logo: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng chọn Logo'
+                            },
+
+                        }
+                    },
                     Address: {
                         validators: {
                             notEmpty: {
@@ -115,6 +123,8 @@ var Add = function () {
                             title: 'Thêm module thành công!',
                             showConfirmButton: false,
                             timer: 1500
+                        }).then(function () {
+                            window.location.href = "/Admin/ModulesAdmin/Index"
                         })
                     } else {
                         Swal.fire({

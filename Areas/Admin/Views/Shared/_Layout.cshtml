@@ -38,7 +38,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <link href="~/Areas/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />
     <link href="~/Areas/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
     <!--end::Layout Themes-->
-    <link rel="shortcut icon" href="~/Areas/assets/media/logos/favicon.ico" />
+    <link rel="shortcut icon" name="logo" />
     @*Jquery*@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     
@@ -52,7 +52,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <div id="kt_header_mobile" class="header-mobile align-items-center header-mobile-fixed">
         <!--begin::Logo-->
         <a href="index.html">
-            <img alt="Logo" src="~/Areas/assets/media/logos/logo-light.png" />
+            <img alt="Logo" width="100%" name="logo" />
         </a>
         <!--end::Logo-->
         <!--begin::Toolbar-->
@@ -95,7 +95,7 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="brand flex-column-auto" id="kt_brand">
                     <!--begin::Logo-->
                     <a href="index.html" class="brand-logo">
-                        <img alt="Logo" src="~/Areas/assets/media/logos/logo-light.png" />
+                        <img width="100%" alt="Logo" name="logo" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Toggle-->
@@ -215,7 +215,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                             <span class="menu-text">Cấp độ thẻ thành viên</span>
                                                         </a>
                                                     </li>
-                                                 
+
 
                                                 </ul>
                                             </div>
@@ -247,7 +247,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                             <span class="menu-text">Tạo khuyến mãi</span>
                                                         </a>
                                                     </li>
-                                                 
+
 
                                                 </ul>
                                             </div>
@@ -284,7 +284,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <i class="menu-bullet menu-bullet-line">
                                                     <span></span>
                                                 </i>
-                                                <span class="menu-text">Tổng quan</span>
+                                                <span class="menu-text">Module</span>
                                             </a>
                                         </li>
                                         <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">
@@ -1454,7 +1454,21 @@ License: You must have a valid license purchased only from themeforest(the above
             $('input[name="Slug"]').val(GetChuoi(name))
         }
     </script>
-
+    <script>
+        $(function Module() {
+            $.ajax({
+                url: '/Home/Module',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('link[name="logo"]').attr("href", data.logo)
+                        $('img[name="logo"]').attr("src", data.logo)
+                    } else {
+                    }
+                }
+            })
+        })
+    </script>
     <!--end::Page Scripts-->
     @RenderSection("scripts", required: false)
 </body>

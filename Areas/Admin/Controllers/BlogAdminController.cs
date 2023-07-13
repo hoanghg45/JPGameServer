@@ -62,7 +62,8 @@ namespace JPGame.Areas.Admin.Controllers
                 a.CreateBy,
                 a.ModifyDate,
                 a.ModifyBy,
-                a.Status
+                a.Status,
+                a.Hot
             }).Where(x => x.Name.Contains(search) || x.Name.ToLower().Contains(search));
 
 
@@ -108,6 +109,10 @@ namespace JPGame.Areas.Admin.Controllers
             {
                 string UserID = Session["UserID"].ToString();
                 var user = db.Users.Find(UserID);
+                if (blog.Hot == null)
+                {
+                    blog.Hot = false;
+                }
                 blog.Des = documentHTML(blog.Des, "games");
                 blog.CreateDate = DateTime.Now;
                 blog.ModifyDate = DateTime.Now;
@@ -148,6 +153,11 @@ namespace JPGame.Areas.Admin.Controllers
                 string UserID = Session["UserID"].ToString();
                 var user = db.Users.Find(UserID);
                 var data = db.Blogs.Find(blog.Id);
+                if (blog.Hot == null)
+                {
+                    blog.Hot = false;
+                }
+                data.Hot = blog.Hot;
                 data.Name = blog.Name;
                 data.Slug = blog.Slug;
                 data.Title = blog.Title;

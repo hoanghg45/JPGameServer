@@ -17,12 +17,10 @@
     </div>
 </section>
 <div class="latest-news-section">
-    <div class="ln-title">Latest News</div>
+    <div class="ln-title">Khuyễn Mãi</div>
     <div class="news-ticker">
-        <div class="news-ticker-contant">
-            <div class="nt-item"><span class="new">new</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
-            <div class="nt-item"><span class="strategy">strategy</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
-            <div class="nt-item"><span class="racing">racing</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+        <div class="news-ticker-contant" name="promotion">
+                <div class="nt-item"><span class="new">Khuyến Mãi</span>Hot trong tháng</div>
         </div>
     </div>
 </div>
@@ -61,6 +59,19 @@
 </section>
 @section scripts{
     <script>
+        $(function Promotion() {
+            $.ajax({
+                type: 'get',
+                url: '/Home/Promotion',
+                success: function (data) {
+                    var div = ``
+                    $.each(data.data, function (k, v) {
+                        div += `<div class="nt-item"><span class="${randomArray(length, ["new", "racing", "adventure", "strategy"])}">${v.Name}</span>${v.Title}. </div>`
+                    })
+                    $('div[name="promotion"]').append(div)
+                }
+            })
+        })
         $(function Game() {
             $.ajax({
                 type: 'get',
