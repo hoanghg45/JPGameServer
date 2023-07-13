@@ -9,8 +9,10 @@ using System.Web.Mvc;
 
 namespace JPGame.Areas.Admin.Controllers
 {   [SessionCheck]
+
     public class PromotionAdminController : Controller
     {
+        
         // GET: Admin/PromotionAdmin
         DBEntities db = new DBEntities();
         // GET: Admin/ModulesAdmin
@@ -25,8 +27,9 @@ namespace JPGame.Areas.Admin.Controllers
         {
             return View();
         }
+      
 
-        [HttpPost]
+        [HttpPost, ValidateInput(false)]
         public JsonResult CreatePromotion(FormCollection collection)
         {
             string UserID = Session["UserID"].ToString();
@@ -45,7 +48,9 @@ namespace JPGame.Areas.Admin.Controllers
                     CreateBy = UserID,
                     CreateDate = DateTime.Now,
                     Rate = (Rate /100),
-                    Status = true
+                    Status = true,
+                    Description= collection["Description"]
+                    
                 };
 
                 db.Promotions.Add(promotion);
@@ -85,7 +90,7 @@ namespace JPGame.Areas.Admin.Controllers
             {
                 string startDateTime = input.Substring(0, separatorIndex).Trim();
                 string endDateTime = input.Substring(separatorIndex + 3).Trim();
-                string format = "dd/MM/yyyy h:mm tt";
+                string format = "dd/MM/yyyy hh:mm tt";
 
 
                 // Sử dụng DateTime.ParseExact()
@@ -94,6 +99,86 @@ namespace JPGame.Areas.Admin.Controllers
                 return (Start, End);
             }
             return (null, null);
+        }
+        [HttpGet]
+        public ActionResult EditPromotion(int id)
+        {
+           var promotion =  db.Promotions.Find(id);
+            return View(promotion);
+        }
+        [HttpPost, ValidateInput(false)]
+        public JsonResult EditPromotion(FormCollection collection)
+        {
+            string UserID = Session["UserID"].ToString().Trim();
+
+            try
+            {
+               
+                if (string.IsNullOrEmpty(collection["ID"]))
+                {
+                    return Json(
+                  new
+                  {
+                      status = "error",
+                      message = "Khuyến mãi không tồn tại, vui lòng thử lại!"
+
+                  }
+                  , JsonRequestBehavior.AllowGet
+                    );
+                }
+                int id = Int16.Parse(collection["ID"]);
+                if (!db.Promotions.Any(p => p.ID == id))
+                {
+                    return Json(
+                 new
+                 {
+                     status = "error",
+                     message = "Khuyến mãi không tồn tại, vui lòng thử lại!"
+
+                 }
+                 , JsonRequestBehavior.AllowGet
+                   );
+                }
+                var promotion = db.Promotions.Find(Int16.Parse(collection["ID"]));
+                string saleTime = collection["SaleTime"].Trim();
+                var SaleTime = GetTwoDate(saleTime);
+                var Rate = Double.Parse(collection["Rate"]);
+
+
+                promotion.Content = collection["Content"].Trim();
+                promotion.Title = collection["Title"].Trim();
+                promotion.From = SaleTime.Item1;
+                promotion.To = SaleTime.Item2;
+                promotion.CreateBy = UserID;
+                promotion.CreateDate = DateTime.Now;
+                promotion.Rate = (Rate / 100);
+                promotion.Status = true;
+                promotion.Description = collection["Description"];
+                db.SaveChanges();
+
+                return Json(
+                new
+                {
+                    status = "success",
+
+
+                }
+                , JsonRequestBehavior.AllowGet
+            );
+            }
+            catch (Exception ex)
+            {
+                return Json(
+                new
+                {
+                    status = "error",
+                    message = ex,
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+
         }
 
         [HttpGet]
@@ -202,6 +287,53 @@ namespace JPGame.Areas.Admin.Controllers
               );
 
 
+
+        }
+        [HttpPost]
+        public JsonResult DeletePromotion(int id)
+        {
+            string UserID = Session["UserID"].ToString();
+
+            try
+            {
+                if(id == 0 || !db.Promotions.Any(p => p.ID == id))
+                {
+                        return Json(
+                  new
+                  {
+                      status = "error",
+                      message = "Khuyến mãi không tồn tại, vui lòng thử lại!",
+
+                  }
+                  , JsonRequestBehavior.AllowGet
+                  );
+                }
+                var promotion = db.Promotions.Find(id);
+                db.Promotions.Remove(promotion);
+                db.SaveChanges();
+
+                return Json(
+                new
+                {
+                    status = "success",
+
+
+                }
+                , JsonRequestBehavior.AllowGet
+            );
+            }
+            catch (Exception ex)
+            {
+                return Json(
+                new
+                {
+                    status = "error",
+                    message = ex,
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
 
         }
     }
