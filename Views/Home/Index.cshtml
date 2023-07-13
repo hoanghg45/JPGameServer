@@ -10,7 +10,6 @@
         <div class="container">
             <h2>@item.Name</h2>
             <p>@(new HtmlString(item.Des))</p>
-            <a href="#" class="site-btn">Read More</a>
         </div>
     </div>
 </div>}
@@ -27,11 +26,11 @@
 
 <section class="recent-game-section spad set-bg" data-setbg="/img/recent-game-bg.png">
     <div class="container">
-        <div class="section-title">
+        <div class="section-title ">
             <div class="cata new">Trò chơi mới</div>
             <h2>Các trò chơi</h2>
         </div>
-        <div class="row" name="game">
+        <div class="row " name="game" >
 
         </div>
     </div>
@@ -52,7 +51,7 @@
             <div class="cata new">Trò chơi HOT</div>
             <h2>Các trò chơi</h2>
         </div>
-        <div class="row" name="gameHot">
+        <div class="row wow fadeInDown" name="gameHot"  data-wow-duration="1000ms" data-wow-delay="300ms">
 
         </div>
     </div>
@@ -66,7 +65,7 @@
                 success: function (data) {
                     var div = ``
                     $.each(data.data, function (k, v) {
-                        div += `<div class="nt-item"><span class="${randomArray(length, ["new", "racing", "adventure", "strategy"])}">${v.Name}</span>${v.Title}. </div>`
+                        div += `<div class="nt-item" onclick="Detail('/chi-tiet-khuyen-mai/${v.Slug}/${v.ID}')" style="cursor: pointer;"><span class="${randomArray(length, ["new", "racing", "adventure", "strategy"])}">${v.Title}</span>${v.Content}. </div>`
                     })
                     $('div[name="promotion"]').append(div)
                 }
@@ -79,7 +78,7 @@
                 success: function (data) {
                     var div =``
                     $.each(data.data, function (k, v) {
-                        div +=` <div class="col-lg-4 col-md-6">
+                        div += ` <div class="col-lg-4 col-md-6" onclick="Detail('/chi-tiet-tro-choi/${v.Slug}/${v.Id}')" style="cursor: pointer;">
                                 <div class="recent-game-item">
                                     <div class="rgi-thumb set-bg" data-setbg="${v.Image}" style="background-image:url('${v.Image}')">
                                         <div class="cata ${randomArray(length, ["new", "racing", "adventure", "strategy"])}">${v.Name}</div>
@@ -98,7 +97,7 @@
                     $('div[name="game"]').append(div)
                     var divHot = ``
                     $.each(data.dataHot, function (k, v) {
-                        divHot += `<div class="col-lg-3 col-md-6">
+                        divHot += `<div class="col-lg-3 col-md-6" onclick="Detail('/chi-tiet-tro-choi/${v.Slug}/${v.Id}')" style="cursor: pointer;">
                 <div class="review-item">
                     <div class="review-cover set-bg" data-setbg="${v.Image}" style="background-image:url('${v.Image}')">
                         <div class="score ${randomArray(length, ["yellow", "purple", "green","pink"])}">${v.PointReview}</div>
@@ -121,7 +120,7 @@
                 success: function (data) {
                     var div = ``
                     $.each(data.data, function (k, v) {
-                        div += `<div class="col-md-6">
+                        div += `<div class="col-md-6" onclick="Detail('/chi-tiet-tin-tuc/${v.Slug}/${v.Id}')" style="cursor: pointer;">
                                     <div class="tournament-item mb-4 mb-lg-0">
                                         <div class="ti-notic">${v.Title}</div>
                                         <div class="ti-content">

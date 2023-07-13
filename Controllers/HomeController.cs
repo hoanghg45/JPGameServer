@@ -44,7 +44,14 @@ namespace JPGame.Controllers
             try
             {
                 var module = db.Modules.Find(1);
-                return Json(new { code = 200, logo = module.Logo }, JsonRequestBehavior.AllowGet);
+                return Json(new {
+                    code = 200, 
+                    logo = module.Logo,
+                    bannerGame = module.BannerGame,
+                    bannerBlog = module.BannerBlog,
+                    bannerPromotion = module.BannerPromotion,
+                
+                }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -82,6 +89,7 @@ namespace JPGame.Controllers
                 var data = db.Games.Select(a => new
                 {
                     a.Id,
+                    a.Slug,
                     a.Name,
                     a.Des,
                     a.Image,
@@ -92,6 +100,7 @@ namespace JPGame.Controllers
                 {
                     a.Id,
                     a.Name,
+                    a.Slug,
                     a.Des,
                     a.PointReview,
                     a.Image,
@@ -113,8 +122,10 @@ namespace JPGame.Controllers
                 var data = db.Promotions.Select(a => new
                 {
                     a.ID,
+                    a.Slug,
                     a.Content,
                     a.Title,
+                    a.Description,
                     a.ModifyDate,
                     a.ModifyBy,
                 }).OrderByDescending(x => x.ModifyDate);

@@ -37,6 +37,15 @@ var Add = function () {
                             
                         }
                     },
+                    Image: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng chọn ảnh',
+
+                            },
+
+                        }
+                    },
                     Rate: {
                         validators: {
                             notEmpty: {

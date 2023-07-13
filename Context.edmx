@@ -50,6 +50,7 @@
           <Property Name="LevelName" Type="nvarchar" MaxLength="200" />
           <Property Name="LevelFee" Type="float" />
           <Property Name="Color" Type="varchar" MaxLength="50" />
+          <Property Name="Image" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Games">
           <Key>
@@ -105,6 +106,7 @@
           <Property Name="GiftLevelID" Type="varchar" MaxLength="50" />
           <Property Name="VIP" Type="bit" />
           <Property Name="VIPGiftID" Type="varchar" MaxLength="50" />
+          <Property Name="Image" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Modules">
           <Key>
@@ -116,6 +118,9 @@
           <Property Name="Hotline" Type="nvarchar(max)" />
           <Property Name="Email" Type="nvarchar(max)" />
           <Property Name="AboutMe" Type="nvarchar(max)" />
+          <Property Name="BannerGame" Type="nvarchar(max)" />
+          <Property Name="BannerBlog" Type="nvarchar(max)" />
+          <Property Name="BannerPromotion" Type="nvarchar(max)" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="CreateBy" Type="nchar" MaxLength="50" />
           <Property Name="ModifyDate" Type="datetime" />
@@ -139,6 +144,8 @@
           <Property Name="From" Type="datetime" />
           <Property Name="To" Type="datetime" />
           <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="Slug" Type="varchar" MaxLength="250" />
+          <Property Name="Image" Type="nvarchar(max)" />
           <Property Name="Content" Type="nvarchar(max)" />
           <Property Name="Rate" Type="float" />
           <Property Name="Status" Type="bit" />
@@ -512,6 +519,7 @@
           <Property Name="LevelName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="LevelFee" Type="Double" />
           <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MemberCardLevels" Relationship="Model.FK_MemberCardLevel_CardLevel" FromRole="CardLevel" ToRole="MemberCardLevel" />
         </EntityType>
         <EntityType Name="Game">
@@ -573,6 +581,7 @@
           <Property Name="GiftLevelID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="VIP" Type="Boolean" />
           <Property Name="VIPGiftID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CardLevel" Relationship="Model.FK_MemberCardLevel_CardLevel" FromRole="MemberCardLevel" ToRole="CardLevel" />
           <NavigationProperty Name="Gift" Relationship="Model.FK_MemberCardLevel_Gift" FromRole="MemberCardLevel" ToRole="Gift" />
           <NavigationProperty Name="MemberCards" Relationship="Model.FK_MemberCard_MemberCardLevel" FromRole="MemberCardLevel" ToRole="MemberCard" />
@@ -588,6 +597,9 @@
           <Property Name="Hotline" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AboutMe" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BannerGame" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BannerBlog" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BannerPromotion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
@@ -614,6 +626,8 @@
           <Property Name="From" Type="DateTime" Precision="3" />
           <Property Name="To" Type="DateTime" Precision="3" />
           <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Slug" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Rate" Type="Double" />
           <Property Name="Status" Type="Boolean" />
@@ -871,6 +885,7 @@
           <EntitySetMapping Name="CardLevels">
             <EntityTypeMapping TypeName="Model.CardLevel">
               <MappingFragment StoreEntitySet="CardLevel">
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Color" ColumnName="Color" />
                 <ScalarProperty Name="LevelFee" ColumnName="LevelFee" />
                 <ScalarProperty Name="LevelName" ColumnName="LevelName" />
@@ -928,6 +943,7 @@
           <EntitySetMapping Name="MemberCardLevels">
             <EntityTypeMapping TypeName="Model.MemberCardLevel">
               <MappingFragment StoreEntitySet="MemberCardLevel">
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="VIPGiftID" ColumnName="VIPGiftID" />
                 <ScalarProperty Name="VIP" ColumnName="VIP" />
                 <ScalarProperty Name="GiftLevelID" ColumnName="GiftLevelID" />
@@ -944,6 +960,9 @@
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="BannerPromotion" ColumnName="BannerPromotion" />
+                <ScalarProperty Name="BannerBlog" ColumnName="BannerBlog" />
+                <ScalarProperty Name="BannerGame" ColumnName="BannerGame" />
                 <ScalarProperty Name="AboutMe" ColumnName="AboutMe" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Hotline" ColumnName="Hotline" />
@@ -974,6 +993,8 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Rate" ColumnName="Rate" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="To" ColumnName="To" />
                 <ScalarProperty Name="From" ColumnName="From" />

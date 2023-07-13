@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách Tin Tức";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="latest-news-section">
+    <div class="ln-title">Khuyến Mãi</div>
+    <div class="news-ticker">
+        <div class="news-ticker-contant" name="promotion">
+            <div class="nt-item"><span class="new">Khuyến Mãi</span>Hot trong tháng</div>
+        </div>
+    </div>
+</div>
+
+<section class="page-info-section set-bg" name="BannerBlog" data-setbg="">
+    <div class="pi-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5 col-lg-6 text-white">
+                    <h2>Tin Tức</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Page info section -->
+<!-- Page section -->
+<section class="page-section review-page spad">
+    <div class="container">
+        <div class="row" name="blog">
+
+        </div>
+        <div class="text-center pt-4">
+            <button class="site-btn btn-sm" onclick="loadMore()">Tải thêm</button>
+        </div>
+    </div>
+</section>
+@section scripts{
+    <script>
+        $(function Promotion() {
+            $.ajax({
+                type: 'get',
+                url: '/Home/Promotion',
+                success: function (data) {
+                    var div = ``
+                    $.each(data.data, function (k, v) {
+                        div += `<div class="nt-item" onclick="Detail('/chi-tiet-khuyen-mai/${v.Slug}/${v.ID}')" style="cursor: pointer;"><span class="${randomArray(length, ["new", "racing", "adventure", "strategy"])}">${v.Title}</span>${v.Content}. </div>`
+                    })
+                    $('div[name="promotion"]').append(div)
+                }
+            })
+        })
+        Blog(1)
+        var pageNumber= 1;
+        function Blog(page) {
+            $.ajax({
+                
+                type: 'get',
+                url: '/Blog/Blog',
+                data: { page: page, pageSize:8},
+                success: function (data) {
+                    var div = ``
+                    $.each(data.data, function (k, v) {
+                        div += `<div class="col-md-6" onclick="Detail('/chi-tiet-tin-tuc/${v.Slug}/${v.Id}')" style="cursor: pointer;">
+							<div class="recent-game-item">
+								<div class="rgi-thumb set-bg" data-setbg="${v.Image}" style="background-image: url('${v.Image}');">
+									<div class="cata ${randomArray(length, ["yellow", "purple", "green", "pink"])}">${v.Name}</div>
+								</div>
+								<div class="rgi-content">
+									<h5>${v.Title}</h5>
+									<p>${v.Des.substring(0,200)} </p>
+									<a  class="comment">${v.ModifyBy}</a>
+									<div class="rgi-extra">
+										<div class="rgi-star"><img src="/img/icons/star.png" alt=""></div>
+										<div class="rgi-heart"><img src="/img/icons/heart.png" alt=""></div>
+									</div>
+								</div>
+							</div>
+						</div>`
+                    })
+                    $('div[name="blog"]').append(div)
+                    pageNumber++
+                }
+            })
+        }
+
+        function loadMore() {
+            Blog(pageNumber)
+        }
+
+        function randomArray(length, arr) {
+            var str = "";
+            var randomIndex = Math.floor(Math.random() * arr.length);
+            str = arr[randomIndex]
+            return str;
+        }
+    </script>
+}
+
+

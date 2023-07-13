@@ -188,6 +188,7 @@
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Game.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -2299,6 +2300,7 @@
     <Content Include="Areas\Admin\Views\BlogAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\BlogAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\BlogAdmin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\PromotionAdmin\EditPromotion.cshtml" />
     <EntityDeploy Include="Context.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Context.Designer.cs</LastGenOutput>
@@ -2306,7 +2308,6 @@
     <Content Include="Context.edmx.diagram">
       <DependentUpon>Context.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\Admin\Views\PromotionAdmin\EditPromotion.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2315,6 +2316,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.marquee.min.js" />
+    <Content Include="Scripts\jquery.nicescroll.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -2324,6 +2326,7 @@
     <Content Include="Scripts\map.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\owl.carousel.min.js" />
+    <Content Include="Scripts\wow.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -2344,12 +2347,16 @@
     <Content Include="Views\Home\AccountInformation.cshtml" />
     <Content Include="Views\Home\ChangePass.cshtml" />
     <Content Include="Views\Game\Index.cshtml" />
+    <Content Include="Views\Game\Detail.cshtml" />
+    <Content Include="Views\Blog\Index.cshtml" />
+    <Content Include="Views\Blog\Detail.cshtml" />
+    <Content Include="Views\Promotion\Index.cshtml" />
+    <Content Include="Views\Promotion\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Blog\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

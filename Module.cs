@@ -20,6 +20,9 @@ namespace JPGame
         public string Hotline { get; set; }
         public string Email { get; set; }
         public string AboutMe { get; set; }
+        public string BannerGame { get; set; }
+        public string BannerBlog { get; set; }
+        public string BannerPromotion { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> ModifyDate { get; set; }

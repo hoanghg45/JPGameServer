@@ -1,17 +1,28 @@
-﻿@{
-    ViewBag.Title = "Contact";
-}
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+﻿@{ ViewBag.Title = "Liên Hệ"; }
+<div class="latest-news-section">
+    <div class="ln-title">Khuyến Mãi</div>
+    <div class="news-ticker">
+        <div class="news-ticker-contant" name="promotion">
+            <div class="nt-item"><span class="new">Khuyến Mãi</span>Hot trong tháng</div>
+        </div>
+    </div>
+</div>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
-
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1177.4220163216448!2d106.72147819228958!3d10.82760326910518!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175291a71519df7%3A0xcbeec0265c71c79f!2zVHJ1bmcgVMOibSBUaMawxqFuZyBN4bqhaSBHaWdhbWFsbC9TZW5zZSBDaXR5!5e1!3m2!1svi!2s!4v1689237420698!5m2!1svi!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+@section scripts{
+    <script>
+        $(function Promotion() {
+            $.ajax({
+                type: 'get',
+                url: '/Home/Promotion',
+                success: function (data) {
+                    var div = ``
+                    $.each(data.data, function (k, v) {
+                        div += `<div class="nt-item" onclick="Detail('/chi-tiet-khuyen-mai/${v.Slug}/${v.ID}')" style="cursor: pointer;"><span class="${randomArray(length, ["new", "racing", "adventure", "strategy"])}">${v.Title}</span>${v.Content}. </div>`
+                    })
+                    $('div[name="promotion"]').append(div)
+                }
+            })
+        })
+        </script>
+    }

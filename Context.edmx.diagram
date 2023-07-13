@@ -4,22 +4,22 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f8f24bc30a9c4c14b512807b1ea2f59b" Name="Diagram1">
+      <Diagram DiagramId="1d471636da014dafaeb5d4c93162066d" Name="Diagram1">
         <EntityTypeShape EntityType="Model.Account" Width="1.5" PointX="5.25" PointY="7.375" />
-        <EntityTypeShape EntityType="Model.Blog" Width="1.5" PointX="0.75" PointY="10.75" />
-        <EntityTypeShape EntityType="Model.CardLevel" Width="1.5" PointX="3" PointY="5.25" />
+        <EntityTypeShape EntityType="Model.Blog" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="Model.CardLevel" Width="1.5" PointX="3" PointY="5.5" />
         <EntityTypeShape EntityType="Model.Game" Width="1.5" PointX="2.75" PointY="12.75" />
         <EntityTypeShape EntityType="Model.Gift" Width="1.5" PointX="3" PointY="1.125" />
         <EntityTypeShape EntityType="Model.MemberCard" Width="1.5" PointX="7.5" PointY="1" />
         <EntityTypeShape EntityType="Model.MemberCardLevel" Width="1.5" PointX="5.25" PointY="1.125" />
-        <EntityTypeShape EntityType="Model.Module" Width="1.5" PointX="10" PointY="10.5" />
-        <EntityTypeShape EntityType="Model.PersonalGift" Width="1.5" PointX="0.75" PointY="5.5" />
-        <EntityTypeShape EntityType="Model.Promotion" Width="1.5" PointX="10" PointY="6.25" />
+        <EntityTypeShape EntityType="Model.Module" Width="1.5" PointX="10" PointY="6.25" />
+        <EntityTypeShape EntityType="Model.PersonalGift" Width="1.5" PointX="0.75" PointY="1.5" />
+        <EntityTypeShape EntityType="Model.Promotion" Width="1.5" PointX="10" PointY="11.125" />
         <EntityTypeShape EntityType="Model.Slider" Width="1.5" PointX="12" PointY="1" />
-        <EntityTypeShape EntityType="Model.SpecialMemory" Width="1.5" PointX="0.75" PointY="1.625" />
+        <EntityTypeShape EntityType="Model.SpecialMemory" Width="1.5" PointX="0.75" PointY="5.625" />
         <EntityTypeShape EntityType="Model.TypeSlider" Width="1.5" PointX="9.75" PointY="1.375" />
-        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="7.75" PointY="8.375" />
-        <EntityTypeShape EntityType="Model.VIPGift" Width="1.5" PointX="3" PointY="8" />
+        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="7.75" PointY="8.875" />
+        <EntityTypeShape EntityType="Model.VIPGift" Width="1.5" PointX="3" PointY="8.375" />
         <AssociationConnector Association="Model.FK_MemberCard_Account" />
         <AssociationConnector Association="Model.FK_MemberCardLevel_CardLevel" />
         <AssociationConnector Association="Model.FK_Gift_PersonalGift" />

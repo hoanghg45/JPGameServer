@@ -16,7 +16,7 @@ namespace JPGame.Areas.Admin.Controllers
         {
             return View();
         }
-        public string UploadImage(HttpPostedFileBase file)
+        public string UploadImage(HttpPostedFileBase file,string name)
         {
             if (ModelState.IsValid)
             {
@@ -31,7 +31,7 @@ namespace JPGame.Areas.Admin.Controllers
                     var sub21 = sub2.Replace(":", "");
                     string _FileName = "";
                     int index = file.FileName.IndexOf('.');
-                    _FileName = sub11 + sub21 + "logo" + file.FileName;
+                    _FileName = sub11 + sub21 + name + file.FileName;
                     file.SaveAs(Server.MapPath("/img/" + _FileName));
                     return "/img/" + _FileName;
                 }
@@ -55,6 +55,9 @@ namespace JPGame.Areas.Admin.Controllers
                  
                     var oldModule = db.Modules.FirstOrDefault();
                     oldModule.Logo = module.Logo;
+                    oldModule.BannerGame = module.BannerGame;
+                    oldModule.BannerBlog = module.BannerBlog;
+                    oldModule.BannerPromotion = module.BannerPromotion;
                     oldModule.Address = module.Address;
                     oldModule.Email = module.Email;
                     oldModule.Hotline = module.Hotline;
@@ -125,7 +128,10 @@ namespace JPGame.Areas.Admin.Controllers
                 Hotline = m.Hotline.Trim(),
                 Email = m.Email.Trim(),
                 m.AboutMe,
-                m.Logo
+                m.Logo,
+                m.BannerGame,
+                m.BannerBlog,
+                m.BannerPromotion
                
             }).FirstOrDefault();
 

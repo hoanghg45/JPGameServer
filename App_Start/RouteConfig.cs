@@ -13,8 +13,33 @@ namespace JPGame
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
+name: "Contact",
+url: "lien-he",
+defaults: new { controller = "Home", action = "Contact", id = UrlParameter.Optional }
+);
+            routes.MapRoute(
+name: "Promotiondetail",
+url: "chi-tiet-khuyen-mai/{meta}/{id}",
+defaults: new { controller = "Promotion", action = "Detail", id = UrlParameter.Optional }
+);
+            routes.MapRoute(
+name: "Promotion",
+url: "khuyen-mai",
+defaults: new { controller = "Promotion", action = "Index", id = UrlParameter.Optional }
+);
+            routes.MapRoute(
+name: "Blogdetail",
+url: "chi-tiet-tin-tuc/{meta}/{id}",
+defaults: new { controller = "Blog", action = "Detail", id = UrlParameter.Optional }
+);
+            routes.MapRoute(
+name: "Blog",
+url: "tin-tuc",
+defaults: new { controller = "Blog", action = "Index", id = UrlParameter.Optional }
+);
+            routes.MapRoute(
 name: "gamedetail",
-url: "tro-choi/{meta}/{id}",
+url: "chi-tiet-tro-choi/{meta}/{id}",
 defaults: new { controller = "Game", action = "Detail", id = UrlParameter.Optional }
 );
             routes.MapRoute(

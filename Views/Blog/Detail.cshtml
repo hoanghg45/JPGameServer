@@ -1,0 +1,145 @@
+﻿@model JPGame.Blog
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="latest-news-section">
+    <div class="ln-title">Khuyến Mãi</div>
+    <div class="news-ticker">
+        <div class="news-ticker-contant" name="promotion">
+            <div class="nt-item"><span class="new">Khuyến Mãi</span>Hot trong tháng</div>
+        </div>
+    </div>
+</div>
+<!-- Latest news section end -->
+<!-- Page info section -->
+<section class="page-info-section set-bg" data-setbg="" name="BannerBlog">
+    <div class="pi-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5 col-lg-6 text-white">
+                    <h2>@Model.Name</h2>
+                    <p>@Model.Title</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="page-section single-blog-page spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="blog-thumb set-bg" data-setbg="@Model.Image" style="background-image:url('@Model.Image')">
+                    <div class="cata new">@Model.Name</div>
+                    <div class="rgi-extra">
+                        <div class="rgi-star"><img src="/img/icons/star.png" alt=""></div>
+                        <div class="rgi-heart"><img src="/img/icons/heart.png" alt=""></div>
+                    </div>
+                </div>
+                <div class="blog-content">
+                    <h3>@Model.Name</h3>
+                    <a href="" class="meta-comment">@Model.ModifyDate.Value.Date</a>
+                    <p>@(new HtmlString(Model.Des))</p>
+                </div>
+                <div class="comment-warp">
+                    <h4 class="comment-title">Soạn: @Model.ModifyBy</h4>
+                </div>
+            </div>
+            <!-- sidebar -->
+            <div class="col-lg-4 col-md-7 sidebar pt-5 pt-lg-0">
+                <div class="widget-item">
+                    <h4 class="widget-title">Trò chơi</h4>
+                    <div class="latest-blog" name="game">
+
+                    </div>
+                </div>
+                <!-- widget -->
+                <div class="widget-item">
+                    <h4 class="widget-title">Tin Tức</h4>
+                    <div class="latest-blog" name="blog">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script>
+        $(function Promotion() {
+            $.ajax({
+                type: 'get',
+                url: '/Home/Promotion',
+                success: function (data) {
+                    var div = ``
+                    $.each(data.data, function (k, v) {
+                        div += `<div class="nt-item" onclick="Detail('/chi-tiet-khuyen-mai/${v.Slug}/${v.ID}')" style="cursor: pointer;"><span class="${randomArray(length, ["new", "racing", "adventure", "strategy"])}">${v.Title}</span>${v.Content}. </div>`
+                    })
+                    $('div[name="promotion"]').append(div)
+                }
+            })
+        })
+
+        Game(1)
+        var pageNumber = 1;
+        function Game(page) {
+            $.ajax({
+                type: 'get',
+                url: '/Game/Game',
+                data: { page: page, pageSize: 3 },
+                success: function (data) {
+                    var div = ``
+                    $.each(data.data, function (k, v) {
+                        div += `<div class="lb-item" onclick="Detail('/chi-tiet-tro-choi/${v.Slug}/${v.Id}')" style="cursor: pointer;">
+                            <div class="lb-thumb set-bg" data-setbg="${v.Image}"style="background-image:url('${v.Image}')"></div>
+                            <div class="lb-content">
+                                <div class="lb-date">${v.Name}</div>
+                                <p>${v.Title}</p>
+                                <a class="lb-author">${v.ModifyBy}</a>
+                            </div>
+                        </div>`
+                    })
+                    $('div[name="game"]').append(div)
+                    pageNumber++
+                }
+            })
+        }
+
+        function loadMore() {
+            Game(pageNumber)
+        }
+
+
+        Blog(1)
+        var pageNumberBlog = 1;
+        function Blog(page) {
+            $.ajax({
+                type: 'get',
+                url: '/Blog/Blog',
+                data: { page: page, pageSize: 3 },
+                success: function (data) {
+                    var div = ``
+                    $.each(data.data, function (k, v) {
+                        div += `<div class="lb-item" onclick="Detail('/chi-tiet-tin-tuc/${v.Slug}/${v.Id}')" style="cursor: pointer;">
+                            <div class="lb-thumb set-bg" data-setbg="${v.Image}"style="background-image:url('${v.Image}')"></div>
+                            <div class="lb-content">
+                                <div class="lb-date">${v.Name}</div>
+                                <p>${v.Title}</p>
+                                <a class="lb-author">${v.ModifyBy}</a>
+                            </div>
+                        </div>`
+                    })
+                    $('div[name="blog"]').append(div)
+                    pageNumberBlog++
+                }
+            })
+        }
+
+        function loadMore() {
+            Blog(pageNumberBlog)
+        }
+    </script>
+}
+
