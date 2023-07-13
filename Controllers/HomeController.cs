@@ -37,6 +37,12 @@ namespace JPGame.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        } 
+        public ActionResult Error()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
         }
         [HttpGet]
         public JsonResult Module()

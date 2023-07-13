@@ -2352,6 +2352,7 @@
     <Content Include="Views\Blog\Detail.cshtml" />
     <Content Include="Views\Promotion\Index.cshtml" />
     <Content Include="Views\Promotion\Detail.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
