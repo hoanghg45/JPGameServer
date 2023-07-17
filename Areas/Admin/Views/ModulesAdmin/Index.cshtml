@@ -126,6 +126,90 @@
                         <!--begin::Form-->
                         <form id="ModuleForm" class="form">
                             <div class="card-body">
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Logo</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <div class="image-input image-input-outline" id="kt_profile_avatar">
+                                            <div class="image-input-wrapper" name="avatar"></div>
+                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                                <input type="file" name="profile_avatar" onchange="Image('profile_avatar','Logo','avatar')" accept=".png, .jpg, .jpeg">
+                                                <input type="text" hidden name="Logo">
+                                                <input type="hidden" name="profile_avatar_remove">
+                                            </label>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="" data-original-title="Remove avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                        </div>
+                                        <span class="form-text text-muted">Allowed file types: png, jpg, jpeg.</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Banner trò chơi</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <div class="image-input image-input-outline" id="kt_profile_avatar">
+                                            <div class="image-input-wrapper" name="avatarBannerGame"></div>
+                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                                <input type="file" name="ImageBannerGame" onchange="Image('ImageBannerGame','BannerGame','avatarBannerGame')"  accept=".png, .jpg, .jpeg">
+                                                <input type="text" hidden name="BannerGame">
+                                                <input type="hidden" name="profile_avatar_remove">
+                                            </label>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="" data-original-title="Remove avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                        </div>
+                                        <span class="form-text text-muted">Allowed file types: png, jpg, jpeg.</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Banner tin tức</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <div class="image-input image-input-outline" id="kt_profile_avatar">
+                                            <div class="image-input-wrapper" name="avatarBannerBlog"></div>
+                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                                <input type="file" name="ImageBannerBlog" onchange="Image('ImageBannerBlog','BannerBlog','avatarBannerBlog')" accept=".png, .jpg, .jpeg">
+                                                <input type="text" hidden name="BannerBlog">
+                                                <input type="hidden" name="profile_avatar_remove">
+                                            </label>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="" data-original-title="Remove avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                        </div>
+                                        <span class="form-text text-muted">Allowed file types: png, jpg, jpeg.</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Banner khuyến mãi</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <div class="image-input image-input-outline" id="kt_profile_avatar">
+                                            <div class="image-input-wrapper" name="avatarBannerPromotion"></div>
+                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                                <input type="file" name="ImageBannerPromotion" onchange="Image('ImageBannerPromotion','BannerPromotion','avatarBannerPromotion')" accept=".png, .jpg, .jpeg">
+                                                <input type="text" hidden name="BannerPromotion">
+                                                <input type="hidden" name="profile_avatar_remove">
+                                            </label>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="" data-original-title="Remove avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                        </div>
+                                        <span class="form-text text-muted">Allowed file types: png, jpg, jpeg.</span>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label>Địa chỉ:</label>
                                     <input name="Address" type="text" class="form-control form-control-solid" required placeholder="Nhập địa chỉ" />
@@ -166,6 +250,46 @@
 <!-- include summernote css/js -->
 <script src="~/Areas/assets/admin/module/module.js"></script>
 <script>
+    //----------------------chon file-------------------------
+    //$('input[name="profile_avatar"]').change(function () {
+    //    if (window.FormData !== undefined) {
+    //        let fileUpload = $('input[name="profile_avatar"]').get(0);
+    //        let files = fileUpload.files;
+    //        let formdata = new FormData();
+    //        formdata.append('file', files[0]);
+    //        $.ajax({
+    //            type: 'post',
+    //            url: '/Admin/ModulesAdmin/UploadImage',
+    //            contentType: false,
+    //            processData: false,
+    //            data: formdata,
+    //            success: function (urlImage) {
+    //                $('input[name="Logo"]').val(urlImage);
+    //                $('div[name="avatar"]').css("background-image", "url('" + urlImage + "')");
+    //            }
+    //        })
+    //    }
+    //});
+    function Image(name,image,avatar) {
+        if (window.FormData !== undefined) {
+            let fileUpload = $('input[name="'+name+'"]').get(0);
+            let files = fileUpload.files;
+            let formdata = new FormData();
+            formdata.append('file', files[0]);
+            formdata.append('name', name);
+            $.ajax({
+                type: 'post',
+                url: '/Admin/ModulesAdmin/UploadImage',
+                contentType: false,
+                processData: false,
+                data: formdata,
+                success: function (urlImage) {
+                    $('input[name="' + image + '"]').val(urlImage);
+                    $('div[name="' + avatar+'"]').css("background-image", "url('" + urlImage + "')");
+                }
+            })
+        }
+    }
     $(document).ready(function () {
         $('#summernote').summernote({
             placeholder: 'Enter content',
@@ -183,6 +307,14 @@
             success: function (data) {
                 if (data.status == "success") {
                     $('input[name="Address"]').val(data.module.Address)
+                    $('input[name="Logo"]').val(data.module.Logo)
+                    $('input[name="BannerGame"]').val(data.module.BannerGame)
+                    $('input[name="BannerBlog"]').val(data.module.BannerBlog)
+                    $('input[name="BannerPromotion"]').val(data.module.BannerPromotion)
+                    $('div[name="avatar"]').css("background-image", "url('"+ data.module.Logo+"')")
+                    $('div[name="avatarBannerGame"]').css("background-image", "url('" + data.module.BannerGame+"')")
+                    $('div[name="avatarBannerBlog"]').css("background-image", "url('" + data.module.BannerBlog+"')")
+                    $('div[name="avatarBannerPromotion"]').css("background-image", "url('" + data.module.BannerPromotion+"')")
                     $('input[name="Hotline"]').val(data.module.Hotline)
                     $('input[name="Email"]').val(data.module.Email)
                     $('[name="AboutMe"]').summernote('code', data.module.AboutMe);

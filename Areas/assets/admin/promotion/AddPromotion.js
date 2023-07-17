@@ -43,7 +43,15 @@ var Add = function () {
                                 message: 'Vui lòng chọn thời gian khuyến mãi',
 
                             },
-                            
+                        }
+                    },        
+                    Image: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng chọn ảnh',
+
+                            },
+
                         }
                     },
                     Rate: {

@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title JP Game</title>
     @*@Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")*@
+        @Scripts.Render("~/bundles/modernizr")*@
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <link href="~/Content/owl.carousel.css" rel="stylesheet" />
     <link href="~/Content/style.css" rel="stylesheet" />
     <link href="~/Content/animate.css" rel="stylesheet" />
+    <link rel="shortcut icon" name="logo" />
 </head>
 <body>
     <div id="preloder">
@@ -21,7 +22,7 @@
         <div class="container">
             <!-- logo -->
             <a class="site-logo" href="/trang-chu/">
-                <img src="~/img/logo.png" />
+                <img style="width:175px;height:25px" src="" name="logo" />
             </a>
             <div class="user-panel">
                 <a href="/dang-nhap/" id="login">Đăng Nhập</a>  /  <a id="register" href="/dang-ki/">Đăng Kí</a>
@@ -36,8 +37,8 @@
                     <li><a href="/trang-chu/">Trang Chủ</a></li>
                     <li><a href="/tro-choi/">Trò Chơi</a></li>
                     <li><a href="/tin-tuc/">Tin Tức</a></li>
-                    <li><a href="">Forums</a></li>
-                    <li><a href="">Contact</a></li>
+                    <li><a href="/khuyen-mai/">Khuyễn Mãi</a></li>
+                    <li><a href="/lien-he/">Liên Hệ</a></li>
                 </ul>
             </nav>
         </div>
@@ -45,18 +46,65 @@
     <!-- Header section end -->
     @RenderBody()
     <hr />
-    <footer>
-        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    <section class="footer-top-section">
+        <div class="container">
+            <div class="footer-top-bg">
+                <img src="/img/footer-top-bg.png" alt="">
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="footer-logo text-white">
+                        <img src="" name="logo" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-widget mb-5 mb-md-0">
+                        <h4 class="fw-title">Tin tức nổi bật</h4>
+                        <div class="latest-blog" name="blogLayout">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-widget">
+                        <h4 class="fw-title">Trò chơi nổi bật</h4>
+                        <div class="top-comment" name="gamelayout">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer-section">
+        <div class="container">
+            <ul class="footer-menu">
+                <li><a href="/trang-chu/">Trang Chủ</a></li>
+                <li><a href="/tro-choi/">Trò Chơi</a></li>
+                <li><a href="/tin-tuc/">Tin Tức</a></li>
+                <li><a href="/khuyen-mai/">Khuyễn Mãi</a></li>
+                <li><a href="/lien-he/">Liên Hệ</a></li>
+            </ul>
+            <p class="copyright">
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright ©
+                <script>document.write(new Date().getFullYear());</script><i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://haphan.com" target="_blank">HaPhan</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+        </div>
     </footer>
+
     <script src="~/Scripts/jquery-3.2.1.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
 
     <script src="~/Scripts/owl.carousel.min.js"></script>
     <script src="~/Scripts/jquery.marquee.min.js"></script>
     <script src="~/Scripts/main.js"></script>
+    <script src="~/Scripts/wow.min.js"></script>
     <script src="~/Scripts/map.js"></script>
     <script src="~/Scripts/layout.js"></script>
     <script src="~/Areas/assets/admin/FormatDate.js"></script>
+
     @RenderSection("scripts", required: false)
 
 </body>

@@ -37,6 +37,32 @@ namespace JPGame.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        } 
+        public ActionResult Error()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+        [HttpGet]
+        public JsonResult Module()
+        {
+            try
+            {
+                var module = db.Modules.Find(1);
+                return Json(new {
+                    code = 200, 
+                    logo = module.Logo,
+                    bannerGame = module.BannerGame,
+                    bannerBlog = module.BannerBlog,
+                    bannerPromotion = module.BannerPromotion,
+                
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Thất Bại" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
         [HttpGet]
         public JsonResult CheckSession()
@@ -44,9 +70,9 @@ namespace JPGame.Controllers
             try
             {
                 var account = (Account)Session["account"];
-
-                if(account != null)
+                if (account != null)
                 {
+                  
                     var user = db.Accounts.Find(account.AccountID);
                     return Json(new { code = 200, user = user}, JsonRequestBehavior.AllowGet);
                 }
@@ -69,12 +95,46 @@ namespace JPGame.Controllers
                 var data = db.Games.Select(a => new
                 {
                     a.Id,
+                    a.Slug,
                     a.Name,
                     a.Des,
                     a.Image,
                     a.Title,
                     a.ModifyDate
                 }).OrderByDescending(x=>x.ModifyDate).Take(3);
+                var dataHot = db.Games.Where(x=>x.Hot==true).Select(a => new
+                {
+                    a.Id,
+                    a.Name,
+                    a.Slug,
+                    a.Des,
+                    a.PointReview,
+                    a.Image,
+                    a.Title,
+                    a.ModifyDate
+                }).OrderByDescending(x => x.ModifyDate).Take(4);
+                return Json(new { code = 200, data, dataHot }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Thất Bại" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public JsonResult Promotion()
+        {
+            try
+            {
+                var data = db.Promotions.Select(a => new
+                {
+                    a.ID,
+                    a.Slug,
+                    a.Content,
+                    a.Title,
+                    a.Description,
+                    a.ModifyDate,
+                    a.ModifyBy,
+                }).OrderByDescending(x => x.ModifyDate);
                 return Json(new { code = 200, data }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -97,7 +157,17 @@ namespace JPGame.Controllers
                     a.ModifyDate,
                     a.ModifyBy,
                 }).OrderByDescending(x => x.ModifyDate).Take(2);
-                return Json(new { code = 200, data }, JsonRequestBehavior.AllowGet);
+                var dataHot = db.Blogs.Where(x=>x.Hot==true).Select(a => new
+                {
+                    a.Id,
+                    a.Name,
+                    a.Des,
+                    a.Image,
+                    a.Title,
+                    a.ModifyDate,
+                    a.ModifyBy,
+                }).OrderByDescending(x => x.ModifyDate).Take(3);
+                return Json(new { code = 200, data, dataHot }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {

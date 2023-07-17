@@ -65,6 +65,17 @@
                                     <textarea class="" required id="summernote" name="Des"></textarea>
                                 </div>
                             </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Tin tức Hot</label>
+                                    <div class="checkbox-inline">
+                                        <label class="checkbox mb-2">
+                                            <input type="checkbox" name="Hot">
+                                            <span></span>Tin nổi bật
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="card-footer">
                                 <button type="button" class="btn btn-primary mr-2 btnCreate">Tạo</button>
                             </div>
@@ -170,7 +181,7 @@
 
 
                 $('.btnCreate').click(function () {
-                    let data = $('#Form').serialize()
+                    let data = $('#Form').serializeArray()
                     validation.validate().then(function (status) {
                         if (status == 'Valid') {
                             Add(data)
@@ -196,6 +207,14 @@
 
 
                 function Add(data) {
+                    var Hot = $('input[name="Hot"]').is(":checked")
+                    if (Hot) {
+                        $.each(data, function (k, v) {
+                            if (data[k].name == "Hot") {
+                                data[k].value = "true"
+                            }
+                        })
+                    }
                     $.ajax({
                         type: "POST",
                         url: "/Admin/BlogAdmin/Adds",

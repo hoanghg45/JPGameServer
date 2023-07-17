@@ -43,7 +43,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <link href="~/Areas/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />
     <link href="~/Areas/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
     <!--end::Layout Themes-->
-    <link rel="shortcut icon" href="~/Areas/assets/media/logos/favicon.ico" />
+    <link rel="shortcut icon" name="logo" />
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -57,32 +57,31 @@ License: You must have a valid license purchased only from themeforest(the above
                     <!--begin::Login Header-->
                     <div class="d-flex flex-center mb-15">
                         <a href="#">
-                            <img src="Areas/assets/media/logos/logo-letter-13.png" class="max-h-75px" alt="" />
+                            <img src="" name="logo" class="max-h-75px" alt="" />
                         </a>
                     </div>
                     <!--end::Login Header-->
                     <!--begin::Login Sign in form-->
                     <div class="login-signin">
                         <div class="mb-20">
-                            <h3 class="opacity-40 font-weight-normal">Sign In To Admin</h3>
-                            <p class="opacity-40">Enter your details to login to your account:</p>
+                            <h3 class="opacity-40 font-weight-normal">Đăng nhập tài khoản</h3>
                         </div>
                         <form class="form" id="kt_login_signin_form">
                             <div class="form-group">
-                                <input class="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8" type="text" placeholder="Username" name="username" autocomplete="off" />
+                                <input class="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8" type="text" placeholder="tài khoản" name="username" autocomplete="off" />
                             </div>
                             <div class="form-group">
-                                <input class="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8" type="password" placeholder="Password" name="password" />
+                                <input class="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8" type="password" placeholder="mật khẩu" name="password" />
                             </div>
                             @*<div class="form-group d-flex flex-wrap justify-content-between align-items-center px-8 opacity-60">
-                                <div class="checkbox-inline">
-                                    <label class="checkbox checkbox-outline checkbox-white text-white m-0">
-                                        <input type="checkbox" name="remember" />
-                                        <span></span>Remember me
-                                    </label>
-                                </div>
-                                <a href="javascript:;" id="kt_login_forgot" class="text-white font-weight-bold">Forget Password ?</a>
-                            </div>*@
+                                    <div class="checkbox-inline">
+                                        <label class="checkbox checkbox-outline checkbox-white text-white m-0">
+                                            <input type="checkbox" name="remember" />
+                                            <span></span>Remember me
+                                        </label>
+                                    </div>
+                                    <a href="javascript:;" id="kt_login_forgot" class="text-white font-weight-bold">Forget Password ?</a>
+                                </div>*@
                             <div class="form-group text-center mt-10">
                                 <button id="kt_login_signin_submit" class="btn btn-pill btn-primary opacity-90 px-15 py-3">Sign In</button>
                             </div>
@@ -164,7 +163,21 @@ License: You must have a valid license purchased only from themeforest(the above
     <!--end::Global Theme Bundle-->
     <!--begin::Page Scripts(used by this page)-->
     <script src="~/Areas/assets/admin/login/AdminLogin.js"></script>
-
+    <script>
+        $(function Module() {
+            $.ajax({
+                url: '/Home/Module',
+                type: 'get',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('link[name="logo"]').attr("href", data.logo)
+                        $('img[name="logo"]').attr("src", data.logo)
+                    } else {
+                    }
+                }
+            })
+        })
+    </script>
     <!--end::Page Scripts-->
 </body>
 <!--end::Body-->

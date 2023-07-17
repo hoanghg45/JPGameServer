@@ -15,10 +15,14 @@ namespace JPGame
     public partial class Module
     {
         public int ModulesID { get; set; }
+        public string Logo { get; set; }
         public string Address { get; set; }
         public string Hotline { get; set; }
         public string Email { get; set; }
         public string AboutMe { get; set; }
+        public string BannerGame { get; set; }
+        public string BannerBlog { get; set; }
+        public string BannerPromotion { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> ModifyDate { get; set; }

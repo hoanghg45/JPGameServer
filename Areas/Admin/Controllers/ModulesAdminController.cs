@@ -16,7 +16,29 @@ namespace JPGame.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpPost]
+        public string UploadImage(HttpPostedFileBase file,string name)
+        {
+            if (ModelState.IsValid)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    var now = DateTime.Now.ToString().Trim();
+                    var index1 = now.IndexOf(" ");
+                    var sub1 = now.Substring(0, index1);
+                    var sub11 = sub1.Replace("/", "");
+                    var index2 = now.IndexOf(" ", index1 + 1);
+                    var sub2 = now.Substring(index1 + 1);
+                    var sub21 = sub2.Replace(":", "");
+                    string _FileName = "";
+                    int index = file.FileName.IndexOf('.');
+                    _FileName = sub11 + sub21 + name + file.FileName;
+                    file.SaveAs(Server.MapPath("/img/" + _FileName));
+                    return "/img/" + _FileName;
+                }
+            }
+            return "";
+        }
+        [HttpPost,ValidateInput(false)]
         public JsonResult CreateModule(Module module)
         {
             string UserID = Session["UserID"].ToString();
@@ -30,12 +52,21 @@ namespace JPGame.Areas.Admin.Controllers
                     db.Modules.Add(module);
                 }
                 else {
-                    module.ModifyBy = UserID;
-                    module.ModifyDate = DateTime.Now;
+                 
                     var oldModule = db.Modules.FirstOrDefault();
-                    oldModule = module;
+                    oldModule.Logo = module.Logo;
+                    oldModule.BannerGame = module.BannerGame;
+                    oldModule.BannerBlog = module.BannerBlog;
+                    oldModule.BannerPromotion = module.BannerPromotion;
+                    oldModule.Address = module.Address;
+                    oldModule.Email = module.Email;
+                    oldModule.Hotline = module.Hotline;
+                    oldModule.AboutMe = module.AboutMe;
+                    oldModule.ModifyBy = UserID;
+                    oldModule.ModifyDate = DateTime.Now;
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
+              
 
                 return Json(
                 new
@@ -96,7 +127,11 @@ namespace JPGame.Areas.Admin.Controllers
                 Address = m.Address.Trim(),
                 Hotline = m.Hotline.Trim(),
                 Email = m.Email.Trim(),
-                m.AboutMe
+                m.AboutMe,
+                m.Logo,
+                m.BannerGame,
+                m.BannerBlog,
+                m.BannerPromotion
                
             }).FirstOrDefault();
 

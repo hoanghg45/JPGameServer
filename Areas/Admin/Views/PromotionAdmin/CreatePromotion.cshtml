@@ -126,38 +126,60 @@
                         <!--begin::Form-->
                         <form id="PromotionForm" class="form">
                             <div class="card-body">
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Hình ảnh</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <div class="image-input image-input-outline" id="kt_profile_avatar">
+                                            <div class="image-input-wrapper" name="avatar"></div>
+                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                                <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
+                                                <input type="text" hidden name="Image">
+                                                <input type="hidden" name="profile_avatar_remove">
+                                            </label>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="" data-original-title="Remove avatar">
+                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                            </span>
+                                        </div>
+                                        <span class="form-text text-muted">Allowed file types: png, jpg, jpeg.</span>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label>Tiêu đề khuyến mãi:</label>
-                                    <input name="Title" type="text" class="form-control form-control-solid" required placeholder="Nhập tiêu đề" />
+                                    <input name="Title" type="text" class="form-control form-control-solid" onkeyup="Sluggg()" required placeholder="Nhập tiêu đề" />
+                                    <input name="Slug" hidden type="text" class="form-control form-control-solid" required placeholder="Nhập tiêu đề" />
 
                                 </div>
-                                 <div class="form-group">
+                                <div class="form-group">
                                     <label>Nội dung khuyến mãi:</label>
                                     <input name="Content" type="text" class="form-control form-control-solid" required placeholder="Nội dung khuyến mãi" />
 
                                 </div>
-                                 <div class="form-group row">
-                                     <div class="col-lg-6">
-                                         <label>Tỉ lệ khuyến mãi:</label>
-                                         <div class="input-group">
-                                             <input name="Rate" type="number" class="form-control form-control-solid" required placeholder="Tỉ lệ khuyến mãi" />
-                                             <div class="input-group-append"><span class="input-group-text">%</span></div>
-                                         </div>
-                                     </div> 
-                                     <div class="col-lg-6">
-                                         <div class="form-group">
-                                             <label>Thời gian khuyến mãi:</label>
-                                             <input type='text' class="form-control" name="SaleTime" id="saletimeranger" readonly placeholder="Select time" />
-                                         </div>
-                                     </div>
-                                 </div>
-                                 <div class="form-group">
-                                     <label>Mô tả khuyến mãi:</label>
-                                     <textarea class="" required id="summernote" name="Description"></textarea>
+                                <div class="form-group row">
+                                    <div class="col-lg-6">
+                                        <label>Tỉ lệ khuyến mãi:</label>
+                                        <div class="input-group">
+                                            <input name="Rate" type="number" class="form-control form-control-solid" required placeholder="Tỉ lệ khuyến mãi" />
+                                            <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Thời gian khuyến mãi:</label>
+                                            <input type='text' class="form-control" name="SaleTime" id="saletimeranger" readonly placeholder="Select time" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Mô tả khuyến mãi:</label>
+                                    <textarea class="" required id="summernote" name="Description"></textarea>
 
-                                 </div>
-                              
-                               
+                                </div>
+
+
                             </div>
                             <div class="card-footer">
                                 <a class="btn btn-primary mr-2 " href="@Url.Action("Index","PromotionAdmin")">Trở về danh sách</a>
@@ -180,6 +202,26 @@
 <script src="~/Areas/assets/admin/promotion/AddPromotion.js"></script>
 
 <script>
+    //----------------------chon file-------------------------
+    $('input[name="profile_avatar"]').change(function () {
+        if (window.FormData !== undefined) {
+            let fileUpload = $('input[name="profile_avatar"]').get(0);
+            let files = fileUpload.files;
+            let formdata = new FormData();
+            formdata.append('file', files[0]);
+            $.ajax({
+                type: 'post',
+                url: '/Admin/PromotionAdmin/UploadImage',
+                contentType: false,
+                processData: false,
+                data: formdata,
+                success: function (urlImage) {
+                    $('input[name="Image"]').val(urlImage);
+                    $('div[name="avatar"]').css("background-image", "url('" + urlImage + "')");
+                }
+            })
+        }
+    });
     $(document).ready(function () {
         $('#summernote').summernote({
             placeholder: 'Enter content',

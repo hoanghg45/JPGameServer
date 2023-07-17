@@ -7,19 +7,29 @@ function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
 }
 
+//function formatdate(jsondate) {
+//    if (jsondate == null)
+//        return ""
+//    jsondate = jsondate.substr(6)
+//    var date = jsontoddate(jsondate)
+//    return [
+//        padto2digits(date.getdate()),
+//        padto2digits(date.getmonth() + 1),
+//        date.getfullyear(),
+//    ].join('/');
+//}
+
 function formatDate(jsonDate) {
     if (jsonDate == null)
         return ""
     jsonDate = jsonDate.substr(6)
     var date = jsonTodDate(jsonDate)
     return [
-        padTo2Digits(date.getDate()),
-        padTo2Digits(date.getMonth() + 1),
         date.getFullYear(),
-    ].join('/');
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+    ].join('-');
 }
-
-
 function timeCal(lastlogin) {
     lastlogin = lastlogin.substring(4, 24)
 

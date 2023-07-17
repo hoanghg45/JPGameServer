@@ -27,8 +27,29 @@ namespace JPGame.Areas.Admin.Controllers
         {
             return View();
         }
-      
 
+        public string UploadImage(HttpPostedFileBase file)
+        {
+            if (ModelState.IsValid)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    var now = DateTime.Now.ToString().Trim();
+                    var index1 = now.IndexOf(" ");
+                    var sub1 = now.Substring(0, index1);
+                    var sub11 = sub1.Replace("/", "");
+                    var index2 = now.IndexOf(" ", index1 + 1);
+                    var sub2 = now.Substring(index1 + 1);
+                    var sub21 = sub2.Replace(":", "");
+                    string _FileName = "";
+                    int index = file.FileName.IndexOf('.');
+                    _FileName = sub11 + sub21 + "promotion" + file.FileName;
+                    file.SaveAs(Server.MapPath("/img/" + _FileName));
+                    return "/img/" + _FileName;
+                }
+            }
+            return "";
+        }
         [HttpPost, ValidateInput(false)]
         public JsonResult CreatePromotion(FormCollection collection)
         {
@@ -40,13 +61,16 @@ namespace JPGame.Areas.Admin.Controllers
                 var SaleTime = GetTwoDate(saleTime);
                 var Rate = Double.Parse(collection["Rate"]);
                 var promotion = new Promotion {
-                    
+                    Image = collection["Image"],
+                    Slug = collection["Slug"].Trim(),
                     Content = collection["Content"].Trim(),
                     Title = collection["Title"].Trim(),
                     From = SaleTime.Item1,
                     To = SaleTime.Item2,
                     CreateBy = UserID,
                     CreateDate = DateTime.Now,
+                    ModifyBy = UserID,
+                    ModifyDate = DateTime.Now,
                     Rate = (Rate /100),
                     Status = true,
                     Description= collection["Description"]
@@ -147,10 +171,12 @@ namespace JPGame.Areas.Admin.Controllers
 
                 promotion.Content = collection["Content"].Trim();
                 promotion.Title = collection["Title"].Trim();
+                promotion.Image = collection["Image"];
+                promotion.Slug = collection["Slug"].Trim();
                 promotion.From = SaleTime.Item1;
                 promotion.To = SaleTime.Item2;
-                promotion.CreateBy = UserID;
-                promotion.CreateDate = DateTime.Now;
+                promotion.ModifyBy = UserID;
+                promotion.ModifyDate = DateTime.Now;
                 promotion.Rate = (Rate / 100);
                 promotion.Status = true;
                 promotion.Description = collection["Description"];

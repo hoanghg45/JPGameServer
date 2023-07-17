@@ -10,30 +10,27 @@
         <div class="container">
             <h2>@item.Name</h2>
             <p>@(new HtmlString(item.Des))</p>
-            <a href="#" class="site-btn">Read More</a>
         </div>
     </div>
 </div>}
     </div>
 </section>
 <div class="latest-news-section">
-    <div class="ln-title">Latest News</div>
+    <div class="ln-title">Khuyễn Mãi</div>
     <div class="news-ticker">
-        <div class="news-ticker-contant">
-            <div class="nt-item"><span class="new">new</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
-            <div class="nt-item"><span class="strategy">strategy</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
-            <div class="nt-item"><span class="racing">racing</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+        <div class="news-ticker-contant" name="promotion">
+                <div class="nt-item"><span class="new">Khuyến Mãi</span>Hot trong tháng</div>
         </div>
     </div>
 </div>
 
 <section class="recent-game-section spad set-bg" data-setbg="/img/recent-game-bg.png">
     <div class="container">
-        <div class="section-title">
+        <div class="section-title ">
             <div class="cata new">Trò chơi mới</div>
             <h2>Các trò chơi</h2>
         </div>
-        <div class="row" name="game">
+        <div class="row " name="game" >
 
         </div>
     </div>
@@ -47,8 +44,33 @@
         </div>
     </div>
 </section>
+
+<section class="review-section spad set-bg" data-setbg="/img/review-bg.png">
+    <div class="container">
+        <div class="section-title">
+            <div class="cata new">Trò chơi HOT</div>
+            <h2>Các trò chơi</h2>
+        </div>
+        <div class="row wow fadeInDown" name="gameHot"  data-wow-duration="1000ms" data-wow-delay="300ms">
+
+        </div>
+    </div>
+</section>
 @section scripts{
     <script>
+        $(function Promotion() {
+            $.ajax({
+                type: 'get',
+                url: '/Home/Promotion',
+                success: function (data) {
+                    var div = ``
+                    $.each(data.data, function (k, v) {
+                        div += `<div class="nt-item" onclick="Detail('/chi-tiet-khuyen-mai/${v.Slug}/${v.ID}')" style="cursor: pointer;"><span class="${randomArray(length, ["new", "racing", "adventure", "strategy"])}">${v.Title}</span>${v.Content}. </div>`
+                    })
+                    $('div[name="promotion"]').append(div)
+                }
+            })
+        })
         $(function Game() {
             $.ajax({
                 type: 'get',
@@ -56,14 +78,14 @@
                 success: function (data) {
                     var div =``
                     $.each(data.data, function (k, v) {
-                        div +=` <div class="col-lg-4 col-md-6">
+                        div += ` <div class="col-lg-4 col-md-6" onclick="Detail('/chi-tiet-tro-choi/${v.Slug}/${v.Id}')" style="cursor: pointer;">
                                 <div class="recent-game-item">
                                     <div class="rgi-thumb set-bg" data-setbg="${v.Image}" style="background-image:url('${v.Image}')">
-                                        <div class="cata new">${v.Name}</div>
+                                        <div class="cata ${randomArray(length, ["new", "racing", "adventure", "strategy"])}">${v.Name}</div>
                                     </div>
                                     <div class="rgi-content">
                                         <h5>${v.Title}</h5>
-                                        <p>${v.Des.substring(0, 300)}<a href="">...</a></p>
+                                        <p>${v.Des.substring(0, 250)}<a href="">...</a></p>
                                         <div class="rgi-extra">
                                             <div class="rgi-star"><img src="/img/icons/star.png" alt=""></div>
                                             <div class="rgi-heart"><img src="/img/icons/heart.png" alt=""></div>
@@ -73,6 +95,21 @@
                             </div>`
                     })
                     $('div[name="game"]').append(div)
+                    var divHot = ``
+                    $.each(data.dataHot, function (k, v) {
+                        divHot += `<div class="col-lg-3 col-md-6" onclick="Detail('/chi-tiet-tro-choi/${v.Slug}/${v.Id}')" style="cursor: pointer;">
+                <div class="review-item">
+                    <div class="review-cover set-bg" data-setbg="${v.Image}" style="background-image:url('${v.Image}')">
+                        <div class="score ${randomArray(length, ["yellow", "purple", "green","pink"])}">${v.PointReview}</div>
+                    </div>
+                    <div class="review-text">
+                        <h5>${v.Name}</h5>
+                        <p>${v.Title}</p>
+                    </div>
+                </div>
+            </div>`
+                    })
+                    $('div[name="gameHot"]').append(divHot)
                 }
             })
         })
@@ -83,7 +120,7 @@
                 success: function (data) {
                     var div = ``
                     $.each(data.data, function (k, v) {
-                        div += `<div class="col-md-6">
+                        div += `<div class="col-md-6" onclick="Detail('/chi-tiet-tin-tuc/${v.Slug}/${v.Id}')" style="cursor: pointer;">
                                     <div class="tournament-item mb-4 mb-lg-0">
                                         <div class="ti-notic">${v.Title}</div>
                                         <div class="ti-content">
@@ -104,6 +141,12 @@
                 }
             })
         })
+        function randomArray(length, arr) {
+            var str = "";
+            var randomIndex = Math.floor(Math.random() * arr.length);
+                str = arr[randomIndex]
+            return str;
+        }
     </script>
 
 }

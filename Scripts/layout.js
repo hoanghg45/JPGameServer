@@ -22,6 +22,62 @@
     })
 })
 
+$(function Module() {
+    $.ajax({
+        url: '/Home/Module',
+        type: 'get',
+        success: function (data) {
+            if (data.code == 200) {
+                $('link[name="logo"]').attr("href", data.logo)
+                $('img[name="logo"]').attr("src", data.logo)
+                $('section[name="BannerGame"]').attr("data-setbg", data.bannerGame).css("background-image", "url('" +data.bannerGame+"')")
+                $('section[name="BannerBlog"]').attr("data-setbg", data.bannerBlog).css("background-image", "url('" + data.bannerBlog+"')")
+                $('section[name="BannerPromotion"]').attr("data-setbg", data.bannerPromotion).css("background-image", "url('" + data.bannerPromotion+"')")
+            } else {
+            }
+        }
+    })
+})
+$(function Game() {
+    $.ajax({
+        type: 'get',
+        url: '/Home/Game',
+        success: function (data) {
+            var div = ``
+            $.each(data.dataHot, function (k, v) {
+                div += `<div class="tc-item" onclick="Detail('/chi-tiet-tro-choi/${v.Slug}/${v.Id}')" style="cursor: pointer;">
+                                <div class="tc-thumb set-bg" data-setbg="${v.Image}"style="background-image:url('${v.Image}')"></div>
+                                <div class="tc-content">
+                                    <p><a href="#">${v.Name}</a>  ${v.Title}</p>
+                                    <div class="tc-date">${formatDate(v.ModifyDate)}</div>
+                                </div>
+                            </div>`
+            })
+            $('div[name="gamelayout"]').append(div)
+        }
+    })
+})
+$(function Blog() {
+    $.ajax({
+        type: 'get',
+        url: '/Home/Blog',
+        success: function (data) {
+            var div = ``
+            $.each(data.dataHot, function (k, v) {
+                div += `<div class="lb-item" onclick="Detail('/chi-tiet-tin-tuc/${v.Slug}/${v.Id}')" style="cursor: pointer;">
+                                <div class="lb-thumb set-bg" data-setbg="${v.Image}"style="background-image:url('${v.Image}')"></div>
+                                <div class="lb-content">
+                                    <div class="lb-date">${v.Name}</div>
+                                    <p><a href="#">xem thêm</a></p>
+                                    <a href="#" class="lb-author">${v.ModifyBy}</a>
+                                </div>
+                            </div>`
+            })
+            $('div[name="blogLayout"]').append(div)
+        }
+    })
+})
+
 $(document).on('click', 'a[name = "logout"]', function (e) {
     e.preventDefault()
     $.ajax({
@@ -55,3 +111,7 @@ toastr.options = {
     "showMethod": "show",
     "hideMethod": "slideUp"
 };
+
+function Detail(path) {
+    window.location.href = path
+}
