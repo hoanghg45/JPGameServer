@@ -67,6 +67,9 @@
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
@@ -82,6 +85,12 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -154,12 +163,14 @@
     <Compile Include="Areas\Admin\Controllers\AccountsAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\BlogAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DataApiController.cs" />
     <Compile Include="Areas\Admin\Controllers\GameAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCardController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCardLevelController.cs" />
     <Compile Include="Areas\Admin\Controllers\ModulesAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\PromotionAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SettingGameAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\SliderAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\TypeSliderAdminController.cs" />
     <Compile Include="Areas\Admin\Extension\PaginationExtension.cs" />
@@ -241,7 +252,6 @@
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
     <Content Include="Areas\assets\admin\membercardlevel\AddMemberCard.js" />
     <Content Include="Areas\assets\admin\membercardlevel\MemberCardLevel.js" />
-    <Content Include="Areas\assets\admin\membercard\MemberCard.js" />
     <Content Include="Areas\assets\admin\module\module.js" />
     <Content Include="Areas\assets\admin\promotion\AddPromotion.js" />
     <Content Include="Areas\assets\admin\promotion\Promotion.js" />
@@ -2170,7 +2180,6 @@
       <DependentUpon>Context.edmx</DependentUpon>
       <LastGenOutput>Context.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Context.edmx.sql" />
     <Content Include="Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Context.edmx</DependentUpon>
@@ -2284,7 +2293,6 @@
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\LoginAdmin\Index.cshtml" />
-    <Content Include="img\tournament\3DLayer.obj" />
     <Content Include="icon-fonts\fontawesome-webfont.eot" />
     <Content Include="icon-fonts\fontawesome-webfont.woff" />
     <Content Include="icon-fonts\fontawesome-webfont.woff2" />
@@ -2307,6 +2315,9 @@
     <Content Include="Areas\Admin\Views\BlogAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\BlogAdmin\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\PromotionAdmin\EditPromotion.cshtml" />
+    <Content Include="Areas\Admin\Views\SettingGameAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SettingGameAdmin\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\SettingGameAdmin\Edit.cshtml" />
     <EntityDeploy Include="Context.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Context.Designer.cs</LastGenOutput>
@@ -2314,9 +2325,8 @@
     <Content Include="Context.edmx.diagram">
       <DependentUpon>Context.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\Admin\Views\PromotionAdmin\EditPromotion.cshtml" />
-    <Content Include="Areas\Admin\Views\MemberCardLevel\AddMemberCard.cshtml" />
     <Content Include="Areas\Admin\Views\MemberCard\Create.cshtml" />
+    <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2366,6 +2376,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Views\SettingGame\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

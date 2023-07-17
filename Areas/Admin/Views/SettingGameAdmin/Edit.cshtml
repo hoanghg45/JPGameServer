@@ -1,6 +1,6 @@
-﻿
+﻿@model JPGame.SettingGame
 @{
-    ViewBag.Title = "Thêm Tin Tức";
+    ViewBag.Title = "Sửa "+Model.Name;
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,7 +9,7 @@
         <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
             <div class="d-flex align-items-center flex-wrap mr-1">
                 <div class="d-flex align-items-baseline flex-wrap mr-5">
-                    <h5 class="text-dark font-weight-bold my-1 mr-5">Thêm tin tức</h5>
+                    <h5 class="text-dark font-weight-bold my-1 mr-5">Sửa trò chơi cho hệ thống</h5>
                 </div>
             </div>
         </div>
@@ -24,56 +24,27 @@
                         </div>
                         <form id="Form" class="form">
                             <div class="card-body">
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">Hình ảnh</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <div class="image-input image-input-outline" id="kt_profile_avatar">
-                                            <div class="image-input-wrapper" name="avatar"></div>
-                                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Change avatar">
-                                                <i class="fa fa-pen icon-sm text-muted"></i>
-                                                <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
-                                                <input type="text" hidden name="Image">
-                                                <input type="hidden" name="profile_avatar_remove">
-                                            </label>
-                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
-                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
-                                            </span>
-                                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove" data-toggle="tooltip" title="" data-original-title="Remove avatar">
-                                                <i class="ki ki-bold-close icon-xs text-muted"></i>
-                                            </span>
+                                <div class="form-group">
+                                    <label>Mã định danh:</label>
+                                    <input name="Id" type="text" class="form-control form-control-solid" value="@Model.Id" readonly required placeholder="Mã" />
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Tên trò chơi:</label>
+                                    <input name="Name" type="text" class="form-control form-control-solid" value="@Model.Name" required placeholder="Tên trò chơi" />
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Giá tiền chơi/lượt:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">đ</span>
                                         </div>
-                                        <span class="form-text text-muted">Allowed file types: png, jpg, jpeg.</span>
+                                        <input type="text" class="form-control form-control-solid money" value="@Model.Price" id="kt_money_input" name="Price" />
                                     </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>Tên tin tức:</label>
-                                    <input name="Name" type="text" class="form-control form-control-solid" onkeyup="Slugg()" required placeholder="Tên tin tức" />
-                                    <input name="Slug" type="text" class="form-control form-control-solid" required hidden />
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>Tiêu đề:</label>
-                                    <input name="Title" type="text" class="form-control form-control-solid" required placeholder="Tiêu đề" />
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>Bài viết:</label>
-                                    <textarea class="" required id="summernote" name="Des"></textarea>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>Tin tức Hot</label>
-                                    <div class="checkbox-inline">
-                                        <label class="checkbox mb-2">
-                                            <input type="checkbox" name="Hot">
-                                            <span></span>Tin nổi bật
-                                        </label>
-                                    </div>
+
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -92,28 +63,27 @@
 </div>
 @section scripts{
     <script>
+        "use strict";
+        // Class definition
+
+        var KTMaskDemo = function () {
+            var demos = function () {
+                $('#kt_money_input').mask('000.000.000.000.000', {
+                    reverse: true
+                });
+            }
+            return {
+                init: function () {
+                    demos();
+                }
+            };
+        }();
+
+        jQuery(document).ready(function () {
+            KTMaskDemo.init();
+        });
         $('#summernote').summernote({
             placeholder: 'Nhập mô tả',
-        });
-        //----------------------chon file-------------------------
-        $('input[name="profile_avatar"]').change(function () {
-            if (window.FormData !== undefined) {
-                let fileUpload = $('input[name="profile_avatar"]').get(0);
-                let files = fileUpload.files;
-                let formdata = new FormData();
-                formdata.append('file', files[0]);
-                $.ajax({
-                    type: 'post',
-                    url: '/Admin/BlogAdmin/UploadImage',
-                    contentType: false,
-                    processData: false,
-                    data: formdata,
-                    success: function (urlImage) {
-                        $('input[name="Image"]').val(urlImage);
-                        $('div[name="avatar"]').css("background-image", "url('" + urlImage + "')");
-                    }
-                })
-            }
         });
         "use strict";
 
@@ -127,6 +97,14 @@
                     KTUtil.getById('Form'),
                     {
                         fields: {
+                            Id: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Vui lòng nhập mã trò chơi'
+                                    },
+
+                                }
+                            },
                             Name: {
                                 validators: {
                                     notEmpty: {
@@ -135,35 +113,15 @@
 
                                 }
                             },
-                            Image: {
+                            Price: {
                                 validators: {
                                     notEmpty: {
-                                        message: 'Vui lòng chọn hình ảnh'
+                                        message: 'Vui lòng nhập giá tiền'
                                     },
 
                                 }
                             },
-                            Title: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Vui lòng nhập tiêu đề'
-                                    },
 
-                                }
-                            },
-                            Des: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Vui lòng nhập bài viết',
-                                        callback: function (input) {
-                                            const code = $('[name="Des"]').summernote('isEmpty');
-                                            // <p><br> is code generated by Summernote for empty content
-                                            return !code;
-                                        },
-                                    },
-
-                                }
-                            },
                         },
                         plugins: {
                             trigger: new FormValidation.plugins.Trigger(),
@@ -207,28 +165,26 @@
 
 
                 function Add(data) {
-                    var Hot = $('input[name="Hot"]').is(":checked")
-                    if (Hot) {
+                    var price = $('input[name="Price"]').val().trim().replaceAll(".","")
                         $.each(data, function (k, v) {
-                            if (data[k].name == "Hot") {
-                                data[k].value = "true"
+                            if (data[k].name == "Price") {
+                                data[k].value = parseFloat(price)
                             }
                         })
-                    }
                     $.ajax({
                         type: "POST",
-                        url: "/Admin/BlogAdmin/Adds",
+                        url: "/Admin/SettingGameAdmin/Edits",
                         data: data,
                         datatype: "json",
                         success: function (result) {
                             if (result.status == "success") {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Thêm thành công!',
+                                    title: 'Sửa thành công!',
                                     showConfirmButton: false,
                                     timer: 1500
                                 }).then(function () {
-                                    window.location.href ="/Admin/BlogAdmin/Index"
+                                    window.location.href ="/Admin/SettingGameAdmin/Index"
                                 })
                             } else {
                                 Swal.fire({

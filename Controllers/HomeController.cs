@@ -50,6 +50,7 @@ namespace JPGame.Controllers
             try
             {
                 var module = db.Modules.FirstOrDefault();
+                
                 return Json(new {
                     code = 200, 
                     logo = module.Logo,

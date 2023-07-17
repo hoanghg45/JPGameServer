@@ -1,0 +1,225 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách trò chơi trong hệ thống";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <div class="d-flex align-items-center flex-wrap mr-1">
+                <h5 class="text-dark font-weight-bold my-1 mr-5">Danh sách trò chơi trong hệ thống</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-custom">
+        <div class="card-header flex-wrap border-0 pt-6 pb-0">
+            <div class="card-title">
+
+            </div>
+            <div class="card-toolbar">
+                <a href="/Admin/SettingGameAdmin/Add" class="btn btn-primary font-weight-bolder">
+                    <span class="svg-icon svg-icon-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <circle fill="#000000" cx="9" cy="15" r="6" />
+                                <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3" />
+                            </g>
+                        </svg>
+                    </span>Thêm
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="mb-7">
+                <div class="row align-items-center">
+                    <div class="col-lg-9 col-xl-8">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 my-2 my-md-0">
+                                <div class="input-icon">
+                                    <input type="text" class="form-control" placeholder="Tìm Kiếm..." id="kt_datatable_search_query" />
+                                    <span>
+                                        <i class="flaticon2-search-1 text-muted"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*begin: Datatable*@
+            <div class="table-responsive" style="position: relative; height: 440px; overflow: auto;">
+                <table id="accounttable" class="table">
+                    <thead style="position: sticky; top: 0px; background: white">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Ngày Tạo</th>
+                            <th scope="col">Người Tạo</th>
+                            <th scope="col">Ngày Sửa</th>
+                            <th scope="col">Người Sửa</th>
+                            <th scope="col">Trạng Thái</th>
+                            <th scope="col">Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div class="spinner spinner-success spinner-lg mr-15" style=" position: absolute; left: 50%; transform: translate(-50%, -50%);display:none"></div>
+            </div>
+            @*end: Datatable*@
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex flex-wrap py-2 mr-3">
+
+                </div>
+                <div class="d-flex align-items-center py-3">
+                    <span class="text-muted" id="QtyNote"></span>
+                </div>
+            </div>
+        </div>
+        @*end::Card*@
+    </div>
+    @*end::Container*@
+</div>
+@section scripts{
+    <script>
+        var page = 1;
+        var search = "";
+var isLoadingData = false;
+var isFull = false;
+(function DataTable() {
+
+    ShowTable(page,search)
+    $('.table-responsive').scroll(function () {
+        search = $('#kt_datatable_search_query').val().trim()
+       /* var element = $(this)[0];*/
+        var scrollTop = $(this).scrollTop()+3;
+        var scrollHeight = $(this)[0].scrollHeight;
+        var windowHeight = $(this).outerHeight();
+
+        if (scrollTop + windowHeight >= scrollHeight && !isLoadingData && !isFull) {
+            // Đạt đến cuối trang và không đang lấy dữ liệu
+            $('.spinner').show();
+            // Gọi hàm để lấy dữ liệu tiếp theo
+            ShowTable(page,search);
+        }
+    });
+})()
+
+        $('#kt_datatable_search_query').keypress(function (e) {
+            if (e.which == 13) {
+                $('#accounttable').find('tbody').empty()
+                search = $('#kt_datatable_search_query').val().trim()
+                ShowTable(1, search)
+            }
+        })
+function ShowTable(pagenumber,search) {
+
+    $.ajax({
+        type: "GET",
+        url: "/Admin/SettingGameAdmin/DataTable",
+        data: {
+            page: pagenumber,search:search
+        },
+
+        datatype: 'json',
+        success: function (data) {
+            let $table = $('#accounttable')
+            let body = $table.find('tbody')
+
+
+            //Hiển thị dữ liệu trong bảng
+
+            if (data.data && data.data.length > 0) {
+                $.each(data.data, function (i, v) {
+                    let tr = `<tr>
+                <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
+                <td>${v.Id}</td>
+                <td>${v.Name}</td>
+                <td>${formatDate(v.CreateDate)}</td>
+                <td>${v.CreateBy}</td>
+                <td>${formatDate(v.ModifyDate)}</td>
+                <td>${v.ModifyBy}</td>
+                <td>${v.Status}</td>
+                <td nowrap="nowrap">
+					<a href="/Admin/SettingGameAdmin/Edit/${v.Id}" class="btn btn-sm btn-clean btn-icon" title="Sửa">
+    <i class="la la-edit"></i>
+    </a>
+     <a id="delete${v.Id}"name="delete" class="btn btn-sm btn-clean btn-icon" title="Xóa">
+            <i class="la la-trash"></i>
+            </a>
+    </td>
+                </tr>`
+                    body.append(tr)
+                })
+                pagenumber++
+                page = pagenumber
+            } else {
+                isFull = true
+            }
+            $('.spinner').hide();
+            isLoadingData = false;
+            $('#QtyNote').text(`Displaying ${data.to} of ${data.total} records`)
+
+
+
+        },
+        error: function () {
+            // Xử lý lỗi (nếu cần thiết)
+            // Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
+            $('.spinner').hide();
+            isLoadingData = false;
+        }
+    })
+        }
+        $(document).on('click', 'a[name="delete"]', function () {
+            Swal.fire({
+                title: 'Chắc chắn muốn xóa?',
+                text: "dữ liệu không thể hồi phục!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xóa!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = $(this).attr('id').replace("delete", "")
+                    $.ajax({
+                        type: "POST",
+                        url: "/Admin/SettingGameAdmin/Delete",
+                        data: { id: Number(id) },
+                        success: function (result) {
+                            if (result.status == "success") {
+                                toastr.success("Xóa Thành Công")
+                                $('#accounttable').find('tbody').empty()
+                                ShowTable(1, search)
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Đã có lỗi xảy ra, vui lòng thử lại!',
+                                    text: result.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Something wrong!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+                    })
+
+                }
+            })
+        })
+    </script>
+}
+
