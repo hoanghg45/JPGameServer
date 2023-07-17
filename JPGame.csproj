@@ -174,8 +174,12 @@
     <Compile Include="Areas\Admin\Controllers\SliderAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\TypeSliderAdminController.cs" />
     <Compile Include="Areas\Admin\Extension\PaginationExtension.cs" />
+    <Compile Include="Areas\CardForm.cs" />
     <Compile Include="Areas\Security\SessionCheck.cs" />
     <Compile Include="Blog.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Card.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="CardLevel.cs">

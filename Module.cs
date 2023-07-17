@@ -28,7 +28,6 @@ namespace JPGame
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
-       
     
         public virtual User User { get; set; }
         public virtual User User1 { get; set; }

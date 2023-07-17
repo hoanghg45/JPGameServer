@@ -4,21 +4,45 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Mvc;
+using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 
 namespace JPGame.Areas.Admin.Controllers
 {
-    public class DataApiController : ApiController
+    public class DataApiController : Controller
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        DBEntities db = new DBEntities();
 
+        [HttpGet]
         // GET api/<controller>/5
-        public string Get(int id)
+        public JsonResult Get(string card)
         {
-            return "value";
+            try {
+                var Card = new Card { CardID = card };
+                db.Cards.Add(Card);
+                db.SaveChanges();
+                return Json(
+                    new
+                    {
+                        status = "ok",
+
+
+                    }
+                    , JsonRequestBehavior.AllowGet);
+
+            }catch(Exception e)
+            {
+                return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = e
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+            }
+
+
         }
 
         // POST api/<controller>
