@@ -28,10 +28,6 @@ namespace JPGame
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
-        public string Logo { get; set; }
-        public string BannerGame { get; set; }
-        public string BannerBlog { get; set; }
-        public string BannerPromotion { get; set; }
     
         public virtual User User { get; set; }
         public virtual User User1 { get; set; }

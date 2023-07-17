@@ -166,6 +166,7 @@
     <Compile Include="Areas\Admin\Controllers\DataApiController.cs" />
     <Compile Include="Areas\Admin\Controllers\GameAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MemberCardController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCardLevelController.cs" />
     <Compile Include="Areas\Admin\Controllers\ModulesAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\PromotionAdminController.cs" />
@@ -2314,6 +2315,9 @@
     <Content Include="Areas\Admin\Views\BlogAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\BlogAdmin\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\PromotionAdmin\EditPromotion.cshtml" />
+    <Content Include="Areas\Admin\Views\SettingGameAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SettingGameAdmin\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\SettingGameAdmin\Edit.cshtml" />
     <EntityDeploy Include="Context.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Context.Designer.cs</LastGenOutput>
@@ -2321,9 +2325,7 @@
     <Content Include="Context.edmx.diagram">
       <DependentUpon>Context.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\Admin\Views\SettingGameAdmin\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\SettingGameAdmin\Add.cshtml" />
-    <Content Include="Areas\Admin\Views\SettingGameAdmin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCard\Create.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
