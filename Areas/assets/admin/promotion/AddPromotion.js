@@ -37,6 +37,15 @@ var Add = function () {
                             
                         }
                     },
+                    SaleTime: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng chọn thời gian khuyến mãi',
+
+                            },
+                            
+                        }
+                    },
                     Rate: {
                         validators: {
                             notEmpty: {

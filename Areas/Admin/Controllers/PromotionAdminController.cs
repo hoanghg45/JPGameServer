@@ -182,7 +182,7 @@ namespace JPGame.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public JsonResult DataTable(int page = 0)
+        public JsonResult DataTable(int page = 0, string search ="")
         {
             var data = db.Promotions.Select(a => new
             {
@@ -193,10 +193,13 @@ namespace JPGame.Areas.Admin.Controllers
                 a.From,
                 a.To,
                 a.CreateDate,
-                a.Status
-
+                a.Status,
+                CreateBy = a.User.Name.Trim()
             });
-
+            if (!string.IsNullOrEmpty(search))
+            {
+                data = data.Where(d => d.Title.Contains(search));
+            }
 
             //Xử lí phân trang
 
@@ -234,61 +237,7 @@ namespace JPGame.Areas.Admin.Controllers
         }
 
 
-        [HttpGet]
-        public JsonResult GetPromotion()
-        {
-            string UserID = Session["UserID"].ToString();
-
-            if (string.IsNullOrEmpty(UserID))
-            {
-                return Json(
-             new
-             {
-                 status = "error",
-                 message = "Tài khoản của bạn không tồn tại vui lòng kiểm tra lại!"
-
-             }
-             , JsonRequestBehavior.AllowGet
-             );
-            }
-            if (!db.Users.Any(u => u.UserID.Trim().Equals(UserID)))
-            {
-                return Json(
-                new
-                {
-                    status = "error",
-                    message = "Tài khoản của bạn không tồn tại vui lòng kiểm tra lại!"
-
-                }
-                , JsonRequestBehavior.AllowGet
-                );
-
-            }
-            var module = db.Modules.Select(m => new
-            {
-                Address = m.Address.Trim(),
-                Hotline = m.Hotline.Trim(),
-                Email = m.Email.Trim(),
-                m.AboutMe
-
-            }).FirstOrDefault();
-
-
-
-
-            return Json(
-              new
-              {
-                  status = "success",
-                  module
-
-              }
-              , JsonRequestBehavior.AllowGet
-              );
-
-
-
-        }
+    
         [HttpPost]
         public JsonResult DeletePromotion(int id)
         {

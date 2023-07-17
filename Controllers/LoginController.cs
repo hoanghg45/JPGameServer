@@ -137,6 +137,34 @@ namespace JPGame.Controllers
             {
                 return Json(new { code = 500, msg = "Thất Bại" + e.Message }, JsonRequestBehavior.AllowGet);
             }
+
+        }
+        [HttpGet]
+        public JsonResult GetAccountInfo(string UserName)
+        {
+            try
+            {
+                var user = db.Accounts.Where(u => u.AccountName.Equals(UserName.Trim())).FirstOrDefault();
+                if(user == null)
+                {
+                   return Json(new { code = 500, msg = "Tài khoản không tồn tại!" }, JsonRequestBehavior.AllowGet);
+
+
+                    
+                }
+                if (!string.IsNullOrEmpty(user.MemberCardID))
+                {
+                    return Json(new { code = 500, msg = "Tài khoản đã có thẻ thành viên!" }, JsonRequestBehavior.AllowGet);
+
+                }
+                
+                return Json(new { code = 200, data = user}, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Thất Bại" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
+
         }
     }
 }

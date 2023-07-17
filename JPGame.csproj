@@ -156,6 +156,7 @@
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\GameAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoginAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MemberCardController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberCardLevelController.cs" />
     <Compile Include="Areas\Admin\Controllers\ModulesAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\PromotionAdminController.cs" />
@@ -213,6 +214,9 @@
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingGame.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="Slider.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -236,6 +240,7 @@
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
     <Content Include="Areas\assets\admin\membercardlevel\AddMemberCard.js" />
     <Content Include="Areas\assets\admin\membercardlevel\MemberCardLevel.js" />
+    <Content Include="Areas\assets\admin\membercard\MemberCard.js" />
     <Content Include="Areas\assets\admin\module\module.js" />
     <Content Include="Areas\assets\admin\promotion\AddPromotion.js" />
     <Content Include="Areas\assets\admin\promotion\Promotion.js" />
@@ -2164,6 +2169,7 @@
       <DependentUpon>Context.edmx</DependentUpon>
       <LastGenOutput>Context.Context.cs</LastGenOutput>
     </Content>
+    <Content Include="Context.edmx.sql" />
     <Content Include="Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Context.edmx</DependentUpon>
@@ -2307,6 +2313,8 @@
       <DependentUpon>Context.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\Admin\Views\PromotionAdmin\EditPromotion.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCardLevel\AddMemberCard.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCard\Create.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

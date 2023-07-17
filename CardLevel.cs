@@ -24,6 +24,7 @@ namespace JPGame
         public string LevelName { get; set; }
         public Nullable<double> LevelFee { get; set; }
         public string Color { get; set; }
+        public string Image { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MemberCardLevel> MemberCardLevels { get; set; }

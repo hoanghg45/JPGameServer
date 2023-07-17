@@ -12,24 +12,15 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class Module
+    public partial class SettingGame
     {
-        public int ModulesID { get; set; }
-        public string Address { get; set; }
-        public string Hotline { get; set; }
-        public string Email { get; set; }
-        public string AboutMe { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public Nullable<double> Price { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
-        public string Logo { get; set; }
-        public string BannerGame { get; set; }
-        public string BannerBlog { get; set; }
-        public string BannerPromotion { get; set; }
-    
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
     }
 }
