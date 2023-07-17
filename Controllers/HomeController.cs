@@ -49,7 +49,7 @@ namespace JPGame.Controllers
         {
             try
             {
-                var module = db.Modules.Find(1);
+                var module = db.Modules.Find(3);
                 return Json(new {
                     code = 200, 
                     logo = module.Logo,
