@@ -20,16 +20,17 @@ var isFull = false;
     });
     //Khởi tạo select
     initSelect()
-    
+   
 })()
 
-function ShowTable(pagenumber) {
+function ShowTable(pagenumber,search) {
 
     $.ajax({
         type: "GET",
         url: "/PromotionAdmin/DataTable",
         data: {
-            page: pagenumber
+            page: pagenumber,
+            search
         },
 
         datatype: 'json',
@@ -46,7 +47,8 @@ function ShowTable(pagenumber) {
                 <td>${v.Title}</td>
                 <td>${v.Content}</td>
                 <td>${formatDate(v.From)}-${formatDate(v.To)}</td>
-                <td>${v.Rate}</td>
+                <td>${v.Rate}%</td>
+                <td>${v.CreateBy}</td>
                 <td>${v.Status}</td>
                 <td nowrap="nowrap">
 					<a href="/Admin/PromotionAdmin/EditPromotion/${v.ID}" class="btn btn-sm btn-clean btn-icon" title="Sửa">
@@ -244,4 +246,14 @@ function GetGiftInfomation(GiftID) {
             isLoadingData = false;
         }
     })
+}
+function initSearch(search) {
+    if (search != "") {
+        let body = $('#accounttable').find('tbody')
+        body.empty()
+        ShowTable(1, search)
+    }
+    
+    
+   
 }

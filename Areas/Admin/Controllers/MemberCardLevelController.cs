@@ -18,12 +18,7 @@ namespace JPGame.Areas.Admin.Controllers
         // GET: Admin/AccountsAdmin
         public ActionResult Index()
         {
-            var levels = db.CardLevels.ToList();
-            ViewBag.levels = levels;
-            var gifts = db.Gifts.ToList();
-            ViewBag.gifts = gifts;
-            var vip = db.VIPGifts.FirstOrDefault();
-            ViewBag.vip = vip;
+       
             return View();
         }
         [HttpGet]
@@ -214,7 +209,22 @@ namespace JPGame.Areas.Admin.Controllers
           );
             }
         }
-    [HttpPost]
+
+
+        [HttpGet]
+        public ActionResult AddMemberCard()
+        {
+            var levels = db.CardLevels.ToList();
+            ViewBag.levels = levels;
+            var gifts = db.Gifts.ToList();
+            ViewBag.gifts = gifts;
+            var vip = db.VIPGifts.FirstOrDefault();
+            ViewBag.vip = vip;
+            return View();
+        }
+
+
+        [HttpPost]
     public JsonResult AddMemberCard(FormCollection collection)
         {
             try
@@ -254,6 +264,100 @@ namespace JPGame.Areas.Admin.Controllers
                 }
         }
 
+        public JsonResult GetMemberCardLevel(double LevelFee)
+        {
+            try
+            {
+                if (LevelFee == 0 || LevelFee <500000)
+                {
+                    return this.Json(
+                    new
+                    {
+                        status = "Error",
+                        message = "Số tiền không hợp lệ"
+
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
+                }
+                var LevelID = GetLevel(LevelFee);
+                if(LevelID == null)
+                {
+                    return this.Json(
+                   new
+                   {
+                       status = "Error",
+                       message = "Số tiền không hợp lệ"
+
+                   }
+                   , JsonRequestBehavior.AllowGet
+                   );
+                }
+
+                var MemberCardLevel = db.MemberCardLevels.Where(c => c.CardLevelID.Equals(LevelID))
+                .Select(c => new
+                {
+                    c.CardLevelID,
+                    c.CardLevel.LevelName,
+                    c.Gift.GiftLevelName,
+                    RewardRate = Math.Round(c.Gift.RewardRate.Value*100),
+                    c.Gift.PointPlus,
+                    Holiday = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Holiday,
+                    Personal = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Personal,
+                    SpecialDay = c.Gift.PersonalGiftID != null && c.Gift.PersonalGift.SpecialDay,
+                    SpecialMemory = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.AvailableTemplates,
+                    CustomizeAvailableTemplate = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.CustomizeAvailableTemplate,
+                    c.VIP,
+                    Mocktail = (bool)c.VIP ? c.VIPGift.Moctail : false,
+                    VipRoom = (bool)c.VIP ? c.VIPGift.VipRoom : false
+                }).FirstOrDefault();
+
+
+
+                return this.Json(
+            new
+            {
+                status = "Success",
+                data = MemberCardLevel
+
+            }
+            , JsonRequestBehavior.AllowGet
+            );
+
+            }
+            catch (Exception e)
+            {
+                return this.Json(
+          new
+          {
+              status = "Error",
+              message = e.InnerException
+
+          }
+          , JsonRequestBehavior.AllowGet
+          );
+            }
+        }
+        public string GetLevel(double amount)
+        {
+            using (var context = new DBEntities()) // Thay YourDbContext bằng context của bạn
+            {
+                var levels = context.CardLevels.OrderBy(l => l.LevelFee).ToList();
+
+                string levelID = null;
+
+                foreach (var level in levels)
+                {
+                    if (amount >= level.LevelFee)
+                    {
+                        levelID = level.ID;
+                        
+                    }
+                }
+
+                return levelID;
+            }
+        }
 
     }
 

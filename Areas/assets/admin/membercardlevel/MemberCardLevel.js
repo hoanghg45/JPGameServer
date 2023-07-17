@@ -44,7 +44,7 @@ function ShowTable(pagenumber) {
                     let tr = `<tr>
                 <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
                 <td>${v.CardLevel}</td>
-                <td>${v.LevelFee}</td>
+                <td>${v.LevelFee.toLocaleString('en-US')}</td>
                 <td>${v.GiftLevelName}</td>
                 <td>${v.Vipzone}</td>
                
