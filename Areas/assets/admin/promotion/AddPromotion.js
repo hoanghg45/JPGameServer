@@ -159,9 +159,6 @@ var Add = function () {
 
         })
 
-
-
-
         function UpdatePromotion(data) {
             $.ajax({
                 type: "POST",

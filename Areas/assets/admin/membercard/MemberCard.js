@@ -160,6 +160,42 @@ var KTWizard1 = function () {
 				}
 			}
 		));
+		_validations.push(FormValidation.formValidation(
+			_formEl,
+			{
+				fields: {
+					delivery: {
+						validators: {
+							notEmpty: {
+								message: 'Delivery type is required'
+							}
+						}
+					},
+					packaging: {
+						validators: {
+							notEmpty: {
+								message: 'Packaging type is required'
+							}
+						}
+					},
+					preferreddelivery: {
+						validators: {
+							notEmpty: {
+								message: 'Preferred delivery window is required'
+							}
+						}
+					}
+				},
+				plugins: {
+					trigger: new FormValidation.plugins.Trigger(),
+					// Bootstrap Framework Integration
+					bootstrap: new FormValidation.plugins.Bootstrap({
+						//eleInvalidClass: '',
+						eleValidClass: '',
+					})
+				}
+			}
+		));
 
 	
 	}
@@ -184,11 +220,15 @@ var KTWizard1 = function () {
 			if (validator) {
 				validator.validate().then(function (status) {
 					if (status == 'Valid') {
+						let nextStep = wizard.getNewStep()
+						if (wizard.getNewStep() == 2) {
+							nextStep = SkipInfoStep(nextStep)
+                        }
 						if (wizard.getNewStep() == 3) {
 							SetReviewStep()
                         }
 						///
-						wizard.goTo(wizard.getNewStep());
+						wizard.goTo(nextStep);
 						
 						KTUtil.scrollTop();
 					} else {
@@ -215,6 +255,9 @@ var KTWizard1 = function () {
 				let moneyReward = rate != 0? money * rate / 100 : money 
 				$('input[name = "Money"]').val(moneyReward.toLocaleString('en-US'))
 				$('input[name = "Point"]').val($('input[name = "PointPlus"]').val())
+			}
+			function SkipInfoStep(nextStep) {
+				return $('input[name = "LevelName"]').val() == "Welcome" ? 4 : nextStep			
 			}
 			return false;  // Do not change wizard step, further action will be handled by he validator
 		});
