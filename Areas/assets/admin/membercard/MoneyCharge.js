@@ -455,11 +455,11 @@ function InitLoadingButton() {
 	});
 
 }
-function GetCurrCard($this, level) {
+function GetCurrCard($this) {
 	$.ajax({
 		type: "GET",
-		url: "/MemberCard/GetCurrentCard",
-		data: { level },
+		url: "/MemberCard/GetCurrentCardForCharge",
+		
 
 		datatype: 'json',
 		complete: function () {
@@ -471,7 +471,19 @@ function GetCurrCard($this, level) {
 			if (data.status == "Success") {
 				$('#iconStatus').addClass("flaticon2-check-mark text-success");
 				$('#textNoti').text("Thẻ hợp lệ!");
-				$('input[name="CardID"]').val(data.card)
+				$('input[name="CardID"]').val(data.card.MemberCardID)
+				$('input[name="LevelName"]').val(data.card.LevelName)
+				$('input[name="GiftLevelName"]').val(data.card.GiftLevelName)
+				$('input[name="RewardRate"]').val(data.card.RewardRate)
+				$('input[name="PointPlus"]').val(data.card.PointPlus)
+				$('#AvailableTemplates').prop("checked", data.card.AvailableTemplates);
+				$('#CustomizeAvailableTemplate').prop("checked", data.card.CustomizeAvailableTemplate);
+				$('#Holiday').prop("checked", data.card.Holiday);
+				$('#Special').prop("checked", data.card.Special);
+				$('#Personal').prop("checked", data.card.Personal);
+				$('#VIP').prop("checked", data.card.VIP);
+				$('#Mocktail').prop("checked", data.card.Mocktail);
+				$('#VipRoom').prop("checked", data.card.VipRoom);
 			} else {
 				toastr.error("Lỗi!")
 

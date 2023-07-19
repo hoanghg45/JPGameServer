@@ -104,6 +104,7 @@ namespace JPGame.Areas.Admin.Controllers
         }
 
         // POST: Admin/MemberCard/Create
+        
         [HttpPost]
         public JsonResult MoneyCharge(FormCollection collection)
         {
@@ -111,14 +112,44 @@ namespace JPGame.Areas.Admin.Controllers
             {
                 // TODO: Add insert logic here
 
-                string CardID = "Card1";
+                string CardID = collection["CardID"];
                 var MemberCardLevel = db.MemberCards.Find(collection["MemberCardLevelID"]);
-                var MemberCard = new MemberCard {
-                    MemberCardID = CardID,
-                    MemberCardLevelID = Int16.Parse(collection["MemberCardLevelID"]),
-                    Points = double.Parse(collection["PointReview"].Replace(",","")),
-                };
+                var card = db.MemberCards.Find(CardID);
+                if (card == null)
+                {
+                    return this.Json(
+               new
+               {
+                   status = "Error",
+                   message = "Thẻ không tồn tại, vui lòng kiểm tra lại!"
 
+               }
+               , JsonRequestBehavior.AllowGet
+               );
+                }
+                if (!card.MemberCardLevel.CardLevel.LevelName.Trim().Equals("Welcome"))
+                {
+                    string accname = collection["AccountName"];
+                    var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
+                    if (string.IsNullOrEmpty(accname) || acc == null)
+                    {
+                        return this.Json(
+                      new
+                      {
+                          status = "Error",
+                          message = "Tài khoản không tồn tại!"
+
+                      }
+                      , JsonRequestBehavior.AllowGet
+                      );
+                    }
+                    acc.MemberCardID = card.MemberCardID;
+
+                }
+                card.Balance = Double.Parse(collection["Money"].Replace(",", ""));
+                card.Points = Double.Parse(collection["Point"].Replace(",", ""));
+                card.Status = true;
+                db.SaveChanges();
                 return this.Json(
                  new
                  {
@@ -129,30 +160,96 @@ namespace JPGame.Areas.Admin.Controllers
                  , JsonRequestBehavior.AllowGet
                  );
             }
-            catch
+            catch (Exception e)
             {
                 return this.Json(
                  new
                  {
-                     status = "Success",
-
+                     status = "Error",
+                     message = e
 
                  }
                  , JsonRequestBehavior.AllowGet
                  );
             }
         }
-
         [HttpGet]
-        public JsonResult GetCurrentCard(string level)
+        public JsonResult GetCurrentCardForCharge()
         {
             DateTime now = DateTime.Now;
             DateTime oneMinuteAgo = now.AddMinutes(-2).AddSeconds(-now.Second);
              
             string reader = "7374d2c8e7b943c7";
-            var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
+            //var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
+            var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader)).FirstOrDefault();
             
-            if (currCard == null )
+            if (currCard == null)
+            {
+                return this.Json(
+                new
+                {
+                    status = "Error",
+                    message = "Vui lòng quét lại thẻ!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+            var memberCard = db.MemberCards.Where(c => c.MemberCardID.Equals(currCard.CardID))
+                .Select(c => new
+            {
+                c.MemberCardID,
+                c.MemberCardLevel.CardLevelID,
+                c.MemberCardLevel.CardLevel.LevelName,
+                c.MemberCardLevel.Gift.GiftLevelName,
+                RewardRate = Math.Round(c.MemberCardLevel.Gift.RewardRate.Value * 100),
+                c.MemberCardLevel.Gift.PointPlus,
+                Holiday = c.MemberCardLevel.Gift.PersonalGiftID == null ? false : c.MemberCardLevel.Gift.PersonalGift.Holiday,
+                Personal = c.MemberCardLevel.Gift.PersonalGiftID == null ? false : c.MemberCardLevel.Gift.PersonalGift.Personal,
+                SpecialDay = c.MemberCardLevel.Gift.PersonalGiftID != null && c.MemberCardLevel.Gift.PersonalGift.SpecialDay,
+                SpecialMemory = c.MemberCardLevel.Gift.SpecialMemory == null ? false : c.MemberCardLevel.Gift.SpecialMemory.AvailableTemplates,
+                CustomizeAvailableTemplate = c.MemberCardLevel.Gift.SpecialMemory == null ? false : c.MemberCardLevel.Gift.SpecialMemory.CustomizeAvailableTemplate,
+                c.MemberCardLevel.VIP,
+                Mocktail = (bool)c.MemberCardLevel.VIP ? c.MemberCardLevel.VIPGift.Moctail : false,
+                VipRoom = (bool)c.MemberCardLevel.VIP ? c.MemberCardLevel.VIPGift.VipRoom : false
+            }).FirstOrDefault(); 
+
+            if (memberCard == null)
+            {
+                return this.Json(
+                new
+                {
+                    status = "Error",
+                    message = "Vui lòng quét lại thẻ!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+
+           
+
+            return this.Json(
+                new
+                {
+                    status = "Success",
+                    card = memberCard
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+        }
+        [HttpGet]
+        public JsonResult GetCurrentCardForCreate(string level)
+        {
+            DateTime now = DateTime.Now;
+            DateTime oneMinuteAgo = now.AddMinutes(-2).AddSeconds(-now.Second);
+             
+            string reader = "7374d2c8e7b943c7";
+            //var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
+            var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader)).FirstOrDefault();
+            
+            if (currCard == null)
             {
                 return this.Json(
                 new
@@ -196,7 +293,7 @@ namespace JPGame.Areas.Admin.Controllers
                 new
                 {
                     status = "Success",
-                    card = currCard.CardID
+                    card = memberCard.MemberCardID
 
                 }
                 , JsonRequestBehavior.AllowGet

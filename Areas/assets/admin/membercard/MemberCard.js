@@ -458,7 +458,7 @@ function InitLoadingButton() {
 function GetCurrCard($this,level) {
 	$.ajax({
 		type: "GET",
-		url: "/MemberCard/GetCurrentCard",
+		url: "/MemberCard/GetCurrentCardForCreate",
 		data: { level },
 
 		datatype: 'json',
@@ -471,7 +471,7 @@ function GetCurrCard($this,level) {
 			if (data.status == "Success") {
 				$('#iconStatus').addClass("flaticon2-check-mark text-success");
 				$('#textNoti').text("Thẻ hợp lệ!");
-				$('input[name="CardID"]').val(data.card)
+				$('input[name="CardID"]').val(data.MemberCardID)
 			} else {
 				toastr.error("Lỗi!")
 				

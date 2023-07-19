@@ -264,18 +264,11 @@ namespace JPGame.Areas.Admin.Controllers
                 }
         }
 
-        public JsonResult GetMemberCardLevel(double LevelFee, string CardID)
+        public JsonResult GetMemberCardLevel(double LevelFee)
         {
             try
             {
 
-                if (!string.IsNullOrEmpty(CardID))
-                {
-                    
-
-                }
-                if (LevelFee != 0)
-                {
                     if (LevelFee == 0 || LevelFee < 500000)
                     {
                         return this.Json(
@@ -292,36 +285,39 @@ namespace JPGame.Areas.Admin.Controllers
                     if (LevelID == null)
                     {
                         return this.Json(
-                       new
-                       {
-                           status = "Error",
-                           message = "Số tiền không hợp lệ"
+                        new
+                        {
+                            status = "Error",
+                            message = "Số tiền không hợp lệ"
 
-                       }
-                       , JsonRequestBehavior.AllowGet
-                       );
+                        }
+                        , JsonRequestBehavior.AllowGet
+                        );
                     }
-                }
 
-                //var MemberCardLevel = db.MemberCardLevels
-                //    .WhereIf(!string.IsNullOrEmpty(CardID),c => c.le)
-                //    .WhereIf(LevelFee != 0,c => c.CardLevelID.Equals(LevelID))
-                //.Select(c => new
-                //{
-                //    c.CardLevelID,
-                //    c.CardLevel.LevelName,
-                //    c.Gift.GiftLevelName,
-                //    RewardRate = Math.Round(c.Gift.RewardRate.Value*100),
-                //    c.Gift.PointPlus,
-                //    Holiday = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Holiday,
-                //    Personal = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Personal,
-                //    SpecialDay = c.Gift.PersonalGiftID != null && c.Gift.PersonalGift.SpecialDay,
-                //    SpecialMemory = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.AvailableTemplates,
-                //    CustomizeAvailableTemplate = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.CustomizeAvailableTemplate,
-                //    c.VIP,
-                //    Mocktail = (bool)c.VIP ? c.VIPGift.Moctail : false,
-                //    VipRoom = (bool)c.VIP ? c.VIPGift.VipRoom : false
-                //}).FirstOrDefault();
+
+
+
+
+                var MemberCardLevel = db.MemberCardLevels
+                    
+                    .WhereIf(LevelFee != 0, c => c.CardLevelID.Equals(LevelID))
+                .Select(c => new
+                {
+                    c.CardLevelID,
+                    c.CardLevel.LevelName,
+                    c.Gift.GiftLevelName,
+                    RewardRate = Math.Round(c.Gift.RewardRate.Value * 100),
+                    c.Gift.PointPlus,
+                    Holiday = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Holiday,
+                    Personal = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Personal,
+                    SpecialDay = c.Gift.PersonalGiftID != null && c.Gift.PersonalGift.SpecialDay,
+                    SpecialMemory = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.AvailableTemplates,
+                    CustomizeAvailableTemplate = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.CustomizeAvailableTemplate,
+                    c.VIP,
+                    Mocktail = (bool)c.VIP ? c.VIPGift.Moctail : false,
+                    VipRoom = (bool)c.VIP ? c.VIPGift.VipRoom : false
+                }).FirstOrDefault();
 
 
 
@@ -329,7 +325,7 @@ namespace JPGame.Areas.Admin.Controllers
             new
             {
                 status = "Success",
-                //data = MemberCardLevel
+                data = MemberCardLevel
 
             }
             , JsonRequestBehavior.AllowGet
@@ -339,14 +335,13 @@ namespace JPGame.Areas.Admin.Controllers
             catch (Exception e)
             {
                 return this.Json(
-          new
-          {
-              status = "Error",
-              message = e.InnerException
+           new
+           {
+               status = "Error",
+               message = e.Message
 
-          }
-          , JsonRequestBehavior.AllowGet
-          );
+           }, JsonRequestBehavior.AllowGet
+            );
             }
         }
         public string GetLevel(double amount)
