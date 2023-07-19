@@ -205,6 +205,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
+    <Compile Include="Controllers\SystemGameController.cs" />
     <Compile Include="Game.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -230,6 +231,13 @@
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="qa\mcardsea.aspx.cs">
+      <DependentUpon>mcardsea.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="qa\mcardsea.aspx.designer.cs">
+      <DependentUpon>mcardsea.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SettingGame.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -2249,6 +2257,7 @@
     <Content Include="img\slider-2.jpg" />
     <Content Include="img\tournament\1.jpg" />
     <Content Include="img\tournament\2.jpg" />
+    <Content Include="qa\mcardsea.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admin\Views\web.config" />
@@ -2331,6 +2340,7 @@
     </Content>
     <Content Include="Areas\Admin\Views\MemberCard\Create.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2382,6 +2392,7 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Views\SettingGame\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\SystemGame\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
