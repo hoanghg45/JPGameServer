@@ -329,7 +329,7 @@ namespace JPGame.Areas.Admin.Controllers
             new
             {
                 status = "Success",
-                data = MemberCardLevel
+                //data = MemberCardLevel
 
             }
             , JsonRequestBehavior.AllowGet
