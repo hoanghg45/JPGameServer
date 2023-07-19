@@ -303,25 +303,25 @@ namespace JPGame.Areas.Admin.Controllers
                     }
                 }
 
-                var MemberCardLevel = db.MemberCardLevels
-                    .WhereIf(!string.IsNullOrEmpty(CardID),c => c.le)
-                    .WhereIf(LevelFee != 0,c => c.CardLevelID.Equals(LevelID))
-                .Select(c => new
-                {
-                    c.CardLevelID,
-                    c.CardLevel.LevelName,
-                    c.Gift.GiftLevelName,
-                    RewardRate = Math.Round(c.Gift.RewardRate.Value*100),
-                    c.Gift.PointPlus,
-                    Holiday = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Holiday,
-                    Personal = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Personal,
-                    SpecialDay = c.Gift.PersonalGiftID != null && c.Gift.PersonalGift.SpecialDay,
-                    SpecialMemory = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.AvailableTemplates,
-                    CustomizeAvailableTemplate = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.CustomizeAvailableTemplate,
-                    c.VIP,
-                    Mocktail = (bool)c.VIP ? c.VIPGift.Moctail : false,
-                    VipRoom = (bool)c.VIP ? c.VIPGift.VipRoom : false
-                }).FirstOrDefault();
+                //var MemberCardLevel = db.MemberCardLevels
+                //    .WhereIf(!string.IsNullOrEmpty(CardID),c => c.le)
+                //    .WhereIf(LevelFee != 0,c => c.CardLevelID.Equals(LevelID))
+                //.Select(c => new
+                //{
+                //    c.CardLevelID,
+                //    c.CardLevel.LevelName,
+                //    c.Gift.GiftLevelName,
+                //    RewardRate = Math.Round(c.Gift.RewardRate.Value*100),
+                //    c.Gift.PointPlus,
+                //    Holiday = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Holiday,
+                //    Personal = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Personal,
+                //    SpecialDay = c.Gift.PersonalGiftID != null && c.Gift.PersonalGift.SpecialDay,
+                //    SpecialMemory = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.AvailableTemplates,
+                //    CustomizeAvailableTemplate = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.CustomizeAvailableTemplate,
+                //    c.VIP,
+                //    Mocktail = (bool)c.VIP ? c.VIPGift.Moctail : false,
+                //    VipRoom = (bool)c.VIP ? c.VIPGift.VipRoom : false
+                //}).FirstOrDefault();
 
 
 
