@@ -173,6 +173,7 @@
     <Compile Include="Areas\Admin\Controllers\SettingGameAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\SliderAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\TypeSliderAdminController.cs" />
+    <Compile Include="Areas\Admin\Extension\CollectionExension.cs" />
     <Compile Include="Areas\Admin\Extension\PaginationExtension.cs" />
     <Compile Include="Areas\CardForm.cs" />
     <Compile Include="Areas\Security\SessionCheck.cs" />
@@ -2342,6 +2343,7 @@
     </Content>
     <Content Include="Areas\Admin\Views\MemberCard\Create.cshtml" />
     <Content Include="Areas\Admin\Views\MemberCard\MoneyCharge.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCardLevel\AddMemberCard.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

@@ -264,37 +264,48 @@ namespace JPGame.Areas.Admin.Controllers
                 }
         }
 
-        public JsonResult GetMemberCardLevel(double LevelFee)
+        public JsonResult GetMemberCardLevel(double LevelFee, string CardID)
         {
             try
             {
-                if (LevelFee == 0 || LevelFee <500000)
+
+                if (!string.IsNullOrEmpty(CardID))
                 {
-                    return this.Json(
-                    new
+                    
+
+                }
+                if (LevelFee != 0)
+                {
+                    if (LevelFee == 0 || LevelFee < 500000)
                     {
-                        status = "Error",
-                        message = "Số tiền không hợp lệ"
+                        return this.Json(
+                        new
+                        {
+                            status = "Error",
+                            message = "Số tiền không hợp lệ"
 
+                        }
+                        , JsonRequestBehavior.AllowGet
+                        );
                     }
-                    , JsonRequestBehavior.AllowGet
-                    );
-                }
-                var LevelID = GetLevel(LevelFee);
-                if(LevelID == null)
-                {
-                    return this.Json(
-                   new
-                   {
-                       status = "Error",
-                       message = "Số tiền không hợp lệ"
+                    var LevelID = GetLevel(LevelFee);
+                    if (LevelID == null)
+                    {
+                        return this.Json(
+                       new
+                       {
+                           status = "Error",
+                           message = "Số tiền không hợp lệ"
 
-                   }
-                   , JsonRequestBehavior.AllowGet
-                   );
+                       }
+                       , JsonRequestBehavior.AllowGet
+                       );
+                    }
                 }
 
-                var MemberCardLevel = db.MemberCardLevels.Where(c => c.CardLevelID.Equals(LevelID))
+                var MemberCardLevel = db.MemberCardLevels
+                    .WhereIf(!string.IsNullOrEmpty(CardID),c => c.le)
+                    .WhereIf(LevelFee != 0,c => c.CardLevelID.Equals(LevelID))
                 .Select(c => new
                 {
                     c.CardLevelID,

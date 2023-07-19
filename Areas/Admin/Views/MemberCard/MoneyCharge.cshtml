@@ -47,8 +47,8 @@
                                 <!--begin::Wizard Step 1 Nav-->
                                 <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending">
                                     <div class="wizard-label">
-                                        <i class="wizard-icon flaticon-list"></i>
-                                        <h3 class="wizard-title">1. Thông tin thẻ</h3>
+                                        <i class="wizard-icon la la-credit-card"></i>
+                                        <h3 class="wizard-title">1. Quét thẻ</h3>
                                     </div>
                                     <span class="svg-icon svg-icon-xl wizard-arrow">
                                         <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
@@ -62,6 +62,7 @@
                                         <!--end::Svg Icon-->
                                     </span>
                                 </div>
+
                                 <!--end::Wizard Step 1 Nav-->
                                 <!--begin::Wizard Step 2 Nav-->
                                 <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
@@ -104,12 +105,13 @@
                                 </div>
                                 <!--end::Wizard Step 3 Nav-->
                                 <!--begin::Wizard Step 4 Nav-->
+
                                 <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending">
                                     <div class="wizard-label">
-                                        <i class="wizard-icon la la-credit-card"></i>
-                                        <h3 class="wizard-title">4. Quét thẻ</h3>
+                                        <i class="wizard-icon flaticon-list"></i>
+                                        <h3 class="wizard-title">1. Thông tin thẻ</h3>
                                     </div>
-
+                                  
                                 </div>
                                 <!--end::Wizard Step 4 Nav-->
 
@@ -120,8 +122,220 @@
                         <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
                             <div class="col-xl-12 col-xxl-7">
                                 <!--begin::Wizard Form-->
-                                <form class="form fv-plugins-bootstrap fv-plugins-framework" id="kt_form">
+                                <form class="form fv-plugins-bootstrap fv-plugins-framework" id="createMemberCardForm">
                                     <!--begin::Wizard Step 1-->
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <h4 class="mb-10 font-weight-bold text-dark">Quét thẻ</h4>
+                                        <!--begin::Select-->
+                                        <h6 class="font-weight-bolder mb-3">Đưa thẻ vào máy đọc</h6>
+                                        <div class="form-group">
+                                            <button type="button" id="CheckCardBtn" class="btn btn-success mr-3">
+                                                Kiểm tra
+                                            </button>
+                                            <button type="button" id="loadingBtn" class="btn btn-outline-warning spinner spinner-darker-warning spinner-left mr-3">
+                                                Đang kiểm tra
+                                            </button>
+                                            <i id="iconStatus" class="flaticon2-check-mark text-success"></i>
+                                            <input name="CardID" hidden />
+                                        </div>
+                                        <span id="textNoti" class="form-text text-muted"></span>
+                                        <!--end::Select-->
+                                        <div class="separator separator-dashed my-10"></div>
+                                        <div class="form-group fv-plugins-icon-container">
+
+                                            <label>Cấp độ thẻ:</label>
+                                            <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="LevelName" />
+
+
+                                        </div>
+
+
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Quà tặng:</label>
+                                            <input class="form-control form-control-solid form-control-lg" readonly style="width:100%" name="GiftLevelName" />
+
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container row">
+                                            <div class="col-lg-6">
+                                                <label>Tỉ lệ tiền tặng:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="RewardRate" aria-describedby="basic-addon2" />
+                                                    <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>Số điểm cộng:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="PointPlus" aria-describedby="basic-addon2" />
+                                                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container ">
+                                            <div class="form-group">
+                                                <label>Quà tặng đặc biệt</label>
+                                                <div class="checkbox-inline">
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="Personal" disabled="disabled" name="CheckGifs" />
+                                                        <span></span>
+                                                        Quà tặng cá nhân
+                                                    </label>
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="Special" disabled="disabled" name="CheckGifs" />
+                                                        <span></span>
+                                                        Quà tặng dịp đặc biệt (sinh nhật,..)
+                                                    </label>
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="Holiday" disabled="disabled" name="CheckGifs" />
+                                                        <span></span>
+                                                        Quà tặng ngày lễ
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group fv-plugins-icon-container">
+                                                <label>Kỉ niệm đặt biệt</label>
+                                                <div class="checkbox-inline">
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="AvailableTemplates" disabled="disabled" name="CheckMemory" />
+                                                        <span></span>
+                                                        Tự tạo mẫu
+                                                    </label>
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="CustomizeAvailableTemplate" disabled="disabled" name="CheckMemory" />
+                                                        <span></span>
+                                                        Chọn những mẫu có sẵn
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>VIP</label>
+                                            <div class="checkbox-list">
+                                                <label class="checkbox checkbox-disabled">
+                                                    <input type="checkbox" id="VIP" disabled="disabled" name="CheckVIP" />
+                                                    <span></span>
+                                                    Có
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Đặc quyền VIP</label>
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-disabled" id="labelMocktail">
+                                                    <input type="checkbox" id="Mocktail" disabled="disabled" name="CheckVIPGifts" />
+                                                    <span></span>
+                                                    Ưu đãi Mocktail
+                                                </label>
+                                                <label class="checkbox checkbox-disabled">
+                                                    <input type="checkbox" id="VipRoom" disabled="disabled" name="CheckVIPGifts" />
+                                                    <span></span>
+                                                    Ưu đãi bàn và phòng VVIP
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--end::Wizard Step 1-->
+                                    <!--begin::Wizard Step 2-->
+                                    <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                        <h3 class="mb-10 font-weight-bold text-dark">Thông tin thành viên</h3>
+                                        <!--begin::Input-->
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Tên tài khoản</label>
+                                            <input type="text" class="form-control form-control-solid form-control-lg" name="AccountName" placeholder="Tên tài khoản">
+
+
+                                        </div>
+                                        <!--end::Input-->
+                                        <!--begin::Input-->
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <!--begin::Input-->
+                                                <div class="form-group fv-plugins-icon-container">
+                                                    <label>Họ và tên</label>
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="FullName">
+                                                    <!--end::Input-->
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div class="form-group fv-plugins-icon-container">
+                                                    <!--begin::Input-->
+                                                    <label>Ngày sinh</label>
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="DateOfBirth">
+                                                    <!--end::Input-->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--end::Input-->
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <!--begin::Input-->
+                                                <div class="form-group fv-plugins-icon-container">
+                                                    <label>Địa chỉ Email</label>
+                                                    <input type="email" class="form-control form-control-solid form-control-lg" readonly name="Email">
+
+                                                </div>
+                                                <!--end::Input-->
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <!--begin::Input-->
+                                                <div class="form-group fv-plugins-icon-container">
+                                                    <label>Số điện thoại</label>
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="Phone">
+
+                                                </div>
+                                                <!--end::Input-->
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <!--end::Wizard Step 2-->
+                                    <!--begin::Wizard Step 3-->
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <h4 class="mb-10 font-weight-bold text-dark">Xác nhận tạo thẻ</h4>
+                                        <!--begin::Select-->
+
+                                        <div class="form-group fv-plugins-icon-container" id="NameContain">
+                                            <label>Họ và tên</label>
+                                            <input type="text" class="form-control form-control-solid form-control-lg" style="width:100%" readonly name="FullNameReview">
+                                            <!--end::Input-->
+                                        </div>
+
+
+                                        <!--end::Select-->
+                                        <div class="form-group fv-plugins-icon-container">
+
+                                            <label>Cấp độ thẻ:</label>
+                                            <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="LevelNameReview" />
+
+
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container row">
+                                            <div class="col-lg-6">
+                                                <label>Số tiền:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="Money" aria-describedby="basic-addon2" />
+                                                    <div class="input-group-append"><span class="input-group-text">đ</span></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>Số điểm:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="Point" aria-describedby="basic-addon2" />
+                                                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end::Select-->
+
+                                    </div>
+                                    <!--end::Wizard Step 3-->
+                                    <!--begin::Wizard Step 4-->
                                     <div class="pb-5" data-wizard-type="step-content">
                                         <h4 class="mb-10 font-weight-bold text-dark">Thông tin thẻ</h4>
                                         <!--begin::Input-->
@@ -228,122 +442,15 @@
                                         </div>
 
                                     </div>
-                                    <!--end::Wizard Step 1-->
-                                    <!--begin::Wizard Step 2-->
-                                    <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-                                        <h3 class="mb-10 font-weight-bold text-dark">Thông tin thành viên</h3>
-                                        <!--begin::Input-->
-                                        <div class="form-group fv-plugins-icon-container">
-                                            <label>Tên tài khoản</label>
-                                            <input type="text" class="form-control form-control-solid form-control-lg" name="AccountName" placeholder="Tên tài khoản">
-
-
-                                        </div>
-                                        <!--end::Input-->
-                                        <!--begin::Input-->
-                                        <div class="row">
-                                            <div class="col-xl-6">
-                                                <!--begin::Input-->
-                                                <div class="form-group fv-plugins-icon-container">
-                                                    <label>Họ và tên</label>
-                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="FullName">
-                                                    <!--end::Input-->
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-6">
-                                                <div class="form-group fv-plugins-icon-container">
-                                                    <!--begin::Input-->
-                                                    <label>Ngày sinh</label>
-                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="DateOfBirth">
-                                                    <!--end::Input-->
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--end::Input-->
-                                        <div class="row">
-                                            <div class="col-xl-6">
-                                                <!--begin::Input-->
-                                                <div class="form-group fv-plugins-icon-container">
-                                                    <label>Địa chỉ Email</label>
-                                                    <input type="email" class="form-control form-control-solid form-control-lg" readonly name="Email">
-
-                                                </div>
-                                                <!--end::Input-->
-                                            </div>
-                                            <div class="col-xl-6">
-                                                <!--begin::Input-->
-                                                <div class="form-group fv-plugins-icon-container">
-                                                    <label>Số điện thoại</label>
-                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="Phone">
-
-                                                </div>
-                                                <!--end::Input-->
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
-                                    <!--end::Wizard Step 2-->
-                                    <!--begin::Wizard Step 3-->
-                                    <div class="pb-5" data-wizard-type="step-content">
-                                        <h4 class="mb-10 font-weight-bold text-dark">Xác nhận tạo thẻ</h4>
-                                        <!--begin::Select-->
-
-                                        <div class="form-group fv-plugins-icon-container" id="NameContain">
-                                            <label>Họ và tên</label>
-                                            <input type="text" class="form-control form-control-solid form-control-lg" style="width:100%" readonly name="FullNameReview">
-                                            <!--end::Input-->
-                                        </div>
-
-
-                                        <!--end::Select-->
-                                        <div class="form-group fv-plugins-icon-container">
-
-                                            <label>Cấp độ thẻ:</label>
-                                            <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="LevelNameReview" />
-
-
-                                        </div>
-                                        <div class="form-group fv-plugins-icon-container row">
-                                            <div class="col-lg-6">
-                                                <label>Số tiền:</label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="Money" aria-describedby="basic-addon2" />
-                                                    <div class="input-group-append"><span class="input-group-text">đ</span></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label>Số điểm:</label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="Point" aria-describedby="basic-addon2" />
-                                                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--end::Select-->
-
-                                    </div>
-                                    <!--end::Wizard Step 3-->
-                                    <!--begin::Wizard Step 4-->
-                                    <div class="pb-5" data-wizard-type="step-content">
-                                        <h4 class="mb-10 font-weight-bold text-dark">Quét thẻ</h4>
-                                        <!--begin::Select-->
-                                        <h6 class="font-weight-bolder mb-3">Đưa thẻ vào máy đọc</h6>
-
-                                        <!--end::Select-->
-
-                                    </div>
                                     <!--end::Wizard Step 4-->
                                     <!--begin::Wizard Actions-->
                                     <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                         <div class="mr-2">
-                                            <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Previous</button>
+                                            <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Quay lại</button>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Submit</button>
-                                            <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Next</button>
+                                            <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Tạo thẻ</button>
+                                            <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Tiếp</button>
                                         </div>
                                     </div>
                                     <!--end::Wizard Actions-->
@@ -365,7 +472,7 @@
 </div>
 <!--end::Content-->
 <!--begin::Page Scripts(used by this page)-->
-<script src="~/Areas/assets/admin/membercard/MemberCard.js"></script>
+<script src="~/Areas/assets/admin/membercard/MoneyCharge.js"></script>
 <!--end::Page Scripts-->
 <!--begin::Page Custom Styles(used by this page)-->
 <link href="~/Areas/assets/css/pages/wizard/wizard-1.css" rel="stylesheet" type="text/css" />

@@ -121,7 +121,7 @@
                         <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
                             <div class="col-xl-12 col-xxl-7">
                                 <!--begin::Wizard Form-->
-                                <form class="form fv-plugins-bootstrap fv-plugins-framework" id="kt_form">
+                                <form class="form fv-plugins-bootstrap fv-plugins-framework" id="createMemberCardForm">
                                     <!--begin::Wizard Step 1-->
                                     <div class="pb-5" data-wizard-type="step-content">
                                         <h4 class="mb-10 font-weight-bold text-dark">Thông tin thẻ</h4>
@@ -332,7 +332,17 @@
                                         <h4 class="mb-10 font-weight-bold text-dark">Quét thẻ</h4>
                                         <!--begin::Select-->
                                         <h6 class="font-weight-bolder mb-3">Đưa thẻ vào máy đọc</h6>
-                                       
+                                        <div class="form-group">
+                                            <button type="button" id="CheckCardBtn" class="btn btn-success mr-3">
+                                                Kiểm tra
+                                            </button>
+                                            <button type="button" id="loadingBtn" class="btn btn-outline-warning spinner spinner-darker-warning spinner-left mr-3">
+                                                Đang kiểm tra
+                                            </button>
+                                            <i id="iconStatus" class="flaticon2-check-mark text-success"></i>
+                                            <input name="CardID" hidden />
+                                        </div>
+                                        <span id="textNoti" class="form-text text-muted"></span>
                                         <!--end::Select-->
 
                                     </div>
@@ -340,11 +350,11 @@
                                     <!--begin::Wizard Actions-->
                                     <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                         <div class="mr-2">
-                                            <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Previous</button>
+                                            <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Quay lại</button>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Submit</button>
-                                            <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Next</button>
+                                            <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Tạo thẻ</button>
+                                            <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Tiếp</button>
                                         </div>
                                     </div>
                                     <!--end::Wizard Actions-->

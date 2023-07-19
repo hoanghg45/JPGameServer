@@ -128,27 +128,7 @@ var KTWizard1 = function () {
 			_formEl,
 			{
 				fields: {
-					delivery: {
-						validators: {
-							notEmpty: {
-								message: 'Delivery type is required'
-							}
-						}
-					},
-					packaging: {
-						validators: {
-							notEmpty: {
-								message: 'Packaging type is required'
-							}
-						}
-					},
-					preferreddelivery: {
-						validators: {
-							notEmpty: {
-								message: 'Preferred delivery window is required'
-							}
-						}
-					}
+
 				},
 				plugins: {
 					trigger: new FormValidation.plugins.Trigger(),
@@ -160,31 +140,19 @@ var KTWizard1 = function () {
 				}
 			}
 		));
+		// Step 4
 		_validations.push(FormValidation.formValidation(
 			_formEl,
 			{
 				fields: {
-					delivery: {
+					CardID: {
 						validators: {
 							notEmpty: {
-								message: 'Delivery type is required'
+								message: 'Vui lòng quét lại'
 							}
 						}
 					},
-					packaging: {
-						validators: {
-							notEmpty: {
-								message: 'Packaging type is required'
-							}
-						}
-					},
-					preferreddelivery: {
-						validators: {
-							notEmpty: {
-								message: 'Preferred delivery window is required'
-							}
-						}
-					}
+
 				},
 				plugins: {
 					trigger: new FormValidation.plugins.Trigger(),
@@ -208,10 +176,13 @@ var KTWizard1 = function () {
 		});
 
 		// Validation before going to next page
+		var isWelcome = false
 		_wizardObj.on('change', function (wizard) {
 
 			if (wizard.getStep() > wizard.getNewStep()) {
-				
+				/// Nếu là thẻ welcome thì bỏ bước thông tin
+				if (wizard.getStep() == 3 && isWelcome)
+					wizard.goTo(wizard.getStep() - 2);
 				return; // Skip if stepped back
 			}
 
@@ -223,6 +194,7 @@ var KTWizard1 = function () {
 					if (status == 'Valid') {
 						let nextStep = wizard.getNewStep()
 						if (nextStep == 2) {
+							/// Nếu là thẻ welcome thì bỏ bước thông tin
 							nextStep = SkipInfoStep(nextStep)
 
 						}
@@ -239,6 +211,7 @@ var KTWizard1 = function () {
 							icon: "error",
 							buttonsStyling: false,
 							confirmButtonText: "Ok, got it!",
+							heightAuto: false,
 							customClass: {
 								confirmButton: "btn font-weight-bold btn-light"
 							}
@@ -264,7 +237,8 @@ var KTWizard1 = function () {
 				$('input[name = "Point"]').val($('input[name = "PointPlus"]').val())
 			}
 			function SkipInfoStep(nextStep) {
-				return $('input[name = "LevelName"]').val() == "Welcome" ? 3 : nextStep
+				isWelcome = $('input[name = "LevelName"]').val() == "Welcome"
+				return isWelcome ? 3 : nextStep
 			}
 			return false;  // Do not change wizard step, further action will be handled by he validator
 		});
@@ -276,42 +250,89 @@ var KTWizard1 = function () {
 
 		// Submit event
 		_wizardObj.on('submit', function (wizard) {
-			Swal.fire({
-				text: "All is good! Please confirm the form submission.",
-				icon: "success",
-				showCancelButton: true,
-				buttonsStyling: false,
-				confirmButtonText: "Yes, submit!",
-				cancelButtonText: "No, cancel",
-				customClass: {
-					confirmButton: "btn font-weight-bold btn-primary",
-					cancelButton: "btn font-weight-bold btn-default"
-				}
-			}).then(function (result) {
-				if (result.value) {
-					_formEl.submit(); // Submit form
-				} else if (result.dismiss === 'cancel') {
-					Swal.fire({
-						text: "Your form has not been submitted!.",
-						icon: "error",
-						buttonsStyling: false,
-						confirmButtonText: "Ok, got it!",
-						customClass: {
-							confirmButton: "btn font-weight-bold btn-primary",
-						}
-					});
-				}
-			});
+			// Validate form before change wizard step
+			var validator = _validations[wizard.getStep() - 1];
+			if (validator) {
+				validator.validate().then(function (status) {
+					if (status == 'Valid') {
+						Swal.fire({
+							text: "All is good! Please confirm the form submission.",
+							icon: "success",
+							showCancelButton: true,
+							buttonsStyling: false,
+							confirmButtonText: "Yes, submit!",
+							cancelButtonText: "No, cancel",
+							heightAuto: false,
+							customClass: {
+								confirmButton: "btn font-weight-bold btn-primary",
+								cancelButton: "btn font-weight-bold btn-default"
+							}
+						}).then(function (result) {
+							if (result.value) {
+								AddMemberCard()
+							} else if (result.dismiss === 'cancel') {
+								Swal.fire({
+									text: "Your form has not been submitted!.",
+									icon: "error",
+									buttonsStyling: false,
+									heightAuto: false,
+									confirmButtonText: "Ok, got it!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-primary",
+									}
+								});
+							}
+						});
+					} else {
+						Swal.fire({
+							text: "Đã có lỗi trong quá trình, vui lòng thử lại",
+							icon: "error",
+							buttonsStyling: false,
+							confirmButtonText: "Ok, got it!",
+							heightAuto: false,
+							customClass: {
+								confirmButton: "btn font-weight-bold btn-light"
+							}
+						}).then(function () {
+							KTUtil.scrollTop();
+						});
+					}
+				});
+			}
+
 		});
 
+		function AddMemberCard() {
+			let data = $('#createMemberCardForm').serializeArray()
+			$.ajax({
+				type: "POST",
+				url: "/MemberCard/Create",
+				data: data,
+				datatype: "json",
+				success: function (result) {
+					if (result.status == "Success") {
 
+
+						toastr.success('Thành công!')
+						location.reload()
+					} else {
+
+						toastr.error(data.message, 'Lỗi')
+					}
+				},
+				error: function () {
+					toastr.error('Lỗi')
+				}
+			})
+
+		}
 	}
 
 	return {
 		// public functions
 		init: function () {
 			_wizardEl = KTUtil.getById('kt_wizard');
-			_formEl = KTUtil.getById('kt_form');
+			_formEl = KTUtil.getById('createMemberCardForm');
 
 			_initValidation();
 			_initWizard();
@@ -343,6 +364,7 @@ jQuery(document).ready(function () {
 		}
 	});
 	initMasks()
+	InitLoadingButton()
 });
 
 
@@ -418,4 +440,52 @@ function initMasks() {
 		reverse: true
 	});
 
+}
+function InitLoadingButton() {
+	$('#loadingBtn').hide()
+	$('#iconStatus').hide()
+	$('#CheckCardBtn').on('click', function () {
+		let $this = $(this)
+		$this.hide();
+		$('#loadingBtn').show()
+		$("#iconStatus").removeClass()
+		GetCurrCard($this, $('input[name="LevelName"]').val())
+		$('input[name="CardID"]').val("")
+		$('#iconStatus').show()
+	});
+
+}
+function GetCurrCard($this, level) {
+	$.ajax({
+		type: "GET",
+		url: "/MemberCard/GetCurrentCard",
+		data: { level },
+
+		datatype: 'json',
+		complete: function () {
+			$this.show();
+			$('#loadingBtn').hide()
+
+		},
+		success: function (data) {
+			if (data.status == "Success") {
+				$('#iconStatus').addClass("flaticon2-check-mark text-success");
+				$('#textNoti').text("Thẻ hợp lệ!");
+				$('input[name="CardID"]').val(data.card)
+			} else {
+				toastr.error("Lỗi!")
+
+				$('#textNoti').text(data.message);
+				$('#iconStatus').addClass("flaticon2-delete text-danger");
+
+			}
+
+
+		},
+		error: function () {
+			// Xử lý lỗi (nếu cần thiết)
+			// Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
+
+		}
+	})
 }

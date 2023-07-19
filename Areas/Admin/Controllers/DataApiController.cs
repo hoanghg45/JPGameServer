@@ -69,6 +69,61 @@ namespace JPGame.Areas.Admin.Controllers
 
 
         }
+        
+         public JsonResult CheckCardMoney(string card, string reader)
+        {
+            try {
+                
+                if (string.IsNullOrEmpty(card) ||string.IsNullOrEmpty(reader))
+                {
+                    return Json(
+                    new
+                    {
+                        status = "fail",
+                        message = "Lỗi hãy thử lại!"
+
+                    }
+                    , JsonRequestBehavior.AllowGet);
+                }
+                if(!db.MemberCards.Any(c => c.MemberCardID.Equals(card)))
+                {
+                    return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = "Thẻ không tồn tại vui lòng thử lại!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+                }
+                var Card = db.MemberCards.Find(card);
+                bool cardMoney = Card.Balance.HasValue && Card.Balance > 0;
+
+                db.SaveChanges();
+                return Json(
+                    new
+                    {
+                        status = "ok",
+                        moneystatus= cardMoney
+                    }
+                    , JsonRequestBehavior.AllowGet);
+
+            }catch(Exception e)
+            {
+                return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = e
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+        
+        
 
         // POST api/<controller>
         public void Post([FromBody] string value)

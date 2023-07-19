@@ -37,14 +37,44 @@ namespace JPGame.Areas.Admin.Controllers
             {
                 // TODO: Add insert logic here
 
-                string CardID = "Card1";
+                string CardID = collection["CardID"];
                 var MemberCardLevel = db.MemberCards.Find(collection["MemberCardLevelID"]);
-                var MemberCard = new MemberCard {
-                    MemberCardID = CardID,
-                    MemberCardLevelID = Int16.Parse(collection["MemberCardLevelID"]),
-                    Points = double.Parse(collection["PointReview"].Replace(",","")),
-                };
+                var card = db.MemberCards.Find(CardID);
+                if (card == null)
+                {
+                            return this.Json(
+                       new
+                       {
+                           status = "Error",
+                           message = "Thẻ không tồn tại, vui lòng kiểm tra lại!"
 
+                       }
+                       , JsonRequestBehavior.AllowGet
+                       );
+                }
+                if (!card.MemberCardLevel.CardLevel.LevelName.Trim().Equals("Welcome"))
+                {
+                    string accname = collection["AccountName"];
+                    var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
+                    if(string.IsNullOrEmpty(accname) || acc == null)
+                    {
+                        return this.Json(
+                      new
+                      {
+                          status = "Error",
+                          message = "Tài khoản không tồn tại!"
+
+                      }
+                      , JsonRequestBehavior.AllowGet
+                      );
+                    }
+                    acc.MemberCardID = card.MemberCardID;
+
+                }
+                card.Balance = Double.Parse(collection["Money"].Replace(",", ""));
+                card.Points = Double.Parse(collection["Point"].Replace(",", ""));
+                card.Status = true;
+                db.SaveChanges();
                 return this.Json(
                  new
                  {
@@ -55,13 +85,13 @@ namespace JPGame.Areas.Admin.Controllers
                  , JsonRequestBehavior.AllowGet
                  );
             }
-            catch
+            catch(Exception e)
             {
                 return this.Json(
                  new
                  {
-                     status = "Success",
-
+                     status = "Error",
+                     message = e
 
                  }
                  , JsonRequestBehavior.AllowGet
@@ -111,6 +141,66 @@ namespace JPGame.Areas.Admin.Controllers
                  , JsonRequestBehavior.AllowGet
                  );
             }
+        }
+
+        [HttpGet]
+        public JsonResult GetCurrentCard(string level)
+        {
+            DateTime now = DateTime.Now;
+            DateTime oneMinuteAgo = now.AddMinutes(-2).AddSeconds(-now.Second);
+             
+            string reader = "7374d2c8e7b943c7";
+            var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
+            
+            if (currCard == null )
+            {
+                return this.Json(
+                new
+                {
+                    status = "Error",
+                    message = "Vui lòng quét lại thẻ!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+            var memberCard = db.MemberCards.Find(currCard.CardID);
+
+            if (memberCard == null)
+            {
+                return this.Json(
+                new
+                {
+                    status = "Error",
+                    message = "Vui lòng quét lại thẻ!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+
+            if (!memberCard.MemberCardLevel.CardLevel.LevelName.Trim().Equals(level))
+            {
+                return this.Json(
+             new
+             {
+                 status = "Error",
+                 message = "Loại thẻ không đúng so với số tiền nạp, vui lòng quét lại!"
+
+             }
+             , JsonRequestBehavior.AllowGet
+             );
+            }
+
+            return this.Json(
+                new
+                {
+                    status = "Success",
+                    card = currCard.CardID
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
         }
 
         // GET: Admin/MemberCard/Edit/5
