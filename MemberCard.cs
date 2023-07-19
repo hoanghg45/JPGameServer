@@ -20,7 +20,7 @@ namespace JPGame
             this.Accounts = new HashSet<Account>();
         }
     
-        public string MemberCardD { get; set; }
+        public string MemberCardID { get; set; }
         public Nullable<int> MemberCardLevelID { get; set; }
         public Nullable<double> Points { get; set; }
         public Nullable<double> Balance { get; set; }

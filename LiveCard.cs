@@ -12,8 +12,11 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class Card
+    public partial class LiveCard
     {
+        public int ID { get; set; }
         public string CardID { get; set; }
+        public string ReaderID { get; set; }
+        public Nullable<System.DateTime> ScanAt { get; set; }
     }
 }

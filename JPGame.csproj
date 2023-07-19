@@ -179,9 +179,6 @@
     <Compile Include="Blog.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Card.cs">
-      <DependentUpon>Context.tt</DependentUpon>
-    </Compile>
     <Compile Include="CardLevel.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -213,6 +210,9 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="LiveCard.cs">
+      <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="MemberCard.cs">
       <DependentUpon>Context.tt</DependentUpon>
@@ -256,6 +256,8 @@
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
     <Content Include="Areas\assets\admin\membercardlevel\AddMemberCard.js" />
     <Content Include="Areas\assets\admin\membercardlevel\MemberCardLevel.js" />
+    <Content Include="Areas\assets\admin\membercard\MemberCard.js" />
+    <Content Include="Areas\assets\admin\membercard\MoneyCharge.js" />
     <Content Include="Areas\assets\admin\module\module.js" />
     <Content Include="Areas\assets\admin\promotion\AddPromotion.js" />
     <Content Include="Areas\assets\admin\promotion\Promotion.js" />
@@ -2330,6 +2332,7 @@
       <DependentUpon>Context.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\Admin\Views\MemberCard\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCard\MoneyCharge.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />

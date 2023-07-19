@@ -29,8 +29,8 @@ namespace JPGame
     
         public virtual CardLevel CardLevel { get; set; }
         public virtual Gift Gift { get; set; }
+        public virtual VIPGift VIPGift { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MemberCard> MemberCards { get; set; }
-        public virtual VIPGift VIPGift { get; set; }
     }
 }

@@ -40,7 +40,51 @@ namespace JPGame.Areas.Admin.Controllers
                 string CardID = "Card1";
                 var MemberCardLevel = db.MemberCards.Find(collection["MemberCardLevelID"]);
                 var MemberCard = new MemberCard {
-                    MemberCardD = CardID,
+                    MemberCardID = CardID,
+                    MemberCardLevelID = Int16.Parse(collection["MemberCardLevelID"]),
+                    Points = double.Parse(collection["PointReview"].Replace(",","")),
+                };
+
+                return this.Json(
+                 new
+                 {
+                     status = "Success",
+
+
+                 }
+                 , JsonRequestBehavior.AllowGet
+                 );
+            }
+            catch
+            {
+                return this.Json(
+                 new
+                 {
+                     status = "Success",
+
+
+                 }
+                 , JsonRequestBehavior.AllowGet
+                 );
+            }
+        } 
+        public ActionResult MoneyCharge()
+        {
+            return View();
+        }
+
+        // POST: Admin/MemberCard/Create
+        [HttpPost]
+        public JsonResult MoneyCharge(FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+
+                string CardID = "Card1";
+                var MemberCardLevel = db.MemberCards.Find(collection["MemberCardLevelID"]);
+                var MemberCard = new MemberCard {
+                    MemberCardID = CardID,
                     MemberCardLevelID = Int16.Parse(collection["MemberCardLevelID"]),
                     Points = double.Parse(collection["PointReview"].Replace(",","")),
                 };

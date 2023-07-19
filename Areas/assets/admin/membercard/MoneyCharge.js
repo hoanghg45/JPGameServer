@@ -50,7 +50,7 @@ var KTWizard1 = function () {
 					PointPlus: {
 						validators: {
 							notEmpty: {
-								message: 'Yêu cầu sô tiền tặng'    
+								message: 'Yêu cầu sô tiền tặng'
 							},
 
 						}
@@ -121,7 +121,7 @@ var KTWizard1 = function () {
 			}
 		));
 
-		
+
 
 		// Step 3
 		_validations.push(FormValidation.formValidation(
@@ -197,7 +197,7 @@ var KTWizard1 = function () {
 			}
 		));
 
-	
+
 	}
 
 	var _initWizard = function () {
@@ -208,34 +208,30 @@ var KTWizard1 = function () {
 		});
 
 		// Validation before going to next page
-		var isWelcome = false
 		_wizardObj.on('change', function (wizard) {
-			
+
 			if (wizard.getStep() > wizard.getNewStep()) {
-				/// Nếu là thẻ welcome thì bỏ bước thông tin
-				if (wizard.getStep() == 3 && isWelcome)
-					wizard.goTo(wizard.getStep()-2);
+				
 				return; // Skip if stepped back
 			}
 
 			// Validate form before change wizard step
 			var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
-			
+
 			if (validator) {
 				validator.validate().then(function (status) {
 					if (status == 'Valid') {
 						let nextStep = wizard.getNewStep()
 						if (nextStep == 2) {
-							/// Nếu là thẻ welcome thì bỏ bước thông tin
 							nextStep = SkipInfoStep(nextStep)
 
-                        }
+						}
 						if (nextStep == 3) {
 							SetReviewStep()
-                        }
+						}
 						///
 						wizard.goTo(nextStep);
-						
+
 						KTUtil.scrollTop();
 					} else {
 						Swal.fire({
@@ -259,17 +255,16 @@ var KTWizard1 = function () {
 				} else {
 					$('input[name = "FullNameReview"]').val($('input[name = "FullName"]').val())
 					$('#NameContain').show()
-                }
+				}
 				$('input[name = "LevelNameReview"]').val($('input[name = "LevelName"]').val())
 				let rate = Number($('input[name = "RewardRate"]').val())
 				let money = Number($('input[name = "MoneyPay"]').val().replaceAll(",", ""))
-				let moneyReward = rate != 0? money * rate / 100 : money 
+				let moneyReward = rate != 0 ? money * rate / 100 : money
 				$('input[name = "Money"]').val(moneyReward.toLocaleString('en-US'))
 				$('input[name = "Point"]').val($('input[name = "PointPlus"]').val())
 			}
 			function SkipInfoStep(nextStep) {
-				isWelcome = $('input[name = "LevelName"]').val() == "Welcome"
-				return isWelcome ? 3 : nextStep
+				return $('input[name = "LevelName"]').val() == "Welcome" ? 3 : nextStep
 			}
 			return false;  // Do not change wizard step, further action will be handled by he validator
 		});
@@ -309,7 +304,7 @@ var KTWizard1 = function () {
 			});
 		});
 
-		
+
 	}
 
 	return {
@@ -330,7 +325,7 @@ jQuery(document).ready(function () {
 		if (event.which === 13) {
 			event.preventDefault();
 			// Xử lý logic khi nhấn phím Enter
-			
+
 			$('input[name="FullName"]').val("")
 			$('input[name="Email"]').val("")
 			$('input[name="Phone"]').val("")
@@ -342,8 +337,8 @@ jQuery(document).ready(function () {
 		if (event.which === 13) {
 			event.preventDefault();
 			// Xử lý logic khi nhấn phím Enter
-			let money = $(this).val().replaceAll(',','')
-			
+			let money = $(this).val().replaceAll(',', '')
+
 			GetMemberCardLevel(money)
 		}
 	});
@@ -362,21 +357,21 @@ function GetUser(UserName) {
 		datatype: 'json',
 		success: function (data) {
 			if (data.code == 200) {
-				
+
 				$('input[name="FullName"]').val(data.data.FullName)
 				$('input[name="Email"]').val(data.data.Email)
 				$('input[name="Phone"]').val(data.data.Phone)
 				$('input[name="DateOfBirth"]').val(formatDate(data.data.DateOfBirth))
 			} else {
-				toastr.error(data.msg,"Lỗi!")
-            }
+				toastr.error(data.msg, "Lỗi!")
+			}
 
 
 		},
 		error: function () {
 			// Xử lý lỗi (nếu cần thiết)
 			// Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
-			
+
 		}
 	})
 }
@@ -392,7 +387,7 @@ function GetMemberCardLevel(LevelFee) {
 		datatype: 'json',
 		success: function (data) {
 			if (data.status == "Success") {
-				
+
 				$('input[name="LevelName"]').val(data.data.LevelName)
 				$('input[name="GiftLevelName"]').val(data.data.GiftLevelName)
 				$('input[name="RewardRate"]').val(data.data.RewardRate)
@@ -406,15 +401,15 @@ function GetMemberCardLevel(LevelFee) {
 				$('#Mocktail').prop("checked", data.data.Mocktail);
 				$('#VipRoom').prop("checked", data.data.VipRoom);
 			} else {
-				toastr.error(data.message,"Lỗi!")
-            }
+				toastr.error(data.message, "Lỗi!")
+			}
 
 
 		},
 		error: function () {
 			// Xử lý lỗi (nếu cần thiết)
 			// Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
-			
+
 		}
 	})
 }

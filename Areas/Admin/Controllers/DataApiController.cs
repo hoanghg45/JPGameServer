@@ -15,17 +15,42 @@ namespace JPGame.Areas.Admin.Controllers
 
         [HttpGet]
         // GET api/<controller>/5
-        public JsonResult Get(string card)
+        public JsonResult GetScanCard(string card, string reader)
         {
             try {
-                var Card = new Card { CardID = card };
-                db.Cards.Add(Card);
+                
+                if (string.IsNullOrEmpty(card) ||string.IsNullOrEmpty(reader))
+                {
+                    return Json(
+                    new
+                    {
+                        status = "fail",
+                        message = "Lỗi hãy thử lại!"
+
+                    }
+                    , JsonRequestBehavior.AllowGet);
+                }
+                if(!db.MemberCards.Any(c => c.MemberCardID.Equals(card)))
+                {
+                    return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = "Thẻ không tồn tại vui lòng thử lại!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+                }
+                var OldCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader));
+                db.LiveCards.RemoveRange(OldCard);
+
+                var Card = new LiveCard { CardID = card, ReaderID = reader, ScanAt = DateTime.Now };
+                db.LiveCards.Add(Card);
                 db.SaveChanges();
                 return Json(
                     new
                     {
                         status = "ok",
-
 
                     }
                     , JsonRequestBehavior.AllowGet);
