@@ -220,6 +220,9 @@
     <Compile Include="MemberCard.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="MemberCardChargeRecord.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="MemberCardLevel.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>

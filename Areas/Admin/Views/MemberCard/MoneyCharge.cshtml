@@ -67,6 +67,26 @@
                                 <!--begin::Wizard Step 2 Nav-->
                                 <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
                                     <div class="wizard-label">
+                                        <i class="wizard-icon fas fa-cash-register"></i>
+                                        <h3 class="wizard-title">2. Nạp tiền</h3>
+                                    </div>
+                                    <span class="svg-icon svg-icon-xl wizard-arrow">
+                                        <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                                <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1"></rect>
+                                                <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)"></path>
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                </div>
+
+                                <!--end::Wizard Step 2 Nav-->
+                                <!--begin::Wizard Step 3 Nav-->
+                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+                                    <div class="wizard-label">
                                         <i class="wizard-icon flaticon-user-add"></i>
                                         <h3 class="wizard-title">2. Thông tin thành viên</h3>
                                     </div>
@@ -82,9 +102,7 @@
                                         <!--end::Svg Icon-->
                                     </span>
                                 </div>
-
-
-                                <!--end::Wizard Step 2 Nav-->
+                                <!--end::Wizard Step 3 Nav-->
                                 <!--begin::Wizard Step 3 Nav-->
                                 <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending">
                                     <div class="wizard-label">
@@ -111,7 +129,7 @@
                                         <i class="wizard-icon flaticon-list"></i>
                                         <h3 class="wizard-title">1. Thông tin thẻ</h3>
                                     </div>
-                                  
+
                                 </div>
                                 <!--end::Wizard Step 4 Nav-->
 
@@ -129,19 +147,175 @@
                                         <!--begin::Select-->
                                         <h6 class="font-weight-bolder mb-3">Đưa thẻ vào máy đọc</h6>
                                         <div class="form-group">
-                                            <button type="button" id="CheckCardBtn" class="btn btn-success mr-3">
+                                            <button type="button" id="CheckCurrCardBtn" class="btn btn-success mr-3">
                                                 Kiểm tra
                                             </button>
                                             <button type="button" id="loadingBtn" class="btn btn-outline-warning spinner spinner-darker-warning spinner-left mr-3">
                                                 Đang kiểm tra
                                             </button>
                                             <i id="iconStatus" class="flaticon2-check-mark text-success"></i>
-                                            <input name="CardID" hidden />
+                                            <input name="CurrCardID" hidden />
                                         </div>
                                         <span id="textNoti" class="form-text text-muted"></span>
                                         <!--end::Select-->
+
                                         <div class="separator separator-dashed my-10"></div>
-                                        
+                                        <h6 class="font-weight-bolder mb-3">Thông tin</h6>
+                                        @*<div class="form-group fv-plugins-icon-container">
+
+                <label>Người sở hữu:</label>
+                <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="FullName" />
+
+
+            </div>*@
+                                        <div class="form-group fv-plugins-icon-container row">
+                                            <div class="col-lg-6">
+
+                                                <label>Số tiền thẻ hiện có:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrBalance" aria-describedby="basic-addon2" />
+                                                    <div class="input-group-append"><span class="input-group-text">đ</span></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>Tổng tiền thẻ hiện đã nạp:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrTotal" aria-describedby="basic-addon2" />
+                                                    <div class="input-group-append"><span class="input-group-text">đ</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="separator separator-dashed my-10"></div>
+                                        <h6 class="font-weight-bolder mb-3">Thông tin loại thẻ</h6>
+                                        <div class="form-group fv-plugins-icon-container">
+
+                                            <label>Cấp độ thẻ:</label>
+                                            <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="CurrLevelName" />
+
+
+                                        </div>
+
+
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Quà tặng:</label>
+                                            <input class="form-control form-control-solid form-control-lg" readonly style="width:100%" name="CurrGiftLevelName" />
+
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container row">
+                                            <div class="col-lg-6">
+                                                <label>Tỉ lệ tiền tặng:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrRewardRate" aria-describedby="basic-addon2" />
+                                                    <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>Số điểm cộng:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrPointPlus" aria-describedby="basic-addon2" />
+                                                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container ">
+                                            <div class="form-group">
+                                                <label>Quà tặng đặc biệt</label>
+                                                <div class="checkbox-inline">
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="CurrPersonal" disabled="disabled" name="CurrCheckGifs" />
+                                                        <span></span>
+                                                        Quà tặng cá nhân
+                                                    </label>
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="CurrSpecial" disabled="disabled" name="CurrCheckGifs" />
+                                                        <span></span>
+                                                        Quà tặng dịp đặc biệt (sinh nhật,..)
+                                                    </label>
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="CurrHoliday" disabled="disabled" name="CurrCheckGifs" />
+                                                        <span></span>
+                                                        Quà tặng ngày lễ
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group fv-plugins-icon-container">
+                                                <label>Kỉ niệm đặt biệt</label>
+                                                <div class="checkbox-inline">
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="CurrAvailableTemplates" disabled="disabled" name="CurrCheckMemory" />
+                                                        <span></span>
+                                                        Tự tạo mẫu
+                                                    </label>
+                                                    <label class="checkbox checkbox-disabled">
+                                                        <input type="checkbox" id="CurrCustomizeAvailableTemplate" disabled="disabled" name="CurrCheckMemory" />
+                                                        <span></span>
+                                                        Chọn những mẫu có sẵn
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>VIP</label>
+                                            <div class="checkbox-list">
+                                                <label class="checkbox checkbox-disabled">
+                                                    <input type="checkbox" id="CurrVIP" disabled="disabled" name="CurrCheckVIP" />
+                                                    <span></span>
+                                                    Có
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Đặc quyền VIP</label>
+                                            <div class="checkbox-inline">
+                                                <label class="checkbox checkbox-disabled" id="labelMocktail">
+                                                    <input type="checkbox" id="CurrMocktail" disabled="disabled" name="CurrCheckVIPGifts" />
+                                                    <span></span>
+                                                    Ưu đãi Mocktail
+                                                </label>
+                                                <label class="checkbox checkbox-disabled">
+                                                    <input type="checkbox" id="CurrVipRoom" disabled="disabled" name="CurrCheckVIPGifts" />
+                                                    <span></span>
+                                                    Ưu đãi bàn và phòng VVIP
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--end::Wizard Step 1-->
+                                    <!--begin::Wizard Step 2-->
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <h4 class="mb-10 font-weight-bold text-dark">Thông tin thẻ</h4>
+                                        <!--begin::Input-->
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Số tiền nạp</label>
+                                            <input type="text" class="form-control form-control-solid form-control-lg money" name="MoneyPay" placeholder="Số tiền nạp">
+
+                                        </div>
+                                        <!--end::Input-->
+                                        <div class="form-group fv-plugins-icon-container row">
+                                            <div class="col-lg-6">
+                                                <label>Số tiền tổng sau khi nạp</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg money" readonly name="TotalMoneyPay" placeholder="Số tiền nạp">
+                                                    <div class="input-group-append"><span class="input-group-text">đ</span></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>Số tiền thẻ sau khi nạp</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg money" readonly name="CardMoneyPay" placeholder="Số tiền nạp">
+                                                    <div class="input-group-append"><span class="input-group-text">đ</span></div>
+                                                </div>
+                                            </div>
+
+                                           
+                                        </div>
+                                        <!--end::Input-->
+                                        <div class="separator separator-dashed my-10"></div>
                                         <div class="form-group fv-plugins-icon-container">
 
                                             <label>Cấp độ thẻ:</label>
@@ -236,9 +410,11 @@
                                                 </label>
                                             </div>
                                         </div>
+
                                     </div>
 
-                                    <!--end::Wizard Step 1-->
+
+                                    <!--end::Wizard Step 2-->
                                     <!--begin::Wizard Step 2-->
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
                                         <h3 class="mb-10 font-weight-bold text-dark">Thông tin thành viên</h3>

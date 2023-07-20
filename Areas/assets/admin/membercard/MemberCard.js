@@ -342,27 +342,7 @@ var KTWizard1 = function () {
 
 jQuery(document).ready(function () {
 	KTWizard1.init();
-	$('input[name="AccountName"').on('keypress', function (event) {
-		if (event.which === 13) {
-			event.preventDefault();
-			// Xử lý logic khi nhấn phím Enter
-			
-			$('input[name="FullName"]').val("")
-			$('input[name="Email"]').val("")
-			$('input[name="Phone"]').val("")
-			$('input[name="DateOfBirth"]').val("")
-			GetUser($(this).val())
-		}
-	});
-	$('input[name="MoneyPay"').on('keypress', function (event) {
-		if (event.which === 13) {
-			event.preventDefault();
-			// Xử lý logic khi nhấn phím Enter
-			let money = $(this).val().replaceAll(',','')
-			
-			GetMemberCardLevel(money)
-		}
-	});
+	InitInputEvent()
 	initMasks()
 	InitLoadingButton()
 });
@@ -471,7 +451,7 @@ function GetCurrCard($this,level) {
 			if (data.status == "Success") {
 				$('#iconStatus').addClass("flaticon2-check-mark text-success");
 				$('#textNoti').text("Thẻ hợp lệ!");
-				$('input[name="CardID"]').val(data.MemberCardID)
+				$('input[name="CardID"]').val(data.card)
 			} else {
 				toastr.error("Lỗi!")
 				
@@ -488,4 +468,51 @@ function GetCurrCard($this,level) {
 
 		}
 	})
+}
+function InitInputEvent() {
+
+	///AccoutName
+	$('input[name="AccountName"]').on('keypress', function (event) {
+		if (event.which === 13) {
+			event.preventDefault();
+			// Xử lý logic khi nhấn ngoài input
+
+			$('input[name="FullName"]').val("")
+			$('input[name="Email"]').val("")
+			$('input[name="Phone"]').val("")
+			$('input[name="DateOfBirth"]').val("")
+			GetUser($(this).val())
+		}
+	});
+	$('input[name="AccountName"]').on('blur', function (event) {
+		event.preventDefault();
+		// Xử lý logic khi nhấn ngoài input
+
+		$('input[name="FullName"]').val("")
+		$('input[name="Email"]').val("")
+		$('input[name="Phone"]').val("")
+		$('input[name="DateOfBirth"]').val("")
+		GetUser($(this).val())
+	});
+
+
+	//Money
+	$('input[name="MoneyPay"]').on('blur', function (event) {
+
+		
+		let money = $(this).val().replaceAll(',', '')
+		
+		GetMemberCardLevel(money)
+	});
+	$('input[name="MoneyPay"]').on('keypress', function (event) {
+		if (event.which === 13) {
+			event.preventDefault();
+			// Xử lý logic khi nhấn phím Enter
+			let money = $(this).val().replaceAll(',', '')
+
+			GetMemberCardLevel(money)
+		}
+	});
+	
+		
 }

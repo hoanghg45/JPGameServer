@@ -33,6 +33,8 @@
         <EntityTypeShape EntityType="Model.MemberCard" Width="1.5" PointX="7.5" PointY="3" />
         <AssociationConnector Association="Model.FK_Accounts_MemberCards" />
         <AssociationConnector Association="Model.FK_MemberCard_MemberCardLevel" />
+        <EntityTypeShape EntityType="Model.MemberCardChargeRecord" Width="1.5" PointX="9.75" PointY="18.625" />
+        <AssociationConnector Association="Model.FK_MemberCardChargeRecords_MemberCards" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

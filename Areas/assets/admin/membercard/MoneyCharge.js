@@ -16,14 +16,28 @@ var KTWizard1 = function () {
 			_formEl,
 			{
 				fields: {
-					MoneyPay: {
+					CurrCardID: {
 						validators: {
 							notEmpty: {
-								message: 'Yêu cầu số tiền nạp'
+								message: 'Vui lòng quét thẻ'
 							}
 						}
 					},
-					LevelName: {
+					CurrBalance: {
+						validators: {
+							notEmpty: {
+								message: 'Yêu cầu số tiền'
+							}
+						}
+					},
+					CurrTotal: {
+						validators: {
+							notEmpty: {
+								message: 'Yêu cầu số tiền tổng'
+							}
+						}
+					},
+					CurrLevelName: {
 						validators: {
 							notEmpty: {
 								message: 'Yêu cầu cấp độ thẻ'
@@ -31,7 +45,7 @@ var KTWizard1 = function () {
 
 						}
 					},
-					GiftLevelName: {
+					CurrGiftLevelName: {
 						validators: {
 							notEmpty: {
 								message: 'Yêu cầu cấp độ quà'
@@ -39,7 +53,7 @@ var KTWizard1 = function () {
 
 						}
 					},
-					RewardRate: {
+					CurrRewardRate: {
 						validators: {
 							notEmpty: {
 								message: 'Yêu cầu tỉ lệ tiền'
@@ -47,7 +61,7 @@ var KTWizard1 = function () {
 
 						}
 					},
-					PointPlus: {
+					CurrPointPlus: {
 						validators: {
 							notEmpty: {
 								message: 'Yêu cầu sô tiền tặng'
@@ -193,14 +207,14 @@ var KTWizard1 = function () {
 				validator.validate().then(function (status) {
 					if (status == 'Valid') {
 						let nextStep = wizard.getNewStep()
-						if (nextStep == 2) {
-							/// Nếu là thẻ welcome thì bỏ bước thông tin
-							nextStep = SkipInfoStep(nextStep)
+						//if (nextStep == 2) {
+						//	/// Nếu là thẻ welcome thì bỏ bước thông tin
+						//	nextStep = SkipInfoStep(nextStep)
 
-						}
-						if (nextStep == 3) {
-							SetReviewStep()
-						}
+						//}
+						//if (nextStep == 3) {
+						//	SetReviewStep()
+						//}
 						///
 						wizard.goTo(nextStep);
 
@@ -342,27 +356,7 @@ var KTWizard1 = function () {
 
 jQuery(document).ready(function () {
 	KTWizard1.init();
-	$('input[name="AccountName"').on('keypress', function (event) {
-		if (event.which === 13) {
-			event.preventDefault();
-			// Xử lý logic khi nhấn phím Enter
-
-			$('input[name="FullName"]').val("")
-			$('input[name="Email"]').val("")
-			$('input[name="Phone"]').val("")
-			$('input[name="DateOfBirth"]').val("")
-			GetUser($(this).val())
-		}
-	});
-	$('input[name="MoneyPay"').on('keypress', function (event) {
-		if (event.which === 13) {
-			event.preventDefault();
-			// Xử lý logic khi nhấn phím Enter
-			let money = $(this).val().replaceAll(',', '')
-
-			GetMemberCardLevel(money)
-		}
-	});
+	InitInputEvent()
 	initMasks()
 	InitLoadingButton()
 });
@@ -414,6 +408,7 @@ function GetMemberCardLevel(LevelFee) {
 				$('input[name="GiftLevelName"]').val(data.data.GiftLevelName)
 				$('input[name="RewardRate"]').val(data.data.RewardRate)
 				$('input[name="PointPlus"]').val(data.data.PointPlus)
+			
 				$('#AvailableTemplates').prop("checked", data.data.AvailableTemplates);
 				$('#CustomizeAvailableTemplate').prop("checked", data.data.CustomizeAvailableTemplate);
 				$('#Holiday').prop("checked", data.data.Holiday);
@@ -422,6 +417,7 @@ function GetMemberCardLevel(LevelFee) {
 				$('#VIP').prop("checked", data.data.VIP);
 				$('#Mocktail').prop("checked", data.data.Mocktail);
 				$('#VipRoom').prop("checked", data.data.VipRoom);
+				SetMoney(data.data.RewardRate)
 			} else {
 				toastr.error(data.message, "Lỗi!")
 			}
@@ -444,13 +440,13 @@ function initMasks() {
 function InitLoadingButton() {
 	$('#loadingBtn').hide()
 	$('#iconStatus').hide()
-	$('#CheckCardBtn').on('click', function () {
+	$('#CheckCurrCardBtn').on('click', function () {
 		let $this = $(this)
 		$this.hide();
 		$('#loadingBtn').show()
 		$("#iconStatus").removeClass()
-		GetCurrCard($this, $('input[name="LevelName"]').val())
-		$('input[name="CardID"]').val("")
+		GetCurrCard($this)
+		$('input[name="CheckCurrCardBtn"]').val("")
 		$('#iconStatus').show()
 	});
 
@@ -471,19 +467,23 @@ function GetCurrCard($this) {
 			if (data.status == "Success") {
 				$('#iconStatus').addClass("flaticon2-check-mark text-success");
 				$('#textNoti').text("Thẻ hợp lệ!");
-				$('input[name="CardID"]').val(data.card.MemberCardID)
-				$('input[name="LevelName"]').val(data.card.LevelName)
-				$('input[name="GiftLevelName"]').val(data.card.GiftLevelName)
-				$('input[name="RewardRate"]').val(data.card.RewardRate)
-				$('input[name="PointPlus"]').val(data.card.PointPlus)
-				$('#AvailableTemplates').prop("checked", data.card.AvailableTemplates);
-				$('#CustomizeAvailableTemplate').prop("checked", data.card.CustomizeAvailableTemplate);
-				$('#Holiday').prop("checked", data.card.Holiday);
-				$('#Special').prop("checked", data.card.Special);
-				$('#Personal').prop("checked", data.card.Personal);
-				$('#VIP').prop("checked", data.card.VIP);
-				$('#Mocktail').prop("checked", data.card.Mocktail);
-				$('#VipRoom').prop("checked", data.card.VipRoom);
+				$('input[name="CurrCardID"]').val(data.card.MemberCardID)
+				
+				$('input[name="CurrLevelName"]').val(data.card.LevelName)
+				$('input[name="CurrGiftLevelName"]').val(data.card.GiftLevelName)
+				$('input[name="CurrRewardRate"]').val(data.card.RewardRate)
+				$('input[name="CurrPointPlus"]').val(data.card.PointPlus)
+				$('input[name="CurrBalance"]').val(data.card.Balance.toLocaleString('en-US'))
+				$('input[name="CurrTotal"]').val(data.card.Total.toLocaleString('en-US'))
+				$('#CurrAvailableTemplates').prop("checked", data.card.AvailableTemplates);
+				$('#CurrCustomizeAvailableTemplate').prop("checked", data.card.CustomizeAvailableTemplate);
+				$('#CurrHoliday').prop("checked", data.card.Holiday);
+				$('#CurrSpecial').prop("checked", data.card.Special);
+				$('#CurrPersonal').prop("checked", data.card.Personal);
+				$('#CurrVIP').prop("checked", data.card.VIP);
+				$('#CurrMocktail').prop("checked", data.card.Mocktail);
+				$('#CurrVipRoom').prop("checked", data.card.VipRoom);
+
 			} else {
 				toastr.error("Lỗi!")
 
@@ -501,3 +501,68 @@ function GetCurrCard($this) {
 		}
 	})
 }
+function InitInputEvent() {
+
+	///AccoutName
+	$('input[name="AccountName"]').on('keypress', function (event) {
+		if (event.which === 13) {
+			event.preventDefault();
+			// Xử lý logic khi nhấn ngoài input
+
+			$('input[name="FullName"]').val("")
+			$('input[name="Email"]').val("")
+			$('input[name="Phone"]').val("")
+			$('input[name="DateOfBirth"]').val("")
+			GetUser($(this).val())
+		}
+	});
+	$('input[name="AccountName"]').on('blur', function (event) {
+		event.preventDefault();
+		// Xử lý logic khi nhấn ngoài input
+
+		$('input[name="FullName"]').val("")
+		$('input[name="Email"]').val("")
+		$('input[name="Phone"]').val("")
+		$('input[name="DateOfBirth"]').val("")
+		GetUser($(this).val())
+	});
+
+
+	//Money
+	$('input[name="MoneyPay"]').on('blur', function (event) {
+		let money = Number($(this).val().replaceAll(',', ''))
+		let total = Number($('input[name="CurrTotal"]').val().replaceAll(',', ''))
+
+		let payTotal = money + total
+		$('input[name="TotalMoneyPay"]').val(payTotal.toLocaleString('en-US'))
+		
+		GetMemberCardLevel(payTotal)
+	});
+	$('input[name="MoneyPay"]').on('keypress', function (event) {
+		if (event.which === 13) {
+			event.preventDefault();
+			// Xử lý logic khi nhấn phím Enter
+			let money = Number($(this).val().replaceAll(',', ''))
+			let total = Number($('input[name="CurrTotal"]').val().replaceAll(',', ''))
+
+			let payTotal = money + total
+			$('input[name="TotalMoneyPay"]').val(payTotal.toLocaleString('en-US'))
+
+			GetMemberCardLevel(payTotal)
+		}
+	});
+
+
+}
+function SetMoney(rate) {
+
+	let money = Number($('input[name="MoneyPay"]').val().replaceAll(',', ''))
+	///
+	money = rate == 0 ? money : money * (rate/100)
+	let currBalance = Number($('input[name="CurrBalance"]').val().replaceAll(',', ''))
+	let newBalance = money + currBalance
+	$('input[name="CardMoneyPay"]').val(newBalance.toLocaleString('en-US'))
+
+
+}
+

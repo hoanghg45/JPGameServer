@@ -36,7 +36,7 @@ namespace JPGame.Areas.Admin.Controllers
             try
             {
                 // TODO: Add insert logic here
-
+                var currUser = (Session["UserID"].ToString());
                 string CardID = collection["CardID"];
                 var MemberCardLevel = db.MemberCards.Find(collection["MemberCardLevelID"]);
                 var card = db.MemberCards.Find(CardID);
@@ -74,6 +74,14 @@ namespace JPGame.Areas.Admin.Controllers
                 card.Balance = Double.Parse(collection["Money"].Replace(",", ""));
                 card.Points = Double.Parse(collection["Point"].Replace(",", ""));
                 card.Status = true;
+                var chargeRecord = new MemberCardChargeRecord
+                {
+                    MemberCardID = card.MemberCardID,
+                    Money = card.Balance,
+                    ChargeDate = DateTime.Now,
+                    CreateBy = currUser,
+                };
+                db.MemberCardChargeRecords.Add(chargeRecord);
                 db.SaveChanges();
                 return this.Json(
                  new
@@ -103,8 +111,8 @@ namespace JPGame.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Admin/MemberCard/Create
-        
+        // POST: Admin/MemberCard/MoneyCharge
+
         [HttpPost]
         public JsonResult MoneyCharge(FormCollection collection)
         {
@@ -176,68 +184,99 @@ namespace JPGame.Areas.Admin.Controllers
         [HttpGet]
         public JsonResult GetCurrentCardForCharge()
         {
-            DateTime now = DateTime.Now;
-            DateTime oneMinuteAgo = now.AddMinutes(-2).AddSeconds(-now.Second);
-             
-            string reader = "7374d2c8e7b943c7";
-            //var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
-            var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader)).FirstOrDefault();
-            
-            if (currCard == null)
+            try
+            {
+                DateTime now = DateTime.Now;
+                DateTime oneMinuteAgo = now.AddMinutes(-2).AddSeconds(-now.Second);
+
+                string reader = "7374d2c8e7b943c7";
+                var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
+                //var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader)).FirstOrDefault();
+
+                if (currCard == null)
+                {
+                    return this.Json(
+                    new
+                    {
+                        status = "Error",
+                        message = "Vui lòng quét lại thẻ!"
+
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
+                }
+                var memberCard = db.MemberCards.Where(c => c.MemberCardID.Equals(currCard.CardID))
+                    .Select(c => new
+                    {
+                        c.MemberCardID,
+                        c.MemberCardLevel.CardLevelID,
+                        c.MemberCardLevel.CardLevel.LevelName,
+                        c.MemberCardLevel.Gift.GiftLevelName,
+                        RewardRate = Math.Round(c.MemberCardLevel.Gift.RewardRate.Value * 100),
+                        c.MemberCardLevel.Gift.PointPlus,
+                        Holiday = c.MemberCardLevel.Gift.PersonalGiftID == null ? false : c.MemberCardLevel.Gift.PersonalGift.Holiday,
+                        Personal = c.MemberCardLevel.Gift.PersonalGiftID == null ? false : c.MemberCardLevel.Gift.PersonalGift.Personal,
+                        SpecialDay = c.MemberCardLevel.Gift.PersonalGiftID != null && c.MemberCardLevel.Gift.PersonalGift.SpecialDay,
+                        SpecialMemory = c.MemberCardLevel.Gift.SpecialMemory == null ? false : c.MemberCardLevel.Gift.SpecialMemory.AvailableTemplates,
+                        CustomizeAvailableTemplate = c.MemberCardLevel.Gift.SpecialMemory == null ? false : c.MemberCardLevel.Gift.SpecialMemory.CustomizeAvailableTemplate,
+                        c.MemberCardLevel.VIP,
+                        Mocktail = (bool)c.MemberCardLevel.VIP ? c.MemberCardLevel.VIPGift.Moctail : false,
+                        VipRoom = (bool)c.MemberCardLevel.VIP ? c.MemberCardLevel.VIPGift.VipRoom : false,
+                        Total = c.MemberCardChargeRecords.Sum(i => i.Money),
+                        Owner = c.Accounts.Any()? c.Accounts.FirstOrDefault().FullName :null,
+                        c.Balance,
+                        c.Status
+                    }).FirstOrDefault();
+                if (!memberCard.Status.HasValue || !memberCard.Status.Value)
+                {
+                    return this.Json(
+                    new
+                    {
+                        status = "Error",
+                        message = "Thẻ này chưa được kích hoạt vui lòng kiểm tra lại!"
+
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
+                }
+
+                if (memberCard == null)
+                {
+                    return this.Json(
+                    new
+                    {
+                        status = "Error",
+                        message = "Vui lòng quét lại thẻ!"
+
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
+                }
+
+
+
+                return this.Json(
+                    new
+                    {
+                        status = "Success",
+                        card = memberCard
+
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
+            }catch(Exception e)
             {
                 return this.Json(
-                new
-                {
-                    status = "Error",
-                    message = "Vui lòng quét lại thẻ!"
+                    new
+                    {
+                        status = "Success",
+                        message = e.Message
 
-                }
-                , JsonRequestBehavior.AllowGet
-                );
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
             }
-            var memberCard = db.MemberCards.Where(c => c.MemberCardID.Equals(currCard.CardID))
-                .Select(c => new
-            {
-                c.MemberCardID,
-                c.MemberCardLevel.CardLevelID,
-                c.MemberCardLevel.CardLevel.LevelName,
-                c.MemberCardLevel.Gift.GiftLevelName,
-                RewardRate = Math.Round(c.MemberCardLevel.Gift.RewardRate.Value * 100),
-                c.MemberCardLevel.Gift.PointPlus,
-                Holiday = c.MemberCardLevel.Gift.PersonalGiftID == null ? false : c.MemberCardLevel.Gift.PersonalGift.Holiday,
-                Personal = c.MemberCardLevel.Gift.PersonalGiftID == null ? false : c.MemberCardLevel.Gift.PersonalGift.Personal,
-                SpecialDay = c.MemberCardLevel.Gift.PersonalGiftID != null && c.MemberCardLevel.Gift.PersonalGift.SpecialDay,
-                SpecialMemory = c.MemberCardLevel.Gift.SpecialMemory == null ? false : c.MemberCardLevel.Gift.SpecialMemory.AvailableTemplates,
-                CustomizeAvailableTemplate = c.MemberCardLevel.Gift.SpecialMemory == null ? false : c.MemberCardLevel.Gift.SpecialMemory.CustomizeAvailableTemplate,
-                c.MemberCardLevel.VIP,
-                Mocktail = (bool)c.MemberCardLevel.VIP ? c.MemberCardLevel.VIPGift.Moctail : false,
-                VipRoom = (bool)c.MemberCardLevel.VIP ? c.MemberCardLevel.VIPGift.VipRoom : false
-            }).FirstOrDefault(); 
-
-            if (memberCard == null)
-            {
-                return this.Json(
-                new
-                {
-                    status = "Error",
-                    message = "Vui lòng quét lại thẻ!"
-
-                }
-                , JsonRequestBehavior.AllowGet
-                );
-            }
-
            
-
-            return this.Json(
-                new
-                {
-                    status = "Success",
-                    card = memberCard
-
-                }
-                , JsonRequestBehavior.AllowGet
-                );
         }
         [HttpGet]
         public JsonResult GetCurrentCardForCreate(string level)
@@ -246,8 +285,8 @@ namespace JPGame.Areas.Admin.Controllers
             DateTime oneMinuteAgo = now.AddMinutes(-2).AddSeconds(-now.Second);
              
             string reader = "7374d2c8e7b943c7";
-            //var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
-            var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader)).FirstOrDefault();
+            var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
+            //var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader)).FirstOrDefault();
             
             if (currCard == null)
             {

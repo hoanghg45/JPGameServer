@@ -91,6 +91,16 @@
           <Property Name="ReaderID" Type="varchar(max)" />
           <Property Name="ScanAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="MemberCardChargeRecords">
+          <Key>
+            <PropertyRef Name="RecordID" />
+          </Key>
+          <Property Name="RecordID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberCardID" Type="varchar" MaxLength="100" />
+          <Property Name="Money" Type="float" />
+          <Property Name="ChargeDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="MemberCardLevels">
           <Key>
             <PropertyRef Name="LevelID" />
@@ -284,6 +294,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MemberCardChargeRecords_MemberCards">
+          <End Role="MemberCards" Type="Self.MemberCards" Multiplicity="0..1" />
+          <End Role="MemberCardChargeRecords" Type="Self.MemberCardChargeRecords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCards">
+              <PropertyRef Name="MemberCardID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecords">
+              <PropertyRef Name="MemberCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MemberCardLevel_CardLevel">
           <End Role="CardLevels" Type="Self.CardLevels" Multiplicity="0..1" />
           <End Role="MemberCardLevels" Type="Self.MemberCardLevels" Multiplicity="*" />
@@ -375,6 +397,7 @@
           <EntitySet Name="Games" EntityType="Self.Games" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gifts" EntityType="Self.Gifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LiveCards" EntityType="Self.LiveCards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberCardChargeRecords" EntityType="Self.MemberCardChargeRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCardLevels" EntityType="Self.MemberCardLevels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCards" EntityType="Self.MemberCards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modules" EntityType="Self.Modules" Schema="dbo" store:Type="Tables" />
@@ -401,6 +424,10 @@
           <AssociationSet Name="FK_MemberCard_MemberCardLevel" Association="Self.FK_MemberCard_MemberCardLevel">
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
             <End Role="MemberCards" EntitySet="MemberCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardChargeRecords_MemberCards" Association="Self.FK_MemberCardChargeRecords_MemberCards">
+            <End Role="MemberCards" EntitySet="MemberCards" />
+            <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
           </AssociationSet>
           <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
             <End Role="CardLevels" EntitySet="CardLevels" />
@@ -833,6 +860,11 @@
             <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
             <End Role="MemberCard" EntitySet="MemberCards" />
           </AssociationSet>
+          <EntitySet Name="MemberCardChargeRecords" EntityType="Model.MemberCardChargeRecord" />
+          <AssociationSet Name="FK_MemberCardChargeRecords_MemberCards" Association="Model.FK_MemberCardChargeRecords_MemberCards">
+            <End Role="MemberCard" EntitySet="MemberCards" />
+            <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="LiveCard">
           <Key>
@@ -858,6 +890,7 @@
           <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="Accounts" Relationship="Model.FK_Accounts_MemberCards" FromRole="MemberCard" ToRole="Account" />
           <NavigationProperty Name="MemberCardLevel" Relationship="Model.FK_MemberCard_MemberCardLevel" FromRole="MemberCard" ToRole="MemberCardLevel" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCard" ToRole="MemberCardChargeRecord" />
         </EntityType>
         <Association Name="FK_Accounts_MemberCards">
           <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="0..1" />
@@ -880,6 +913,29 @@
             </Principal>
             <Dependent Role="MemberCard">
               <PropertyRef Name="MemberCardLevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MemberCardChargeRecord">
+          <Key>
+            <PropertyRef Name="RecordID" />
+          </Key>
+          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberCardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Money" Type="Double" />
+          <Property Name="ChargeDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="MemberCard" Relationship="Model.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCardChargeRecord" ToRole="MemberCard" />
+        </EntityType>
+        <Association Name="FK_MemberCardChargeRecords_MemberCards">
+          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="0..1" />
+          <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCard">
+              <PropertyRef Name="MemberCardID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecord">
+              <PropertyRef Name="MemberCardID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1134,6 +1190,17 @@
                 <ScalarProperty Name="Points" ColumnName="Points" />
                 <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
                 <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberCardChargeRecords">
+            <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
+              <MappingFragment StoreEntitySet="MemberCardChargeRecords">
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ChargeDate" ColumnName="ChargeDate" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

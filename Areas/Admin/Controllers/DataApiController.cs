@@ -70,6 +70,7 @@ namespace JPGame.Areas.Admin.Controllers
 
         }
         
+        [System.Web.Http.HttpPost]
          public JsonResult CheckCardMoney(string card, string reader)
         {
             try {
@@ -98,8 +99,13 @@ namespace JPGame.Areas.Admin.Controllers
                 }
                 var Card = db.MemberCards.Find(card);
                 bool cardMoney = Card.Balance.HasValue && Card.Balance > 0;
-
-                db.SaveChanges();
+                //LiveCard live = new LiveCard
+                //{
+                //    CardID = card,
+                //    ReaderID = "readerTest"
+                //};
+                //db.LiveCards.Add(live);
+                //db.SaveChanges();
                 return Json(
                     new
                     {

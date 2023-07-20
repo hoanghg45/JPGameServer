@@ -42,5 +42,6 @@ namespace JPGame
         public virtual DbSet<VIPGift> VIPGifts { get; set; }
         public virtual DbSet<LiveCard> LiveCards { get; set; }
         public virtual DbSet<MemberCard> MemberCards { get; set; }
+        public virtual DbSet<MemberCardChargeRecord> MemberCardChargeRecords { get; set; }
     }
 }

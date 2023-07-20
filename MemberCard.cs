@@ -18,6 +18,7 @@ namespace JPGame
         public MemberCard()
         {
             this.Accounts = new HashSet<Account>();
+            this.MemberCardChargeRecords = new HashSet<MemberCardChargeRecord>();
         }
     
         public string MemberCardID { get; set; }
@@ -33,5 +34,7 @@ namespace JPGame
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual MemberCardLevel MemberCardLevel { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MemberCardChargeRecord> MemberCardChargeRecords { get; set; }
     }
 }
