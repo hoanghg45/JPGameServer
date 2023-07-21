@@ -73,8 +73,18 @@ namespace JPGame.Controllers
                 var account = (Account)Session["account"];
                 if (account != null)
                 {
-                  
-                    var user = db.Accounts.Find(account.AccountID);
+                    var user = db.Accounts.Where(a => a.AccountID.Equals(account.AccountID)).Select(a => new { 
+                        a.FullName,
+                        a.MemberCard.Balance,
+                        a.MemberCard.Points,
+                        a.MemberCard.MemberCardLevel.CardLevel.Image,
+                        a.Email,
+                        a.Phone,
+                        a.DateOfBirth,
+                        a.Wedding,
+                        a.Avatar,
+
+                    }).FirstOrDefault(); 
                     return Json(new { code = 200, user = user}, JsonRequestBehavior.AllowGet);
                 }
                 else

@@ -2220,6 +2220,7 @@
     <Content Include="img\authors\8.jpg" />
     <Content Include="img\Card\Citizen.png" />
     <Content Include="img\Card\Golden.png" />
+    <Content Include="img\Card\Diamond.png" />
     <Content Include="img\Card\Platinum.png" />
     <Content Include="img\Card\Welcome.png" />
     <Content Include="img\community-bg.jpg" />
