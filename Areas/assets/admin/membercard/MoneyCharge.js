@@ -168,12 +168,12 @@ var KTWizard1 = function () {
 		});
 
 		// Validation before going to next page
-		var isWelcome = false
+		var isEnterInfor = false
 		_wizardObj.on('change', function (wizard) {
 
 			if (wizard.getStep() > wizard.getNewStep()) {
 				/// Nếu là thẻ welcome thì bỏ bước thông tin
-				if (wizard.getStep() == 4 && isWelcome)
+				if (wizard.getStep() == 4 && !isEnterInfor)
 					wizard.goTo(wizard.getStep() - 1);
 				return; // Skip if stepped back
 			}
@@ -216,17 +216,21 @@ var KTWizard1 = function () {
 			///
 			function SetReviewStep() {
 				if ($('input[name = "LevelName"]').val() == "Welcome") {
-				
+					$('#NameContain').hide()
 				} else {
 					$('input[name = "FullNameReview"]').val($('input[name = "FullName"]').val())
 					$('#NameContain').show()
-					if ($('input[name = "LevelName"]').val() != $('input[name = "CurrLevelName"]').val()) {
-						$('#ScanNewCardID').show()
-						$('input[name = "CurrChargeCardID"]').val($('input[name = "CurrCardID"]').val())
-						
-                    }
 				}
-				
+				/// Nếu nâng cấp thẻ
+				if ($('input[name = "LevelName"]').val() != $('input[name = "CurrLevelName"]').val()) {
+					$('#ScanNewCardID').show()
+					$('input[name = "CurrChargeCardID"]').val($('input[name = "CurrCardID"]').val())
+
+				} else {
+					$('#ScanNewCardID').hide()
+                }
+
+
 				$('input[name = "LevelNameReview"]').val($('input[name = "LevelName"]').val())
 
 				let point = Number($('input[name = "PointPlus"]').val()) + Number($('input[name = "CurrPointPlus"]').val())
@@ -234,8 +238,12 @@ var KTWizard1 = function () {
 				$('input[name = "Point"]').val(point)
 			}
 			function SkipInfoStep(nextStep) {
-				isWelcome = $('input[name = "CurrLevelName"]').val() == "Welcome" && $('input[name = "LevelName"]').val() == $('input[name = "CurrLevelName"]').val()
-				return isWelcome ? nextStep+1 : nextStep
+				var levelName = $('input[name="LevelName"]').val();
+				var currLevelName = $('input[name="CurrLevelName"]').val();
+
+
+				isEnterInfor = currLevelName == "Welcome" && levelName != currLevelName
+				return isEnterInfor ? nextStep : nextStep+1
 			}
 			return false;  // Do not change wizard step, further action will be handled by he validator
 		});
@@ -342,6 +350,7 @@ jQuery(document).ready(function () {
 	InitInputEvent()
 	initMasks()
 	InitLoadingButton()
+	
 });
 
 
@@ -386,10 +395,13 @@ function GetMemberCardLevel(LevelFee) {
 		datatype: 'json',
 		success: function (data) {
 			if (data.status == "Success") {
+				let rate = data.data.RewardRate
+				//Chỉ được nhân tiền với tỉ lệ 1 lần
 
+				
 				$('input[name="LevelName"]').val(data.data.LevelName)
 				$('input[name="GiftLevelName"]').val(data.data.GiftLevelName)
-				$('input[name="RewardRate"]').val(data.data.RewardRate)
+				
 				$('input[name="PointPlus"]').val(data.data.PointPlus)			
 				$('#AvailableTemplates').prop("checked", data.data.AvailableTemplates);
 				$('#CustomizeAvailableTemplate').prop("checked", data.data.CustomizeAvailableTemplate);
@@ -399,7 +411,11 @@ function GetMemberCardLevel(LevelFee) {
 				$('#VIP').prop("checked", data.data.VIP);
 				$('#Mocktail').prop("checked", data.data.Mocktail);
 				$('#VipRoom').prop("checked", data.data.VipRoom);
-				SetMoney(data.data.RewardRate, data.data.LevelFee)
+				if ($('input[name = "LevelName"]').val() == $('input[name = "CurrLevelName"]').val()) {
+					rate = 0
+				}
+				$('input[name="RewardRate"]').val(rate)
+				SetMoney(rate, data.data.LevelFee)
 			} else {
 				toastr.error(data.message, "Lỗi!")
 			}
@@ -431,7 +447,7 @@ function InitLoadingButton() {
 		$('input[name="CheckCurrCardBtn"]').val("")
 		$('#iconStatus').show()
 	});
-
+	InitLoadingButtonForCharge()
 }
 function InitLoadingButtonForCharge() {
 	$('#loadingChargeBtn').hide()
@@ -470,6 +486,7 @@ function GetCurrCard($this) {
 				$('input[name="CurrRewardRate"]').val(data.card.RewardRate)
 				$('input[name="CurrPointPlus"]').val(data.card.Points)
 				$('input[name="CurrBalance"]').val(data.card.Balance.toLocaleString('en-US'))
+				
 				$('input[name="CurrTotal"]').val(data.card.Total.toLocaleString('en-US'))
 				$('#CurrAvailableTemplates').prop("checked", data.card.AvailableTemplates);
 				$('#CurrCustomizeAvailableTemplate').prop("checked", data.card.CustomizeAvailableTemplate);
@@ -480,6 +497,7 @@ function GetCurrCard($this) {
 				$('#CurrMocktail').prop("checked", data.card.Mocktail);
 				$('#CurrVipRoom').prop("checked", data.card.VipRoom);
 
+				
 			} else {
 				toastr.error("Lỗi!")
 
