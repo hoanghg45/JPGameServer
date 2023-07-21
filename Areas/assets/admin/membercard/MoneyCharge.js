@@ -407,8 +407,7 @@ function GetMemberCardLevel(LevelFee) {
 				$('input[name="LevelName"]').val(data.data.LevelName)
 				$('input[name="GiftLevelName"]').val(data.data.GiftLevelName)
 				$('input[name="RewardRate"]').val(data.data.RewardRate)
-				$('input[name="PointPlus"]').val(data.data.PointPlus)
-			
+				$('input[name="PointPlus"]').val(data.data.PointPlus)			
 				$('#AvailableTemplates').prop("checked", data.data.AvailableTemplates);
 				$('#CustomizeAvailableTemplate').prop("checked", data.data.CustomizeAvailableTemplate);
 				$('#Holiday').prop("checked", data.data.Holiday);
@@ -417,7 +416,7 @@ function GetMemberCardLevel(LevelFee) {
 				$('#VIP').prop("checked", data.data.VIP);
 				$('#Mocktail').prop("checked", data.data.Mocktail);
 				$('#VipRoom').prop("checked", data.data.VipRoom);
-				SetMoney(data.data.RewardRate)
+				SetMoney(data.data.RewardRate, data.data.LevelFee)
 			} else {
 				toastr.error(data.message, "Lỗi!")
 			}
@@ -554,15 +553,14 @@ function InitInputEvent() {
 
 
 }
-function SetMoney(rate) {
+function SetMoney(rate, levelfee) {
 
 	let money = Number($('input[name="MoneyPay"]').val().replaceAll(',', ''))
 	///
-	money = rate == 0 ? money : money * (rate/100)
+	money = rate == 0 ? money : levelfee * (rate/100)
 	let currBalance = Number($('input[name="CurrBalance"]').val().replaceAll(',', ''))
 	let newBalance = money + currBalance
 	$('input[name="CardMoneyPay"]').val(newBalance.toLocaleString('en-US'))
-
 
 }
 

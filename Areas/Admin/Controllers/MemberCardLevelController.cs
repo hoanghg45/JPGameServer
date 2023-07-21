@@ -316,7 +316,8 @@ namespace JPGame.Areas.Admin.Controllers
                     CustomizeAvailableTemplate = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.CustomizeAvailableTemplate,
                     c.VIP,
                     Mocktail = (bool)c.VIP ? c.VIPGift.Moctail : false,
-                    VipRoom = (bool)c.VIP ? c.VIPGift.VipRoom : false
+                    VipRoom = (bool)c.VIP ? c.VIPGift.VipRoom : false,
+                    c.CardLevel.LevelFee
                 }).FirstOrDefault();
 
 
