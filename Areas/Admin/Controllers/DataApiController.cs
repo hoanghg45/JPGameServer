@@ -139,7 +139,7 @@ namespace JPGame.Areas.Admin.Controllers
         }
 
         // POST api/<controller>
-        [System.Web.Http.HttpPost]
+        [System.Web.Http.HttpGet]
         public JsonResult GetReader(List<SettingGame> data)
         {
             try
