@@ -87,41 +87,19 @@ var KTWizard1 = function () {
 			_formEl,
 			{
 				fields: {
-					AccountName: {
+					MoneyPay: {
 						validators: {
 							notEmpty: {
-								message: 'Vui lòng nhập tên tài khoản'
-							}
+								message: 'Vui lòng nhập số tiền nạp'
+							},
+							between: {
+								min: 1,
+								max: 999999999999,
+								message: 'Số tiền nạp phải lớn hơn 0',
+							},
 						}
 					},
-					FullName: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu họ và tên'
-							}
-						}
-					},
-					DateOfBirth: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu ngày sinh'
-							}
-						}
-					},
-					Email: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu nhập địa chỉ Email'
-							}
-						}
-					},
-					Phone: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu nhập số điện thoại'
-							}
-						}
-					},
+					
 
 				},
 				plugins: {
@@ -195,8 +173,8 @@ var KTWizard1 = function () {
 
 			if (wizard.getStep() > wizard.getNewStep()) {
 				/// Nếu là thẻ welcome thì bỏ bước thông tin
-				if (wizard.getStep() == 3 && isWelcome)
-					wizard.goTo(wizard.getStep() - 2);
+				if (wizard.getStep() == 4 && isWelcome)
+					wizard.goTo(wizard.getStep() - 1);
 				return; // Skip if stepped back
 			}
 
@@ -207,15 +185,15 @@ var KTWizard1 = function () {
 				validator.validate().then(function (status) {
 					if (status == 'Valid') {
 						let nextStep = wizard.getNewStep()
-						//if (nextStep == 2) {
-						//	/// Nếu là thẻ welcome thì bỏ bước thông tin
-						//	nextStep = SkipInfoStep(nextStep)
+						if (nextStep == 3) {
+							/// Nếu là thẻ welcome thì bỏ bước thông tin
+							nextStep = SkipInfoStep(nextStep)
 
-						//}
-						//if (nextStep == 3) {
-						//	SetReviewStep()
-						//}
-						///
+						}
+						if (nextStep == 4) {
+							SetReviewStep()
+						}
+						
 						wizard.goTo(nextStep);
 
 						KTUtil.scrollTop();
@@ -238,21 +216,26 @@ var KTWizard1 = function () {
 			///
 			function SetReviewStep() {
 				if ($('input[name = "LevelName"]').val() == "Welcome") {
-					$('#NameContain').hide()
+				
 				} else {
 					$('input[name = "FullNameReview"]').val($('input[name = "FullName"]').val())
 					$('#NameContain').show()
+					if ($('input[name = "LevelName"]').val() != $('input[name = "CurrLevelName"]').val()) {
+						$('#ScanNewCardID').show()
+						$('input[name = "CurrChargeCardID"]').val($('input[name = "CurrCardID"]').val())
+						
+                    }
 				}
+				
 				$('input[name = "LevelNameReview"]').val($('input[name = "LevelName"]').val())
-				let rate = Number($('input[name = "RewardRate"]').val())
-				let money = Number($('input[name = "MoneyPay"]').val().replaceAll(",", ""))
-				let moneyReward = rate != 0 ? money * rate / 100 : money
-				$('input[name = "Money"]').val(moneyReward.toLocaleString('en-US'))
-				$('input[name = "Point"]').val($('input[name = "PointPlus"]').val())
+
+				let point = Number($('input[name = "PointPlus"]').val()) + Number($('input[name = "CurrPointPlus"]').val())
+				$('input[name = "Money"]').val($('input[name = "CardMoneyPay"]').val())
+				$('input[name = "Point"]').val(point)
 			}
 			function SkipInfoStep(nextStep) {
-				isWelcome = $('input[name = "LevelName"]').val() == "Welcome"
-				return isWelcome ? 3 : nextStep
+				isWelcome = $('input[name = "CurrLevelName"]').val() == "Welcome" && $('input[name = "LevelName"]').val() == $('input[name = "CurrLevelName"]').val()
+				return isWelcome ? nextStep+1 : nextStep
 			}
 			return false;  // Do not change wizard step, further action will be handled by he validator
 		});
@@ -450,6 +433,20 @@ function InitLoadingButton() {
 	});
 
 }
+function InitLoadingButtonForCharge() {
+	$('#loadingChargeBtn').hide()
+	$('#iconChargeStatus').hide()
+	$('#CheckChargeCurrCardBtn').on('click', function () {
+		let $this = $(this)
+		$this.hide();
+		$('#loadingChargeBtn').show()
+		$("#iconStatusCharge").removeClass()
+		GetCurrCard($this)
+		$('input[name="CheckChargeCurrCardBtn"]').val("")
+		$('#iconStatusCharge').show()
+	});
+
+}
 function GetCurrCard($this) {
 	$.ajax({
 		type: "GET",
@@ -471,7 +468,7 @@ function GetCurrCard($this) {
 				$('input[name="CurrLevelName"]').val(data.card.LevelName)
 				$('input[name="CurrGiftLevelName"]').val(data.card.GiftLevelName)
 				$('input[name="CurrRewardRate"]').val(data.card.RewardRate)
-				$('input[name="CurrPointPlus"]').val(data.card.PointPlus)
+				$('input[name="CurrPointPlus"]').val(data.card.Points)
 				$('input[name="CurrBalance"]').val(data.card.Balance.toLocaleString('en-US'))
 				$('input[name="CurrTotal"]').val(data.card.Total.toLocaleString('en-US'))
 				$('#CurrAvailableTemplates').prop("checked", data.card.AvailableTemplates);
