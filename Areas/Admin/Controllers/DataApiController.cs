@@ -98,19 +98,28 @@ namespace JPGame.Areas.Admin.Controllers
                    , JsonRequestBehavior.AllowGet);
                 }
                 var Card = db.MemberCards.Find(card);
-                bool cardMoney = Card.Balance.HasValue && Card.Balance > 0;
-                //LiveCard live = new LiveCard
-                //{
-                //    CardID = card,
-                //    ReaderID = "readerTest"
-                //};
-                //db.LiveCards.Add(live);
-                //db.SaveChanges();
+                var Reader = db.SettingGames.Find(reader);
+                bool cardMoney = Card.Balance.HasValue && Card.Balance > 0 ;
+                bool rsl = false;
+                if (cardMoney)
+                {
+                   if((Card.Balance - Reader.Price) >= 0)
+                    {
+                        rsl = true;
+                        Card.Balance = Card.Balance - Reader.Price;
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    rsl = false;
+                }
+
                 return Json(
                     new
                     {
                         status = "ok",
-                        moneystatus= cardMoney
+                        moneystatus= rsl
                     }
                     , JsonRequestBehavior.AllowGet);
 
