@@ -179,6 +179,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IP" Type="varchar" MaxLength="50" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="Price" Type="float" />
           <Property Name="CreateDate" Type="datetime" />
@@ -623,6 +624,7 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Slider">
           <Key>
@@ -1094,6 +1096,7 @@
           <EntitySetMapping Name="SettingGames">
             <EntityTypeMapping TypeName="Model.SettingGame">
               <MappingFragment StoreEntitySet="SettingGame">
+                <ScalarProperty Name="IP" ColumnName="IP" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Price" ColumnName="Price" />

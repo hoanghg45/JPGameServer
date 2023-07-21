@@ -1386,7 +1386,8 @@ ol {
 		font-size: 25px;
 	}
 	.user-panel {
-		display: none;
+		padding: 0px 0px;
+		margin: 1%;
 	}
 	.hero-slider .hs-item {
 		height: 700px;
@@ -1442,70 +1443,84 @@ ol {
 
 /* Medium Mobile :480px. */
 
-@media only screen and (max-width: 576px) {
-	.hero-slider .owl-dots {
-		padding: 0 15px;
-	}
-	.feature-section {
-		padding-left: 15px;
-		padding-right: 15px;
-	}
-	.community-post-list .community-post .author-avator {
-		float: none;
-	}
-	.community-post-list .community-post .post-content {
-		padding-left: 0;
-		padding-top: 30px;
-	}
-}
+		@media only screen and (max-width: 576px) {
+			.hero-slider .owl-dots {
+				padding: 0 15px;
+			}
 
-/* Small Mobile :320px. */
+			.feature-section {
+				padding-left: 15px;
+				padding-right: 15px;
+			}
 
-@media only screen and (max-width: 479px) {
-	.hero-slider .hs-item {
-		height: auto;
-		padding: 150px 0;
-	}
-	.ln-title {
-		display: none;
-	}
-	.news-ticker {
-		width: 100%;
-	}
-	.tournament-item .ti-thumb {
-		width: 100%;
-		height: 230px;
-		float: none;
-	}
-	.tournament-item .ti-text {
-		padding-left: 0;
-		padding-top: 20px;
-	}
-	.latest-blog .lb-item .lb-thumb {
-		width: 55px;
-		height: 55px;
-	}
-	.latest-blog .lb-item .lb-content {
-		padding-left: 67px;
-	}
-	.top-comment .tc-item .tc-content {
-		padding-left: 85px;
-	}
-	.site-btn {
-		padding: 11px 30px;
-		min-width: 145px;
-	}
-	.comment-list .comment .comment-avator {
-		float: none;
-	}
-	.comment-list .comment .comment-content {
-		padding-left: 0;
-		padding-top: 20px;
-	}
-	.footer-widget {
-		padding: 40px 15px 7px;
-	}
-	.page-info-section .pi-content h2 {
-		font-size: 40px;
-	}
-}
+			.community-post-list .community-post .author-avator {
+				float: none;
+			}
+
+			.community-post-list .community-post .post-content {
+				padding-left: 0;
+				padding-top: 30px;
+			}
+		}
+		/* Small Mobile :320px. */
+
+		@media only screen and (max-width: 479px) {
+			.hero-slider .hs-item {
+				height: auto;
+				padding: 150px 0;
+			}
+
+			.ln-title {
+				display: none;
+			}
+
+			.news-ticker {
+				width: 100%;
+			}
+
+			.tournament-item .ti-thumb {
+				width: 100%;
+				height: 230px;
+				float: none;
+			}
+
+			.tournament-item .ti-text {
+				padding-left: 0;
+				padding-top: 20px;
+			}
+
+			.latest-blog .lb-item .lb-thumb {
+				width: 55px;
+				height: 55px;
+			}
+
+			.latest-blog .lb-item .lb-content {
+				padding-left: 67px;
+			}
+
+			.top-comment .tc-item .tc-content {
+				padding-left: 85px;
+			}
+
+			.site-btn {
+				padding: 11px 30px;
+				min-width: 145px;
+			}
+
+			.comment-list .comment .comment-avator {
+				float: none;
+			}
+
+			.comment-list .comment .comment-content {
+				padding-left: 0;
+				padding-top: 20px;
+			}
+
+			.footer-widget {
+				padding: 40px 15px 7px;
+			}
+
+			.page-info-section .pi-content h2 {
+				font-size: 40px;
+			}
+		}

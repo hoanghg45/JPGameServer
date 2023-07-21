@@ -70,7 +70,7 @@ namespace JPGame.Areas.Admin.Controllers
 
         }
         
-        [System.Web.Http.HttpPost]
+        [System.Web.Http.HttpGet]
          public JsonResult CheckCardMoney(string card, string reader)
         {
             try {
@@ -137,13 +137,35 @@ namespace JPGame.Areas.Admin.Controllers
 
 
         }
-        
-        
 
         // POST api/<controller>
-        public void Post([FromBody] string value)
+        [System.Web.Http.HttpPost]
+        public JsonResult GetReader(List<SettingGame> data)
         {
+            try
+            {
+                db.SettingGames.AddRange(data);
+                db.SaveChanges();
+                return Json(
+                    new
+                    {
+                        status = "ok",
+                        message = "true"
+                    }
+                    , JsonRequestBehavior.AllowGet);
 
+            }
+            catch (Exception e)
+            {
+                return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = "Không thành công!!!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+            }
         }
 
         // PUT api/<controller>/5

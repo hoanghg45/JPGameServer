@@ -68,9 +68,10 @@
 }
 .card_info {
     width: 450px;
-    height: 250px;
+    height: 600px;
     background-color: #fff;
-    background: linear-gradient(#f8f8f8, #fff);
+    background-size:100% 100%;
+/*    background: linear-gradient(#f8f8f8, #fff);*/
     box-shadow: 0 8px 16px -8px rgba(0,0,0,0.4);
     border-radius: 6px;
     overflow: hidden;
@@ -86,7 +87,7 @@
         position: absolute;
         width: 150px;
         height: 100%;
-        background: linear-gradient(silver, lightgray);
+    /*    background: linear-gradient(silver, lightgray);*/
         transition: width 0.4s;
         overflow: hidden;
         z-index: 2;
@@ -214,7 +215,7 @@
         }
 
     .card_info .general {
-        background: linear-gradient(silver, lightgray);
+       /* background: linear-gradient(silver, lightgray);*/
         width: 300px;
         height: 100%;
         position: absolute;
@@ -234,7 +235,7 @@
 @media screen and (max-width: 600px) {
     .card_info {
         width: 100%;
-        height: auto;
+        height: 450px;
     }
 
         .card_info .additional,
