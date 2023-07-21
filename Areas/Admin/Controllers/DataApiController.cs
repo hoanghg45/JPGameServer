@@ -144,7 +144,8 @@ namespace JPGame.Areas.Admin.Controllers
         {
             try
             {
-                db.SettingGames.AddRange(data);
+                var filteredRecords = data.Where(r => !db.SettingGames.Any(er => er.Id == r.Id)).ToList();
+                db.SettingGames.AddRange(filteredRecords);
                 db.SaveChanges();
                 return Json(
                     new
