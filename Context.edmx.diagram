@@ -30,11 +30,11 @@
         <AssociationConnector Association="Model.FK_Promotion_Users" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_Slider_TypeSlider" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Model.LiveCard" Width="1.5" PointX="10.375" PointY="12.75" />
-        <EntityTypeShape EntityType="Model.MemberCard" Width="1.5" PointX="7.5" PointY="3" />
-        <AssociationConnector Association="Model.FK_Accounts_MemberCards" />
-        <AssociationConnector Association="Model.FK_MemberCard_MemberCardLevel" />
         <EntityTypeShape EntityType="Model.MemberCardChargeRecord" Width="1.5" PointX="9.75" PointY="18.625" />
+        <EntityTypeShape EntityType="Model.MemberCard" Width="1.5" PointX="7.5" PointY="2.875" />
+        <AssociationConnector Association="Model.FK_Accounts_MemberCards" />
         <AssociationConnector Association="Model.FK_MemberCardChargeRecords_MemberCards" />
+        <AssociationConnector Association="Model.FK_MemberCard_MemberCardLevel" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
