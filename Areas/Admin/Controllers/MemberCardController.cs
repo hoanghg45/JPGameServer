@@ -213,7 +213,7 @@ namespace JPGame.Areas.Admin.Controllers
                         c.MemberCardLevel.CardLevel.LevelName,
                         c.MemberCardLevel.Gift.GiftLevelName,
                         RewardRate = Math.Round(c.MemberCardLevel.Gift.RewardRate.Value * 100),
-                        c.MemberCardLevel.Gift.PointPlus,
+                        c.Points,
                         Holiday = c.MemberCardLevel.Gift.PersonalGiftID == null ? false : c.MemberCardLevel.Gift.PersonalGift.Holiday,
                         Personal = c.MemberCardLevel.Gift.PersonalGiftID == null ? false : c.MemberCardLevel.Gift.PersonalGift.Personal,
                         SpecialDay = c.MemberCardLevel.Gift.PersonalGiftID != null && c.MemberCardLevel.Gift.PersonalGift.SpecialDay,
