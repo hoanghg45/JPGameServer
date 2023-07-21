@@ -139,8 +139,8 @@ namespace JPGame.Areas.Admin.Controllers
         }
 
         // POST api/<controller>
-        [System.Web.Http.HttpGet]
-        public JsonResult GetReader(List<SettingGame> data)
+        [System.Web.Http.HttpPost]
+        public JsonResult AddReader(List<SettingGame> data)
         {
             try
             {
@@ -169,6 +169,35 @@ namespace JPGame.Areas.Admin.Controllers
             }
         }
 
+
+        // POST api/<controller>
+        [System.Web.Http.HttpGet]
+        public JsonResult GetReaders()
+        {
+            try
+            {
+                var data = db.SettingGames.ToList();
+                return Json(
+                    new
+                    {
+                        status = "ok",
+                        message = data
+                    }
+                    , JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception e)
+            {
+                return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = "Không thành công!!!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+            }
+        }
         // PUT api/<controller>/5
         public void Put(int id, [FromBody] string value)
         {
