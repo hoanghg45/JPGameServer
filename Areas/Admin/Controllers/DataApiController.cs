@@ -119,7 +119,7 @@ namespace JPGame.Areas.Admin.Controllers
                     new
                     {
                         status = "ok",
-                        moneystatus= rsl
+                        message = rsl
                     }
                     , JsonRequestBehavior.AllowGet);
 
