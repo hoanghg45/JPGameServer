@@ -121,7 +121,9 @@ namespace JPGame.Areas.Admin.Controllers
                 return Json(
                     new
                     {
+
                         status = status,
+
                         message = rsl
                     }
                     , JsonRequestBehavior.AllowGet);
