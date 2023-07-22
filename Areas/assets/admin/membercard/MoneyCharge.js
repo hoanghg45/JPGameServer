@@ -100,7 +100,6 @@ var KTWizard1 = function () {
 						}
 					},
 					
-
 				},
 				plugins: {
 					trigger: new FormValidation.plugins.Trigger(),
@@ -120,6 +119,41 @@ var KTWizard1 = function () {
 			_formEl,
 			{
 				fields: {
+					AccountName: {
+						validators: {
+							notEmpty: {
+								message: 'Vui lòng nhập tên tài khoản'
+							}
+						}
+					},
+					FullName: {
+						validators: {
+							notEmpty: {
+								message: 'Yêu cầu họ và tên'
+							}
+						}
+					},
+					DateOfBirth: {
+						validators: {
+							notEmpty: {
+								message: 'Yêu cầu ngày sinh'
+							}
+						}
+					},
+					Email: {
+						validators: {
+							notEmpty: {
+								message: 'Yêu cầu nhập địa chỉ Email'
+							}
+						}
+					},
+					Phone: {
+						validators: {
+							notEmpty: {
+								message: 'Yêu cầu nhập số điện thoại'
+							}
+						}
+					},
 
 				},
 				plugins: {
@@ -137,7 +171,7 @@ var KTWizard1 = function () {
 			_formEl,
 			{
 				fields: {
-					CardID: {
+					NewCardID: {
 						validators: {
 							notEmpty: {
 								message: 'Vui lòng quét lại'
@@ -218,22 +252,24 @@ var KTWizard1 = function () {
 				if ($('input[name = "LevelName"]').val() == "Welcome") {
 					$('#NameContain').hide()
 				} else {
-					$('input[name = "FullNameReview"]').val($('input[name = "FullName"]').val())
+					
 					$('#NameContain').show()
 				}
 				/// Nếu nâng cấp thẻ
 				if ($('input[name = "LevelName"]').val() != $('input[name = "CurrLevelName"]').val()) {
 					$('#ScanNewCardID').show()
-					$('input[name = "CurrChargeCardID"]').val($('input[name = "CurrCardID"]').val())
+				
 
 				} else {
 					$('#ScanNewCardID').hide()
+					$('input[name = "NewCardID"]').val($('input[name = "CurrCardID"]').val())
+
                 }
 
 
 				$('input[name = "LevelNameReview"]').val($('input[name = "LevelName"]').val())
 
-				let point = Number($('input[name = "PointPlus"]').val()) + Number($('input[name = "CurrPointPlus"]').val())
+				let point = Number($('input[name = "PointPlus"]').val()) + Number($('input[name = "CurrPoints"]').val())
 				$('input[name = "Money"]').val($('input[name = "CardMoneyPay"]').val())
 				$('input[name = "Point"]').val(point)
 			}
@@ -367,6 +403,7 @@ function GetUser(UserName) {
 			if (data.code == 200) {
 
 				$('input[name="FullName"]').val(data.data.FullName)
+				$('input[name="FullNameReview"]').val(data.data.FullName)
 				$('input[name="Email"]').val(data.data.Email)
 				$('input[name="Phone"]').val(data.data.Phone)
 				$('input[name="DateOfBirth"]').val(formatDate(data.data.DateOfBirth))
@@ -456,10 +493,10 @@ function InitLoadingButtonForCharge() {
 		let $this = $(this)
 		$this.hide();
 		$('#loadingChargeBtn').show()
-		$("#iconStatusCharge").removeClass()
-		GetCurrCard($this)
+		$("#iconChargeStatus").removeClass()
+		GetNewCard($this, $('input[name="LevelName"]').val())
 		$('input[name="CheckChargeCurrCardBtn"]').val("")
-		$('#iconStatusCharge').show()
+		$('#iconChargeStatus').show()
 	});
 
 }
@@ -484,8 +521,9 @@ function GetCurrCard($this) {
 				$('input[name="CurrLevelName"]').val(data.card.LevelName)
 				$('input[name="CurrGiftLevelName"]').val(data.card.GiftLevelName)
 				$('input[name="CurrRewardRate"]').val(data.card.RewardRate)
-				$('input[name="CurrPointPlus"]').val(data.card.Points)
+				$('input[name="CurrPoints"]').val(data.card.Points)
 				$('input[name="CurrBalance"]').val(data.card.Balance.toLocaleString('en-US'))
+				$('input[name="FullNameReview"]').val(data.card.Owner == null ? "": data.card.Owner)
 				
 				$('input[name="CurrTotal"]').val(data.card.Total.toLocaleString('en-US'))
 				$('#CurrAvailableTemplates').prop("checked", data.card.AvailableTemplates);
@@ -515,6 +553,42 @@ function GetCurrCard($this) {
 		}
 	})
 }
+
+function GetNewCard($this,level) {
+	$.ajax({
+		type: "GET",
+		url: "/MemberCard/GetCurrentCardForCreate",
+		data: { level },
+
+		datatype: 'json',
+		complete: function () {
+			$this.show();
+			$('#loadingChargeBtn').hide()
+
+		},
+		success: function (data) {
+			if (data.status == "Success") {
+				$('#iconStatusCharge').addClass("flaticon2-check-mark text-success");
+				$('#textChargeNoti').text("Thẻ hợp lệ!");
+				$('NewCardID').val(data.card)
+			} else {
+				toastr.error("Lỗi!")
+
+				$('#textChargeNoti').text(data.message);
+				$('#iconStatusCharge').addClass("flaticon2-delete text-danger");
+
+			}
+
+
+		},
+		error: function () {
+			// Xử lý lỗi (nếu cần thiết)
+			// Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
+
+		}
+	})
+}
+
 function InitInputEvent() {
 
 	///AccoutName

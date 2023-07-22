@@ -144,11 +144,12 @@
                                         <h6 class="font-weight-bolder mb-3">Thông tin</h6>
                                         @*<div class="form-group fv-plugins-icon-container">
 
-                <label>Người sở hữu:</label>
-                <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="FullName" />
+            <label>Người sở hữu:</label>
+            <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="FullName" />
 
 
-            </div>*@
+        </div>*@
+
                                         <div class="form-group fv-plugins-icon-container row">
                                             <div class="col-lg-6">
 
@@ -166,7 +167,13 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div class="form-group fv-plugins-icon-container ">
+                                            <label>Số điểm hiện có:</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrPoints" aria-describedby="basic-addon2" />
+                                                <div class="input-group-append"><span class="input-group-text">đ</span></div>
+                                            </div>
+                                        </div>
 
                                         <div class="separator separator-dashed my-10"></div>
                                         <h6 class="font-weight-bolder mb-3">Thông tin loại thẻ</h6>
@@ -185,22 +192,22 @@
 
                                         </div>
                                         @*<div class="form-group fv-plugins-icon-container row">
-                                            <div class="col-lg-6">
-                                                <label>Tỉ lệ tiền tặng:</label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrRewardRate" aria-describedby="basic-addon2" />
-                                                    <div class="input-group-append"><span class="input-group-text">%</span></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label>Số điểm cộng:</label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrPointPlus" aria-describedby="basic-addon2" />
-                                                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
-                                                </div>
-                                            </div>
+            <div class="col-lg-6">
+                <label>Tỉ lệ tiền tặng:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrRewardRate" aria-describedby="basic-addon2" />
+                    <div class="input-group-append"><span class="input-group-text">%</span></div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label>Số điểm cộng:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrPointPlus" aria-describedby="basic-addon2" />
+                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
+                </div>
+            </div>
 
-                                        </div>*@
+        </div>*@
                                         <div class="form-group fv-plugins-icon-container ">
                                             <div class="form-group">
                                                 <label>Quà tặng đặc biệt</label>
@@ -457,8 +464,9 @@
                                     <div class="pb-5" data-wizard-type="step-content">
                                         <h4 class="mb-10 font-weight-bold text-dark">Xác nhận nạp tiền thẻ</h4>
                                         <!--begin::Select-->
-                                       <div id="ScanNewCardID">
-                                            <h6 class="font-weight-bolder mb-3">Đưa thẻ vào máy đọc</h6>
+                                        <div id="ScanNewCardID">
+                                            <span class="form-text text-danger">Thành viên nâng cấp lên cấp độ thẻ mới!</span>
+                                            <h6 class="font-weight-bolder mb-3">Đưa thẻ mới vào máy đọc</h6>
                                             <div class="form-group">
                                                 <button type="button" id="CheckChargeCurrCardBtn" class="btn btn-success mr-3">
                                                     Kiểm tra
@@ -466,11 +474,11 @@
                                                 <button type="button" id="loadingChargeBtn" class="btn btn-outline-warning spinner spinner-darker-warning spinner-left mr-3">
                                                     Đang kiểm tra
                                                 </button>
-                                                <i id="iconStatusCharge" class="flaticon2-check-mark text-success"></i>
-                                                <input name="CurrChargeCardID" hidden />
+                                                <i id="iconChargeStatus" class="flaticon2-check-mark text-success"></i>
+                                                <input name="NewCardID" hidden />
                                             </div>
                                             <span id="textChargeNoti" class="form-text text-muted"></span>
-                                        <!--end::Select-->
+                                            <!--end::Select-->
                                         </div>
 
                                         <div class="separator separator-dashed my-10"></div>
