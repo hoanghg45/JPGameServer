@@ -101,10 +101,12 @@ namespace JPGame.Areas.Admin.Controllers
                 var Reader = db.SettingGames.Find(reader);
                 bool cardMoney = Card.Balance.HasValue && Card.Balance > 0 ;
                 bool rsl = false;
+                var status = "fail";
                 if (cardMoney)
                 {
                    if((Card.Balance - Reader.Price) >= 0)
                     {
+                        status = "ok";
                         rsl = true;
                         Card.Balance = Card.Balance - Reader.Price;
                         db.SaveChanges();
@@ -112,13 +114,16 @@ namespace JPGame.Areas.Admin.Controllers
                 }
                 else
                 {
+                    status = "fail";
                     rsl = false;
                 }
 
                 return Json(
                     new
                     {
-                        status = "ok",
+
+                        status = status,
+
                         message = rsl
                     }
                     , JsonRequestBehavior.AllowGet);
