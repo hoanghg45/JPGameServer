@@ -255,34 +255,7 @@ var KTWizard1 = function () {
 			if (validator) {
 				validator.validate().then(function (status) {
 					if (status == 'Valid') {
-						Swal.fire({
-							text: "All is good! Please confirm the form submission.",
-							icon: "success",
-							showCancelButton: true,
-							buttonsStyling: false,
-							confirmButtonText: "Yes, submit!",
-							cancelButtonText: "No, cancel",
-							heightAuto: false,
-							customClass: {
-								confirmButton: "btn font-weight-bold btn-primary",
-								cancelButton: "btn font-weight-bold btn-default"
-							}
-						}).then(function (result) {
-							if (result.value) {
-								AddMemberCard()
-							} else if (result.dismiss === 'cancel') {
-								Swal.fire({
-									text: "Your form has not been submitted!.",
-									icon: "error",
-									buttonsStyling: false,
-									heightAuto: false,
-									confirmButtonText: "Ok, got it!",
-									customClass: {
-										confirmButton: "btn font-weight-bold btn-primary",
-									}
-								});
-							}
-						});
+						AddMemberCard()
 					} else {
 						Swal.fire({
 							text: "Đã có lỗi trong quá trình, vui lòng thử lại",
