@@ -296,34 +296,7 @@ var KTWizard1 = function () {
 			if (validator) {
 				validator.validate().then(function (status) {
 					if (status == 'Valid') {
-						Swal.fire({
-							text: "All is good! Please confirm the form submission.",
-							icon: "success",
-							showCancelButton: true,
-							buttonsStyling: false,
-							confirmButtonText: "Yes, submit!",
-							cancelButtonText: "No, cancel",
-							heightAuto: false,
-							customClass: {
-								confirmButton: "btn font-weight-bold btn-primary",
-								cancelButton: "btn font-weight-bold btn-default"
-							}
-						}).then(function (result) {
-							if (result.value) {
-								AddMemberCard()
-							} else if (result.dismiss === 'cancel') {
-								Swal.fire({
-									text: "Your form has not been submitted!.",
-									icon: "error",
-									buttonsStyling: false,
-									heightAuto: false,
-									confirmButtonText: "Ok, got it!",
-									customClass: {
-										confirmButton: "btn font-weight-bold btn-primary",
-									}
-								});
-							}
-						});
+						ChargeMemberCard()
 					} else {
 						Swal.fire({
 							text: "Đã có lỗi trong quá trình, vui lòng thử lại",
@@ -343,11 +316,11 @@ var KTWizard1 = function () {
 
 		});
 
-		function AddMemberCard() {
-			let data = $('#createMemberCardForm').serializeArray()
+		function ChargeMemberCard() {
+			let data = $('#chargeMemberCardForm').serializeArray()
 			$.ajax({
 				type: "POST",
-				url: "/MemberCard/Create",
+				url: "/MemberCard/MoneyCharge",
 				data: data,
 				datatype: "json",
 				success: function (result) {
@@ -373,7 +346,7 @@ var KTWizard1 = function () {
 		// public functions
 		init: function () {
 			_wizardEl = KTUtil.getById('kt_wizard');
-			_formEl = KTUtil.getById('createMemberCardForm');
+			_formEl = KTUtil.getById('chargeMemberCardForm');
 
 			_initValidation();
 			_initWizard();
@@ -522,6 +495,7 @@ function GetCurrCard($this) {
 				$('input[name="CurrGiftLevelName"]').val(data.card.GiftLevelName)
 				$('input[name="CurrRewardRate"]').val(data.card.RewardRate)
 				$('input[name="CurrPoints"]').val(data.card.Points)
+				
 				$('input[name="CurrBalance"]').val(data.card.Balance.toLocaleString('en-US'))
 				$('input[name="FullNameReview"]').val(data.card.Owner == null ? "": data.card.Owner)
 				
@@ -570,7 +544,7 @@ function GetNewCard($this,level) {
 			if (data.status == "Success") {
 				$('#iconStatusCharge').addClass("flaticon2-check-mark text-success");
 				$('#textChargeNoti').text("Thẻ hợp lệ!");
-				$('NewCardID').val(data.card)
+				$('input[name="NewCardID"]').val(data.card)
 			} else {
 				toastr.error("Lỗi!")
 

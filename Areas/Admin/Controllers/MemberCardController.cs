@@ -119,44 +119,108 @@ namespace JPGame.Areas.Admin.Controllers
             try
             {
                 // TODO: Add insert logic here
-
-                string CardID = collection["CardID"];
+                var currUser = (Session["UserID"].ToString());
+                string OldCardID = collection["CurrCardID"];
+                string NewCardID = collection["NewCardID"];
                 var MemberCardLevel = db.MemberCards.Find(collection["MemberCardLevelID"]);
-                var card = db.MemberCards.Find(CardID);
-                if (card == null)
+                var oldCard = db.MemberCards.Find(OldCardID);
+                var newCard = db.MemberCards.Find(NewCardID);
+                if (oldCard == null)
                 {
                     return this.Json(
-               new
-               {
-                   status = "Error",
-                   message = "Thẻ không tồn tại, vui lòng kiểm tra lại!"
-
-               }
-               , JsonRequestBehavior.AllowGet
-               );
-                }
-                if (!card.MemberCardLevel.CardLevel.LevelName.Trim().Equals("Welcome"))
+                new
                 {
-                    string accname = collection["AccountName"];
-                    var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
-                    if (string.IsNullOrEmpty(accname) || acc == null)
+                    status = "Error",
+                    message = "Thẻ cũ không tồn tại, vui lòng kiểm tra lại!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+                }
+
+                double ChargeMoney = Double.Parse(collection["MoneyPay"].Replace(",", ""));//Số tiền nạp
+                double FinalMoney = Double.Parse(collection["Money"].Replace(",", ""));//Số tiền sau khi đã tính
+                double FinalPoint = Double.Parse(collection["Point"].Replace(",", ""));//Số điểm sau khi đã tính
+
+                //Nếu không thay đổi cấp độ
+                if (oldCard.MemberCardLevel.CardLevel.LevelName.Equals(newCard.MemberCardLevel.CardLevel.LevelName))
+                {
+                    oldCard.Balance = FinalMoney;
+                    oldCard.Points = FinalPoint;
+                }
+                else
+                {
+                    if (newCard == null)
                     {
                         return this.Json(
-                      new
-                      {
-                          status = "Error",
-                          message = "Tài khoản không tồn tại!"
+                    new
+                    {
+                        status = "Error",
+                        message = "Thẻ mới không tồn tại, vui lòng kiểm tra lại!"
 
-                      }
-                      , JsonRequestBehavior.AllowGet
-                      );
                     }
-                    acc.MemberCardID = card.MemberCardID;
+                    , JsonRequestBehavior.AllowGet
+                    );
+                    }
+
+                    //Hủy thẻ cũ
+                    oldCard.Status = false;
+                    //Chuyển tiền sang thẻ mới
+                    newCard.Balance = FinalMoney;
+                    newCard.Points = FinalPoint;
+                    newCard.Status = true;
+                    newCard.CreateDate = DateTime.Now;
+                 
+                    //Nếu thẻ welcome được nâng cấp
+                    if (oldCard.MemberCardLevel.CardLevel.LevelName.Trim().Equals("Welcome"))
+                    {
+                        string accname = collection["AccountName"];
+                        var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
+                        if (string.IsNullOrEmpty(accname) || acc == null)
+                        {
+                            return this.Json(
+                          new
+                          {
+                              status = "Error",
+                              message = "Tài khoản không tồn tại!"
+
+                          }
+                          , JsonRequestBehavior.AllowGet
+                          );
+                        }
+                        acc.MemberCardID = newCard.MemberCardID;
+                    }
+                    else
+                    {
+                        var acc = oldCard.Accounts.FirstOrDefault();
+                        if (acc == null)
+                        {
+                            return this.Json(
+                          new
+                          {
+                              status = "Error",
+                              message = "Tài khoản sở hữu thẻ cũ không tồn tại!"
+
+                          }
+                          , JsonRequestBehavior.AllowGet
+                          );
+                        }
+                        acc.MemberCardID = newCard.MemberCardID;
+                    }
+
 
                 }
-                card.Balance = Double.Parse(collection["Money"].Replace(",", ""));
-                card.Points = Double.Parse(collection["Point"].Replace(",", ""));
-                card.Status = true;
+                //Lưu thời gian nạp tiền
+                var chargeRecord = new MemberCardChargeRecord
+                {
+                    MemberCardID = newCard.MemberCardID,
+                    Money = ChargeMoney,
+                    ChargeDate = DateTime.Now,
+                    CreateBy = currUser,
+                };
+                db.MemberCardChargeRecords.Add(chargeRecord);
+
+
                 db.SaveChanges();
                 return this.Json(
                  new
