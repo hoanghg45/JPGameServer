@@ -1,6 +1,7 @@
-﻿
+﻿@model JPGame.User
+
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -13,7 +14,7 @@
                 <!--begin::Page Heading-->
                 <div class="d-flex align-items-baseline flex-wrap mr-5">
                     <!--begin::Page Title-->
-                    <h5 class="text-dark font-weight-bold my-1 mr-5">Tạo tài khoản</h5>
+                    <h5 class="text-dark font-weight-bold my-1 mr-5">Sửa tài khoản</h5>
                     <!--end::Page Title-->
                     <!--begin::Breadcrumb-->
                     <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
@@ -24,7 +25,7 @@
                             <a href="" class="text-muted">Tài khoản quản trị</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="" class="text-muted">Tạo tài khoản</a>
+                            <a href="" class="text-muted">Sửa tài khoản</a>
                         </li>
                     </ul>
                     <!--end::Breadcrumb-->
@@ -34,7 +35,7 @@
             <!--end::Info-->
             <!--begin::Toolbar-->
             <div class="d-flex align-items-center">
-           
+
             </div>
             <!--end::Toolbar-->
         </div>
@@ -55,38 +56,36 @@
                         <!--begin::Form-->
                         <form id="UserForm" class="form">
                             <div class="card-body">
-                                
+                                <input hidden name="UserID" value="@Model.UserID" />
                                 <div class="form-group">
                                     <label>Tài khoản:</label>
-                                   
-                                    <input name="UserName" type="text" class="form-control form-control-solid" required placeholder="Nhập tên tài khoản" />
+
+                                    <input name="UserName" type="text" class="form-control form-control-solid" required placeholder="Nhập tên tài khoản" value="@Model.UserName.Trim()" />
 
                                 </div>
                                 <div class="form-group">
                                     <label>Tên :</label>
-                                    <input name="Name" type="text" class="form-control form-control-solid" required placeholder="Nhập tên" />
+                                    <input name="Name" type="text" class="form-control form-control-solid" required value="@Model.Name.Trim()" placeholder="Nhập tên" />
 
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-6">
-                                        <label>Nhập mật khẩu:</label>
-                                        <input name="Password" type="password" class="form-control" placeholder="Nhập mật khẩu" />
-
+                                        <label>Nhập mật khẩu mới:</label>
+                                        <input type="password" class="form-control" name="newPassword" placeholder="Nhập mật khẩu" />
                                     </div>
                                     <div class="col-lg-6">
                                         <label>Xác nhận mật khẩu:</label>
-                                        <input type='password' class="form-control" name="RePassword" placeholder="Nhập xác nhận mật khẩu" />
-                                    </div>
-                                
+                                        <input type='password' class="form-control" name="newRePassword" placeholder="Nhập xác nhận mật khẩu" />
 
+                                    </div>
                                 </div>
-                                
+                                <span class="form-text text-danger">Chỉ nhập khi có sự thay đổi</span>
 
 
                             </div>
                             <div class="card-footer">
                                 <a class="btn btn-primary mr-2 " href="@Url.Action("Index","Administrator")">Trở về danh sách</a>
-                                <button type="button" class="btn btn-success mr-2 btnCreate">Tạo</button>
+                                <button type="button" class="btn btn-success mr-2 btnUpdate">Sửa</button>
                             </div>
                         </form>
                         <!--end::Form-->
@@ -101,4 +100,4 @@
     </div>
     <!--end::Entry-->
 </div>
-<script src="~/Areas/assets/admin/users/CreateUser.js"></script>
+<script src="~/Areas/assets/admin/users/UpdateUser.js"></script>

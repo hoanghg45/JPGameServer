@@ -40,30 +40,15 @@ var Add = function () {
 
                         }
                     },
-                    Password: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Vui lòng nhập mật khẩu',
-                            },
-                        },
-                    },
-                    RePassword: {
-                        validators: {
-                            identical: {
-                                compare: function () {
-                                    return form.querySelector('[name="Password"]').value;
-                                },
-                                message: 'Xác nhận mật khẩu chưa đúng',
-                            },
-                        },
-
-                    },
+                  
                     
+                    
+
                     newRePassword: {
                         validators: {
                             identical: {
                                 compare: function () {
-                                    return form.querySelector('[name="Password"]').value;
+                                    return form.querySelector('[name="newPassword"]').value;
                                 },
                                 message: 'Xác nhận mật khẩu chưa đúng',
                             },
@@ -85,56 +70,12 @@ var Add = function () {
                 }
             }
         );
-        form.querySelector('[name="Password"]').addEventListener('input', function () {
-            fv.revalidateField('RePassword');
-        });
+    
         form.querySelector('[name="newPassword"]').addEventListener('input', function () {
             fv.revalidateField('newRePassword');
         });
 
-        $('.btnCreate').click(function () {
-            let data = $('#UserForm').serialize()
-
-            validation.validate().then(function (status) {
-                if (status == 'Valid') {
-                    AddUser(data)
-                } else {
-                    toastr.error('Vui lòng điền thông tin đầy đủ và hợp lệ!')
-                        .then(function () {
-                            KTUtil.scrollTop();
-                        });
-                }
-            });
-
-        })
-
-
-
-
-        function AddUser(data) {
-            $.ajax({
-                type: "POST",
-                url: "/Administrator/Create",
-                data: data,
-                datatype: "json",
-                success: function (result) {
-                    if (result.status == "success") {
-                        toastr.success('Thành công!')
-                        setTimeout(function () {
-                            window.location.href = "/Admin/Administrator"
-                        }, 500)
-                      
-                    } else {
-
-                        toastr.error('Đã có lỗi xảy ra, vui lòng thử lại!', result.message)
-                    }
-                },
-                error: function () {
-                    toastr.error('Đã có lỗi xảy ra, vui lòng thử lại!')
-                }
-            })
-        }
-
+      
         $('.btnUpdate').click(function () {
             let data = $('#UserForm').serialize()
 
@@ -158,15 +99,15 @@ var Add = function () {
                 data: data,
                 datatype: "json",
                 success: function (result) {
-                    if (result.status == "success") {
+                    if (result.status) {
                         toastr.success('Thành công!')
                         setTimeout(function () {
                             window.location.href = "/Admin/Administrator"
-                        },500)
-                      
+                        }, 500)
+
                     } else {
 
-                        toastr.error('Đã có lỗi xảy ra, vui lòng thử lại!', result.message)
+                        toastr.error(result.message,'Đã có lỗi xảy ra, vui lòng thử lại!')
                     }
                 },
                 error: function () {

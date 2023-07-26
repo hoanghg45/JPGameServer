@@ -25,7 +25,7 @@ namespace JPGame.Areas.Admin.Controllers
             {
                 var data = db.Users.Select(a => new
                 {
-                    a.UserID,
+                    ID = a.UserID.Trim(),
                     UserName = a.UserName.Trim(),
                     Name = a.Name.Trim(),
                     CreateAt = a.CreateDate,
@@ -147,28 +147,79 @@ namespace JPGame.Areas.Admin.Controllers
         }
 
         // GET: Admin/Administator/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            var user = db.Users.Find(id);
+            if(string.IsNullOrEmpty(id)|| user == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(user);
         }
 
         // POST: Admin/Administator/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public JsonResult Edit(FormCollection collection)
         {
             try
             {
                 // TODO: Add update logic here
+                var user = db.Users.Find(collection["UserID"].Trim());
+                if(user == null)
+                {
+                    return Json(
+                                    new
+                                    {
+                                        status = false,
+                                        message = "Tài khoản không tồn tại!!!"
 
-                return RedirectToAction("Index");
+                                    }
+                                    , JsonRequestBehavior.AllowGet);
+                }
+
+                string formUserName = collection["UserName"].Trim();
+                if(!formUserName.Equals(user.UserName.Trim()) && db.Users.Any(u => u.UserName.Equals(formUserName)))
+                {
+                    return Json(
+                                    new
+                                    {
+                                        status = false,
+                                        message = "Tài khoản đã tồn tại!!!"
+
+                                    }
+                                    , JsonRequestBehavior.AllowGet);
+                }
+
+                user.Name = collection["Name"].Trim();
+                user.UserName = collection["UserName"].Trim();
+                if (!string.IsNullOrEmpty(collection["newPassword"])){
+                  user.Password =  BCrypt.Net.BCrypt.HashPassword(collection["newPassword"]);
+                }
+                db.SaveChanges();
+                return Json(
+                   new
+                   {
+                       status = true,
+                    
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
             }
             catch
             {
-                return View();
+
+                return Json(
+                   new
+                   {
+                       status = false,
+                       message = "Không thành công!!!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
             }
         }
 
-        // GET: Admin/Administator/Delete/5
+   
        
 
         // POST: Admin/Administator/Delete/5
@@ -178,7 +229,7 @@ namespace JPGame.Areas.Admin.Controllers
             try
             {
                 // TODO: Add delete logic here
-                if(string.IsNullOrEmpty(id) || db.Users.Any(u => u.UserID.Equals(id)))
+                if(string.IsNullOrEmpty(id) || !db.Users.Any(u => u.UserID.Trim().Equals(id)))
                 {
                     return Json(
                   new

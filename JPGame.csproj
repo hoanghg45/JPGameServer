@@ -276,6 +276,7 @@
     <Content Include="Areas\assets\admin\promotion\AddPromotion.js" />
     <Content Include="Areas\assets\admin\promotion\Promotion.js" />
     <Content Include="Areas\assets\admin\users\CreateUser.js" />
+    <Content Include="Areas\assets\admin\users\UpdateUser.js" />
     <Content Include="Areas\assets\admin\users\UsersTable.js" />
     <Content Include="Areas\assets\css\pages\error\error-3.css" />
     <Content Include="Areas\assets\css\pages\error\error-4.css" />
@@ -2358,6 +2359,7 @@
     <Content Include="Areas\Admin\Views\MemberCardLevel\AddMemberCard.cshtml" />
     <Content Include="Areas\Admin\Views\Administrator\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Administrator\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Administrator\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
