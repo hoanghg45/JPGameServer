@@ -15,6 +15,7 @@ namespace JPGame
     public partial class SettingGame
     {
         public string Id { get; set; }
+        public string IP { get; set; }
         public string Name { get; set; }
         public Nullable<double> Price { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
@@ -22,6 +23,5 @@ namespace JPGame
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
-        public string IP { get; set; }
     }
 }

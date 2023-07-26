@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Accounts">
           <Key>
             <PropertyRef Name="AccountID" />
@@ -460,7 +460,8 @@
             <End Role="Sliders" EntitySet="Sliders" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -483,7 +484,7 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="MemberCard" Relationship="Model.FK_Accounts_MemberCards" FromRole="Account" ToRole="MemberCard" />
+          <NavigationProperty Name="MemberCard" Relationship="Self.FK_Accounts_MemberCards" FromRole="Accounts" ToRole="MemberCards" />
         </EntityType>
         <EntityType Name="Blog">
           <Key>
@@ -546,6 +547,26 @@
           <NavigationProperty Name="SpecialMemory" Relationship="Self.FK_Gift_SpecialMemory" FromRole="Gifts" ToRole="SpecialMemories" />
           <NavigationProperty Name="MemberCardLevels" Relationship="Self.FK_MemberCardLevel_Gift" FromRole="Gifts" ToRole="MemberCardLevels" />
         </EntityType>
+        <EntityType Name="LiveCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ReaderID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ScanAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MemberCardChargeRecord">
+          <Key>
+            <PropertyRef Name="RecordID" />
+          </Key>
+          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberCardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Money" Type="Double" />
+          <Property Name="ChargeDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="MemberCard" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCardChargeRecords" ToRole="MemberCards" />
+        </EntityType>
         <EntityType Name="MemberCardLevel">
           <Key>
             <PropertyRef Name="LevelID" />
@@ -558,8 +579,26 @@
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CardLevel" Relationship="Self.FK_MemberCardLevel_CardLevel" FromRole="MemberCardLevels" ToRole="CardLevels" />
           <NavigationProperty Name="Gift" Relationship="Self.FK_MemberCardLevel_Gift" FromRole="MemberCardLevels" ToRole="Gifts" />
+          <NavigationProperty Name="MemberCards" Relationship="Self.FK_MemberCard_MemberCardLevel" FromRole="MemberCardLevels" ToRole="MemberCards" />
           <NavigationProperty Name="VIPGift" Relationship="Self.FK_MemberCardLevel_VIPGift" FromRole="MemberCardLevels" ToRole="VIPGifts" />
-          <NavigationProperty Name="MemberCards" Relationship="Model.FK_MemberCard_MemberCardLevel" FromRole="MemberCardLevel" ToRole="MemberCard" />
+        </EntityType>
+        <EntityType Name="MemberCard">
+          <Key>
+            <PropertyRef Name="MemberCardID" />
+          </Key>
+          <Property Name="MemberCardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MemberCardLevelID" Type="Int32" />
+          <Property Name="Points" Type="Double" />
+          <Property Name="Balance" Type="Double" />
+          <Property Name="ModifyBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="MultipliedMoney" Type="Boolean" />
+          <NavigationProperty Name="Accounts" Relationship="Self.FK_Accounts_MemberCards" FromRole="MemberCards" ToRole="Accounts" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCards" ToRole="MemberCardChargeRecords" />
+          <NavigationProperty Name="MemberCardLevel" Relationship="Self.FK_MemberCard_MemberCardLevel" FromRole="MemberCards" ToRole="MemberCardLevels" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -617,6 +656,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Double" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
@@ -624,7 +664,6 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
-          <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Slider">
           <Key>
@@ -693,6 +732,18 @@
           <Property Name="Discount" Type="Double" />
           <NavigationProperty Name="MemberCardLevels" Relationship="Self.FK_MemberCardLevel_VIPGift" FromRole="VIPGifts" ToRole="MemberCardLevels" />
         </EntityType>
+        <Association Name="FK_Accounts_MemberCards">
+          <End Role="MemberCards" Type="Self.MemberCard" Multiplicity="0..1" />
+          <End Role="Accounts" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCards">
+              <PropertyRef Name="MemberCardID" />
+            </Principal>
+            <Dependent Role="Accounts">
+              <PropertyRef Name="MemberCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MemberCardLevel_CardLevel">
           <End Role="CardLevels" Type="Self.CardLevel" Multiplicity="0..1" />
           <End Role="MemberCardLevels" Type="Self.MemberCardLevel" Multiplicity="*" />
@@ -738,6 +789,30 @@
             </Principal>
             <Dependent Role="MemberCardLevels">
               <PropertyRef Name="GiftLevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberCardChargeRecords_MemberCards">
+          <End Role="MemberCards" Type="Self.MemberCard" Multiplicity="0..1" />
+          <End Role="MemberCardChargeRecords" Type="Self.MemberCardChargeRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCards">
+              <PropertyRef Name="MemberCardID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecords">
+              <PropertyRef Name="MemberCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberCard_MemberCardLevel">
+          <End Role="MemberCardLevels" Type="Self.MemberCardLevel" Multiplicity="0..1" />
+          <End Role="MemberCards" Type="Self.MemberCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCardLevels">
+              <PropertyRef Name="LevelID" />
+            </Principal>
+            <Dependent Role="MemberCards">
+              <PropertyRef Name="MemberCardLevelID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -807,7 +882,10 @@
           <EntitySet Name="CardLevels" EntityType="Self.CardLevel" />
           <EntitySet Name="Games" EntityType="Self.Game" />
           <EntitySet Name="Gifts" EntityType="Self.Gift" />
+          <EntitySet Name="LiveCards" EntityType="Self.LiveCard" />
+          <EntitySet Name="MemberCardChargeRecords" EntityType="Self.MemberCardChargeRecord" />
           <EntitySet Name="MemberCardLevels" EntityType="Self.MemberCardLevel" />
+          <EntitySet Name="MemberCards" EntityType="Self.MemberCard" />
           <EntitySet Name="Modules" EntityType="Self.Module" />
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGift" />
           <EntitySet Name="Promotions" EntityType="Self.Promotion" />
@@ -817,6 +895,10 @@
           <EntitySet Name="TypeSliders" EntityType="Self.TypeSlider" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="VIPGifts" EntityType="Self.VIPGift" />
+          <AssociationSet Name="FK_Accounts_MemberCards" Association="Self.FK_Accounts_MemberCards">
+            <End Role="MemberCards" EntitySet="MemberCards" />
+            <End Role="Accounts" EntitySet="Accounts" />
+          </AssociationSet>
           <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
             <End Role="CardLevels" EntitySet="CardLevels" />
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
@@ -832,6 +914,14 @@
           <AssociationSet Name="FK_MemberCardLevel_Gift" Association="Self.FK_MemberCardLevel_Gift">
             <End Role="Gifts" EntitySet="Gifts" />
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardChargeRecords_MemberCards" Association="Self.FK_MemberCardChargeRecords_MemberCards">
+            <End Role="MemberCards" EntitySet="MemberCards" />
+            <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCard_MemberCardLevel" Association="Self.FK_MemberCard_MemberCardLevel">
+            <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
+            <End Role="MemberCards" EntitySet="MemberCards" />
           </AssociationSet>
           <AssociationSet Name="FK_MemberCardLevel_VIPGift" Association="Self.FK_MemberCardLevel_VIPGift">
             <End Role="VIPGifts" EntitySet="VIPGifts" />
@@ -853,96 +943,7 @@
             <End Role="TypeSliders" EntitySet="TypeSliders" />
             <End Role="Sliders" EntitySet="Sliders" />
           </AssociationSet>
-          <EntitySet Name="LiveCards" EntityType="Model.LiveCard" />
-          <EntitySet Name="MemberCardChargeRecords" EntityType="Model.MemberCardChargeRecord" />
-          <EntitySet Name="MemberCards" EntityType="Model.MemberCard" />
-          <AssociationSet Name="FK_Accounts_MemberCards" Association="Model.FK_Accounts_MemberCards">
-            <End Role="MemberCard" EntitySet="MemberCards" />
-            <End Role="Account" EntitySet="Accounts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardChargeRecords_MemberCards" Association="Model.FK_MemberCardChargeRecords_MemberCards">
-            <End Role="MemberCard" EntitySet="MemberCards" />
-            <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCard_MemberCardLevel" Association="Model.FK_MemberCard_MemberCardLevel">
-            <End Role="MemberCardLevel" EntitySet="MemberCardLevels" />
-            <End Role="MemberCard" EntitySet="MemberCards" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="LiveCard">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CardID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ReaderID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ScanAt" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="MemberCardChargeRecord">
-          <Key>
-            <PropertyRef Name="RecordID" />
-          </Key>
-          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MemberCardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Money" Type="Double" />
-          <Property Name="ChargeDate" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="MemberCard" Relationship="Model.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCardChargeRecord" ToRole="MemberCard" />
-        </EntityType>
-        <EntityType Name="MemberCard">
-          <Key>
-            <PropertyRef Name="MemberCardID" />
-          </Key>
-          <Property Name="MemberCardID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="MemberCardLevelID" Type="Int32" />
-          <Property Name="Points" Type="Double" />
-          <Property Name="Balance" Type="Double" />
-          <Property Name="ModifyBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="Boolean" />
-          <Property Name="MultipliedMoney" Type="Boolean" />
-          <NavigationProperty Name="Accounts" Relationship="Model.FK_Accounts_MemberCards" FromRole="MemberCard" ToRole="Account" />
-          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCard" ToRole="MemberCardChargeRecord" />
-          <NavigationProperty Name="MemberCardLevel" Relationship="Model.FK_MemberCard_MemberCardLevel" FromRole="MemberCard" ToRole="MemberCardLevel" />
-        </EntityType>
-        <Association Name="FK_Accounts_MemberCards">
-          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="0..1" />
-          <End Type="Model.Account" Role="Account" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberCard">
-              <PropertyRef Name="MemberCardID" />
-            </Principal>
-            <Dependent Role="Account">
-              <PropertyRef Name="MemberCardID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardChargeRecords_MemberCards">
-          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="0..1" />
-          <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberCard">
-              <PropertyRef Name="MemberCardID" />
-            </Principal>
-            <Dependent Role="MemberCardChargeRecord">
-              <PropertyRef Name="MemberCardID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCard_MemberCardLevel">
-          <End Type="Model.MemberCardLevel" Role="MemberCardLevel" Multiplicity="0..1" />
-          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberCardLevel">
-              <PropertyRef Name="LevelID" />
-            </Principal>
-            <Dependent Role="MemberCard">
-              <PropertyRef Name="MemberCardLevelID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1031,6 +1032,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LiveCards">
+            <EntityTypeMapping TypeName="Model.LiveCard">
+              <MappingFragment StoreEntitySet="LiveCards">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CardID" ColumnName="CardID" />
+                <ScalarProperty Name="ReaderID" ColumnName="ReaderID" />
+                <ScalarProperty Name="ScanAt" ColumnName="ScanAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberCardChargeRecords">
+            <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
+              <MappingFragment StoreEntitySet="MemberCardChargeRecords">
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="ChargeDate" ColumnName="ChargeDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MemberCardLevels">
             <EntityTypeMapping TypeName="Model.MemberCardLevel">
               <MappingFragment StoreEntitySet="MemberCardLevels">
@@ -1040,6 +1062,22 @@
                 <ScalarProperty Name="VIP" ColumnName="VIP" />
                 <ScalarProperty Name="VIPGiftID" ColumnName="VIPGiftID" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberCards">
+            <EntityTypeMapping TypeName="Model.MemberCard">
+              <MappingFragment StoreEntitySet="MemberCards">
+                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
+                <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
+                <ScalarProperty Name="Points" ColumnName="Points" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="MultipliedMoney" ColumnName="MultipliedMoney" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1096,8 +1134,8 @@
           <EntitySetMapping Name="SettingGames">
             <EntityTypeMapping TypeName="Model.SettingGame">
               <MappingFragment StoreEntitySet="SettingGame">
-                <ScalarProperty Name="IP" ColumnName="IP" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
@@ -1170,43 +1208,6 @@
                 <ScalarProperty Name="Moctail" ColumnName="Moctail" />
                 <ScalarProperty Name="VipRoom" ColumnName="VipRoom" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LiveCards">
-            <EntityTypeMapping TypeName="Model.LiveCard">
-              <MappingFragment StoreEntitySet="LiveCards">
-                <ScalarProperty Name="ScanAt" ColumnName="ScanAt" />
-                <ScalarProperty Name="ReaderID" ColumnName="ReaderID" />
-                <ScalarProperty Name="CardID" ColumnName="CardID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MemberCardChargeRecords">
-            <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
-              <MappingFragment StoreEntitySet="MemberCardChargeRecords">
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="ChargeDate" ColumnName="ChargeDate" />
-                <ScalarProperty Name="Money" ColumnName="Money" />
-                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
-                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MemberCards">
-            <EntityTypeMapping TypeName="Model.MemberCard">
-              <MappingFragment StoreEntitySet="MemberCards">
-                <ScalarProperty Name="MultipliedMoney" ColumnName="MultipliedMoney" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="Points" ColumnName="Points" />
-                <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
-                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
