@@ -35,6 +35,9 @@
         <AssociationConnector Association="Model.FK_Modules_Users1" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_Promotion_Users" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_Slider_TypeSlider" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Model.Role" Width="1.5" PointX="3.5" PointY="16.375" />
+        <AssociationConnector Association="Model.FK_MemberCardChargeRecords_Accounts" />
+        <AssociationConnector Association="Model.FK_User_Roles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

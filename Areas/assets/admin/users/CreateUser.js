@@ -59,17 +59,7 @@ var Add = function () {
 
                     },
                     
-                    newRePassword: {
-                        validators: {
-                            identical: {
-                                compare: function () {
-                                    return form.querySelector('[name="Password"]').value;
-                                },
-                                message: 'Xác nhận mật khẩu chưa đúng',
-                            },
-                        },
-
-                    }
+                  
                 },
 
                 plugins: {
@@ -86,11 +76,9 @@ var Add = function () {
             }
         );
         form.querySelector('[name="Password"]').addEventListener('input', function () {
-            fv.revalidateField('RePassword');
+            validation.revalidateField('RePassword');
         });
-        form.querySelector('[name="newPassword"]').addEventListener('input', function () {
-            fv.revalidateField('newRePassword');
-        });
+      
 
         $('.btnCreate').click(function () {
             let data = $('#UserForm').serialize()
@@ -193,4 +181,5 @@ var Add = function () {
 // Class Initialization
 jQuery(document).ready(function () {
     Add.init();
+    $('.select2').select2();
 });

@@ -30,6 +30,7 @@ namespace JPGame.Areas.Admin.Controllers
                     Name = a.Name.Trim(),
                     CreateAt = a.CreateDate,
                     Update = a.ModifyDate,
+                    Role = a.Role1.Description.Trim(),
                     a.Status
                 });
                 ///Tìm kiếm
@@ -94,6 +95,7 @@ namespace JPGame.Areas.Admin.Controllers
         // GET: Admin/Administator/Create
         public ActionResult Create()
         {
+           ViewBag.Roles = db.Roles.ToList();
             return View();
         }
 
@@ -149,6 +151,7 @@ namespace JPGame.Areas.Admin.Controllers
         // GET: Admin/Administator/Edit/5
         public ActionResult Edit(string id)
         {
+            ViewBag.Roles = db.Roles.ToList();
             var user = db.Users.Find(id);
             if(string.IsNullOrEmpty(id)|| user == null)
             {

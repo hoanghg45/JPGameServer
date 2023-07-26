@@ -1,491 +1,137 @@
-﻿"use strict";
+﻿var page = 1;
+var isLoadingData = false;
+var isFull = false;
+(function DataTable() {
 
-// Class definition
-var KTWizard1 = function () {
-	// Base elements
-	var _wizardEl;
-	var _formEl;
-	var _wizardObj;
-	var _validations = [];
+    ShowTable(page)
+    $('.table-responsive').scroll(function () {
+        /* var element = $(this)[0];*/
+        var scrollTop = $(this).scrollTop() + 3;
+        var scrollHeight = $(this)[0].scrollHeight;
+        var windowHeight = $(this).outerHeight();
 
-	// Private functions
-	var _initValidation = function () {
-		// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-		// Step 1
-		_validations.push(FormValidation.formValidation(
-			_formEl,
-			{
-				fields: {
-					MoneyPay: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu số tiền nạp'
-							}
-						}
-					},
-					LevelName: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu cấp độ thẻ'
-							},
+        if (scrollTop + windowHeight >= scrollHeight && !isLoadingData && !isFull) {
+            // Đạt đến cuối trang và không đang lấy dữ liệu
+            $('.spinner').show();
+            // Gọi hàm để lấy dữ liệu tiếp theo
+            ShowTable(page);
+        }
+    });
+    InitSearch()
+})()
 
-						}
-					},
-					GiftLevelName: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu cấp độ quà'
-							},
+function ShowTable(pagenumber, search) {
 
-						}
-					},
-					RewardRate: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu tỉ lệ tiền'
-							},
+    $.ajax({
+        type: "GET",
+        url: "/MemberCard/DataTable",
+        data: {
+            page: pagenumber,
+            search
+        },
 
-						}
-					},
-					PointPlus: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu sô tiền tặng'    
-							},
+        datatype: 'json',
+        success: function (data) {
+            let $table = $('#membercardtable')
+            let body = $table.find('tbody')
 
-						}
-					},
+            //Hiển thị dữ liệu trong bảng
 
-				},
-				plugins: {
-					trigger: new FormValidation.plugins.Trigger(),
-					// Bootstrap Framework Integration
-					bootstrap: new FormValidation.plugins.Bootstrap({
-						//eleInvalidClass: '',
-						eleValidClass: '',
-					})
-				}
-			}
-		));
+            if (data.data && data.data.length > 0) {
+                $.each(data.data, function (i, v) {
+                    let tr = `<tr>
+                            <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
+                            <td>${v.MemberCardID}</td>
+                            <td>${v.Level}</td>
+                            <td>${v.Owner}</td>
+                            <td>${v.Status}</td>
+               
+                            <td nowrap="nowrap">
+				            <a href="/Admin/Administrator/Edit/${v.ID}" class="btn btn-sm btn-clean btn-icon" title="Sửa">
+                            <i class="la la-edit"></i>
+                            </a>
+                                <a href="javascript:Remove('${v.ID}')" class="btn btn-sm btn-clean btn-icon" title="Xóa">
+                                    <i class="la la-trash"></i>
+                                    </a>
+                            </td>
+                            </tr>`
 
-		// Step 2
-		_validations.push(FormValidation.formValidation(
-			_formEl,
-			{
-				fields: {
-					AccountName: {
-						validators: {
-							notEmpty: {
-								message: 'Vui lòng nhập tên tài khoản'
-							}
-						}
-					},
-					FullName: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu họ và tên'
-							}
-						}
-					},
-					DateOfBirth: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu ngày sinh'
-							}
-						}
-					},
-					Email: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu nhập địa chỉ Email'
-							}
-						}
-					},
-					Phone: {
-						validators: {
-							notEmpty: {
-								message: 'Yêu cầu nhập số điện thoại'
-							}
-						}
-					},
 
-				},
-				plugins: {
-					trigger: new FormValidation.plugins.Trigger(),
-					// Bootstrap Framework Integration
-					bootstrap: new FormValidation.plugins.Bootstrap({
-						//eleInvalidClass: '',
-						eleValidClass: '',
-					})
-				}
-			}
-		));
+                    body.append(tr)
+                })
+                pagenumber++
+                page = pagenumber
 
-		
 
-		// Step 3
-		_validations.push(FormValidation.formValidation(
-			_formEl,
-			{
-				fields: {
-					
-				},
-				plugins: {
-					trigger: new FormValidation.plugins.Trigger(),
-					// Bootstrap Framework Integration
-					bootstrap: new FormValidation.plugins.Bootstrap({
-						//eleInvalidClass: '',
-						eleValidClass: '',
-					})
-				}
-			}
-		));
-		// Step 4
-		_validations.push(FormValidation.formValidation(
-			_formEl,
-			{
-				fields: {
-					CardID: {
-						validators: {
-							notEmpty: {
-								message: 'Vui lòng quét lại'
-							}
-						}
-					},
-					
-				},
-				plugins: {
-					trigger: new FormValidation.plugins.Trigger(),
-					// Bootstrap Framework Integration
-					bootstrap: new FormValidation.plugins.Bootstrap({
-						//eleInvalidClass: '',
-						eleValidClass: '',
-					})
-				}
-			}
-		));
 
-	
-	}
+            } else {
+                isFull = true
+            }
+            $('.spinner').hide();
+            isLoadingData = false;
+            $('#QtyNote').text(`Displaying ${data.to} of ${data.total} records`)
+        },
+        error: function () {
+            // Xử lý lỗi (nếu cần thiết)
+            // Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
+            $('.spinner').hide();
+            isLoadingData = false;
+        }
+    })
 
-	var _initWizard = function () {
-		// Initialize form wizard
-		_wizardObj = new KTWizard(_wizardEl, {
-			startStep: 1, // initial active step number
-			clickableSteps: false  // allow step clicking
-		});
 
-		// Validation before going to next page
-		var isWelcome = false
-		_wizardObj.on('change', function (wizard) {
-			
-			if (wizard.getStep() > wizard.getNewStep()) {
-				/// Nếu là thẻ welcome thì bỏ bước thông tin
-				if (wizard.getStep() == 3 && isWelcome)
-					wizard.goTo(wizard.getStep()-2);
-				return; // Skip if stepped back
-			}
 
-			// Validate form before change wizard step
-			var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
-			
-			if (validator) {
-				validator.validate().then(function (status) {
-					if (status == 'Valid') {
-						let nextStep = wizard.getNewStep()
-						if (nextStep == 2) {
-							/// Nếu là thẻ welcome thì bỏ bước thông tin
-							nextStep = SkipInfoStep(nextStep)
+}
+function Remove(id) {
 
-                        }
-						if (nextStep == 3) {
-							SetReviewStep()
-                        }
-						///
-						wizard.goTo(nextStep);
-						
-						KTUtil.scrollTop();
-					} else {
-						Swal.fire({
-							text: "Đã có lỗi trong quá trình, vui lòng thử lại",
-							icon: "error",
-							buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
-							heightAuto: false,
-							customClass: {
-								confirmButton: "btn font-weight-bold btn-light"
-							}
-						}).then(function () {
-							KTUtil.scrollTop();
-						});
-					}
-				});
-			}
-			///
-			function SetReviewStep() {
-				if ($('input[name = "LevelName"]').val() == "Welcome") {
-					$('#NameContain').hide()
-				} else {
-					$('input[name = "FullNameReview"]').val($('input[name = "FullName"]').val())
-					$('#NameContain').show()
-                }
-				$('input[name = "LevelNameReview"]').val($('input[name = "LevelName"]').val())
-				let rate = Number($('input[name = "RewardRate"]').val())
-				let money = Number($('input[name = "MoneyPay"]').val().replaceAll(",", ""))
-				let moneyReward = rate != 0? money * rate / 100 : money 
-				$('input[name = "Money"]').val(moneyReward.toLocaleString('en-US'))
-				$('input[name = "Point"]').val($('input[name = "PointPlus"]').val())
-			}
-			function SkipInfoStep(nextStep) {
-				isWelcome = $('input[name = "LevelName"]').val() == "Welcome"
-				return isWelcome ? 3 : nextStep
-			}
-			return false;  // Do not change wizard step, further action will be handled by he validator
-		});
+    Swal.fire({
+        title: 'Bạn có muốn xóa dữ liệu này?',
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: 'Có, xóa!',
 
-		// Change event
-		_wizardObj.on('changed', function (wizard) {
-			KTUtil.scrollTop();
-		});
-
-		// Submit event
-		_wizardObj.on('submit', function (wizard) {
-			// Validate form before change wizard step
-			var validator = _validations[wizard.getStep() - 1];
-			if (validator) {
-				validator.validate().then(function (status) {
-					if (status == 'Valid') {
-						AddMemberCard()
-					} else {
-						Swal.fire({
-							text: "Đã có lỗi trong quá trình, vui lòng thử lại",
-							icon: "error",
-							buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
-							heightAuto: false,
-							customClass: {
-								confirmButton: "btn font-weight-bold btn-light"
-							}
-						}).then(function () {
-							KTUtil.scrollTop();
-						});
-					}
-				});
-			}
-			
-		});
-
-		function AddMemberCard() {
-			let data = $('#createMemberCardForm').serializeArray()
+        customClass: {
+            actions: 'my-actions',
+            cancelButton: 'order-1 right-gap',
+            confirmButton: 'order-2',
+            denyButton: 'order-3',
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
-                type: "POST",
-				url: "/MemberCard/Create",
-                data: data,
-                datatype: "json",
-                success: function (result) {
-                    if (result.status == "Success") {
+                type: "Post",
+                url: "/Administrator/Delete",
+                data: {
+                    id
+                },
 
-                    
-						toastr.success('Thành công!')
-						location.reload()
-                    } else {
+                datatype: 'json',
+                success: function (data) {
+                    if (data.status == 'success') {
+                        toastr.success('Đã xóa thành công')
+                        $('#membercardtable').find('tbody').empty()
+                        ShowTable(1)
                        
-                        toastr.error(data.message,'Lỗi')
                     }
+
+                    else
+                        toastr.error(data.message, 'Lỗi')
                 },
                 error: function () {
-                    toastr.error('Lỗi')
+
                 }
             })
-        
         }
-	}
-
-	return {
-		// public functions
-		init: function () {
-			_wizardEl = KTUtil.getById('kt_wizard');
-			_formEl = KTUtil.getById('createMemberCardForm');
-
-			_initValidation();
-			_initWizard();
-		}
-	};
-}();
-
-jQuery(document).ready(function () {
-	KTWizard1.init();
-	InitInputEvent()
-	initMasks()
-	InitLoadingButton()
-});
-
-
-function GetUser(UserName) {
-	$.ajax({
-		type: "GET",
-		url: "/Login/GetAccountInfo",
-		data: {
-			UserName
-		},
-
-		datatype: 'json',
-		success: function (data) {
-			if (data.code == 200) {
-				
-				$('input[name="FullName"]').val(data.data.FullName)
-				$('input[name="Email"]').val(data.data.Email)
-				$('input[name="Phone"]').val(data.data.Phone)
-				$('input[name="DateOfBirth"]').val(formatDate(data.data.DateOfBirth))
-			} else {
-				toastr.error(data.msg,"Lỗi!")
-            }
-
-
-		},
-		error: function () {
-			// Xử lý lỗi (nếu cần thiết)
-			// Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
-			
-		}
-	})
-}
-
-function GetMemberCardLevel(LevelFee) {
-	$.ajax({
-		type: "GET",
-		url: "/MemberCardLevel/GetMemberCardLevel",
-		data: {
-			LevelFee
-		},
-
-		datatype: 'json',
-		success: function (data) {
-			if (data.status == "Success") {
-				
-				$('input[name="LevelName"]').val(data.data.LevelName)
-				$('input[name="GiftLevelName"]').val(data.data.GiftLevelName)
-				$('input[name="RewardRate"]').val(data.data.RewardRate)
-				$('input[name="PointPlus"]').val(data.data.PointPlus)
-				$('#AvailableTemplates').prop("checked", data.data.AvailableTemplates);
-				$('#CustomizeAvailableTemplate').prop("checked", data.data.CustomizeAvailableTemplate);
-				$('#Holiday').prop("checked", data.data.Holiday);
-				$('#Special').prop("checked", data.data.Special);
-				$('#Personal').prop("checked", data.data.Personal);
-				$('#VIP').prop("checked", data.data.VIP);
-				$('#Mocktail').prop("checked", data.data.Mocktail);
-				$('#VipRoom').prop("checked", data.data.VipRoom);
-			} else {
-				toastr.error(data.message,"Lỗi!")
-            }
-
-
-		},
-		error: function () {
-			// Xử lý lỗi (nếu cần thiết)
-			// Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
-			
-		}
-	})
-}
-function initMasks() {
-	$('.money').mask('000,000,000,000,000,000,000,000,000', {
-		reverse: true
-	});
+    })
 
 }
-function InitLoadingButton() {
-	$('#loadingBtn').hide()
-	$('#iconStatus').hide()
-	$('#CheckCardBtn').on('click', function () {
-		let	$this = $(this)
-		$this.hide();
-		$('#loadingBtn').show()
-		$("#iconStatus").removeClass()
-		GetCurrCard($this, $('input[name="LevelName"]').val())
-		$('input[name="CardID"]').val("")
-		$('#iconStatus').show()
-	});
+function InitSearch() {
+    $('#kt_datatable_search_query').keypress(function (e) {
+        if (e.which == 13) {
+            $('#membercardtable').find('tbody').empty()
+            search = $('#kt_datatable_search_query').val().trim()
 
-}
-function GetCurrCard($this,level) {
-	$.ajax({
-		type: "GET",
-		url: "/MemberCard/GetCurrentCardForCreate",
-		data: { level },
-
-		datatype: 'json',
-		complete: function () {
-			$this.show();
-			$('#loadingBtn').hide()
-		
-        },
-		success: function (data) {
-			if (data.status == "Success") {
-				$('#iconStatus').addClass("flaticon2-check-mark text-success");
-				$('#textNoti').text("Thẻ hợp lệ!");
-				$('input[name="CardID"]').val(data.card)
-			} else {
-				toastr.error("Lỗi!")
-				
-				$('#textNoti').text(data.message);
-				$('#iconStatus').addClass("flaticon2-delete text-danger");
-
-			}
-
-
-		},
-		error: function () {
-			// Xử lý lỗi (nếu cần thiết)
-			// Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
-
-		}
-	})
-}
-function InitInputEvent() {
-
-	///AccoutName
-	$('input[name="AccountName"]').on('keypress', function (event) {
-		if (event.which === 13) {
-			event.preventDefault();
-			// Xử lý logic khi nhấn ngoài input
-
-			$('input[name="FullName"]').val("")
-			$('input[name="Email"]').val("")
-			$('input[name="Phone"]').val("")
-			$('input[name="DateOfBirth"]').val("")
-			GetUser($(this).val())
-		}
-	});
-	$('input[name="AccountName"]').on('blur', function (event) {
-		event.preventDefault();
-		// Xử lý logic khi nhấn ngoài input
-
-		$('input[name="FullName"]').val("")
-		$('input[name="Email"]').val("")
-		$('input[name="Phone"]').val("")
-		$('input[name="DateOfBirth"]').val("")
-		GetUser($(this).val())
-	});
-
-
-	//Money
-	$('input[name="MoneyPay"]').on('blur', function (event) {
-
-		
-		let money = $(this).val().replaceAll(',', '')
-		
-		GetMemberCardLevel(money)
-	});
-	$('input[name="MoneyPay"]').on('keypress', function (event) {
-		if (event.which === 13) {
-			event.preventDefault();
-			// Xử lý logic khi nhấn phím Enter
-			let money = $(this).val().replaceAll(',', '')
-
-			GetMemberCardLevel(money)
-		}
-	});
-	
-		
+            ShowTable(1, search)
+        }
+    })
 }

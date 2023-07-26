@@ -134,4 +134,5 @@ var Add = function () {
 // Class Initialization
 jQuery(document).ready(function () {
     Add.init();
+    $('.select2').select2()
 });

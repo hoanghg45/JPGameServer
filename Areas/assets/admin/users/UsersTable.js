@@ -43,6 +43,7 @@ function ShowTable(pagenumber, search) {
                             <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
                             <td>${v.UserName}</td>
                             <td>${v.Name}</td>
+                            <td>${v.Role}</td>
                             <td>${v.Status}</td>
                
                             <td nowrap="nowrap">
@@ -108,6 +109,7 @@ function Remove(id) {
                 success: function (data) {
                     if (data.status == 'success') {
                         toastr.success('Đã xóa thành công')
+                        $('#accounttable').find('tbody').empty()
                         ShowTable(1)
                     }
                 
@@ -127,6 +129,7 @@ function InitSearch() {
         if (e.which == 13) {
             $('#accounttable').find('tbody').empty()
             search = $('#kt_datatable_search_query').val().trim()
+            
             ShowTable(1, search)
         }
     })

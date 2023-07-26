@@ -39,5 +39,6 @@ namespace JPGame
         public virtual ICollection<Module> Modules1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Promotion> Promotions { get; set; }
+        public virtual Role Role1 { get; set; }
     }
 }
