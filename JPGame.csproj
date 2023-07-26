@@ -58,6 +58,7 @@
       <HintPath>packages\HtmlAgilityPack.1.11.49\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -79,6 +80,7 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -161,7 +163,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountsAdminController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdministratorController.cs" />
     <Compile Include="Areas\Admin\Controllers\BlogAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\DataApiController.cs" />
@@ -2347,6 +2348,9 @@
     <Content Include="Areas\Admin\Views\SettingGameAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SettingGameAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\SettingGameAdmin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCard\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCard\MoneyCharge.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCardLevel\AddMemberCard.cshtml" />
     <EntityDeploy Include="Context.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Context.Designer.cs</LastGenOutput>
