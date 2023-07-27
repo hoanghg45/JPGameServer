@@ -14,13 +14,14 @@ namespace JPGame.Areas.Admin.Controllers
     public class MemberCardController : Controller
     {
         readonly DBEntities db = new DBEntities();
+        readonly string reader = "ef7f36c1fc1d31c7";
         // GET: Admin/MemberCard
         public ActionResult Index()
         {
             return View();
         }
         [HttpGet]
-        public JsonResult DataTable(int page = 0)
+        public JsonResult DataTable(int page = 0, string search ="")
         {
             var data = db.MemberCards.Select(a => new
             {
@@ -32,6 +33,7 @@ namespace JPGame.Areas.Admin.Controllers
                 
             });
 
+            data = data.WhereIf(!string.IsNullOrEmpty(search), a => a.MemberCardID.Contains(search));
 
             //Xử lí phân trang
 
@@ -102,7 +104,7 @@ namespace JPGame.Areas.Admin.Controllers
                        , JsonRequestBehavior.AllowGet
                        );
                 }
-                if (!card.MemberCardLevel.CardLevel.LevelName.Trim().Equals("Welcome"))
+                if (!card.MemberCardLevel.CardLevel.ID.Trim().Equals("level1"))
                 {
                     string accname = collection["AccountName"];
                     var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
@@ -191,10 +193,11 @@ namespace JPGame.Areas.Admin.Controllers
                 double ChargeMoney = Double.Parse(collection["MoneyPay"].Replace(",", ""));//Số tiền nạp
                 double FinalMoney = Double.Parse(collection["Money"].Replace(",", ""));//Số tiền sau khi đã tính
                 double FinalPoint = Double.Parse(collection["Point"].Replace(",", ""));//Số điểm sau khi đã tính
-
+                var FirstLevel = db.CardLevels.Where(l => l.ID.Trim().Equals("level1")).FirstOrDefault();
                 //Nếu không thay đổi cấp độ
                 if (oldCard.MemberCardLevel.CardLevel.LevelName.Equals(newCard.MemberCardLevel.CardLevel.LevelName))
                 {
+                    //if(oldCard.Balance < FirstLevel.LevelFee || newCard.Balance )
                     oldCard.Balance = FinalMoney;
                     oldCard.Points = FinalPoint;
                 }
@@ -303,7 +306,7 @@ namespace JPGame.Areas.Admin.Controllers
                 DateTime now = DateTime.Now;
                 DateTime oneMinuteAgo = now.AddMinutes(-2).AddSeconds(-now.Second);
 
-                string reader = "7374d2c8e7b943c7";
+               
                 var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
                 //var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader)).FirstOrDefault();
 
@@ -398,7 +401,7 @@ namespace JPGame.Areas.Admin.Controllers
             DateTime now = DateTime.Now;
             DateTime oneMinuteAgo = now.AddMinutes(-2).AddSeconds(-now.Second);
              
-            string reader = "7374d2c8e7b943c7";
+           
             var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
             //var currCard = db.LiveCards.Where(c => c.ReaderID.Equals(reader)).FirstOrDefault();
             
@@ -441,7 +444,18 @@ namespace JPGame.Areas.Admin.Controllers
              , JsonRequestBehavior.AllowGet
              );
             }
+            if (memberCard.Accounts.Any())
+            {
+                    return Json(
+               new
+               {
+                   status = "Error",
+                   message = "Thẻ đã được sử dụng!"
 
+               }
+               , JsonRequestBehavior.AllowGet
+               );
+            }
             return this.Json(
                 new
                 {
@@ -503,18 +517,20 @@ namespace JPGame.Areas.Admin.Controllers
             {
                 if (file != null && file.ContentLength > 0)
                 {
+                    var UserID = (Session["UserID"].ToString());
+                    var User = db.Users.Find(UserID);
                     // Xử lý file Excel tại đây (lưu vào thư mục, đọc dữ liệu, ...)
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                     using (var package = new ExcelPackage(file.InputStream))
                     {
                         // Chọn sheet trong file (ví dụ chọn sheet đầu tiên)
                         var workSheet = package.Workbook.Worksheets[0];
-
+                        List<MemberCard> memberCards = new List<MemberCard>();
                         // Đọc dữ liệu từ sheet và xử lý theo nhu cầu của bạn
                         for (int row = 2; row <= workSheet.Dimension.Rows; row++)
                         {
 
-
+                           
                             var CardID = workSheet.Cells[row, 2].Text;
                             var Type = workSheet.Cells[row, 4].Text;
                             if (string.IsNullOrEmpty(CardID) || string.IsNullOrEmpty(Type))
@@ -534,9 +550,13 @@ namespace JPGame.Areas.Admin.Controllers
                                 Points = 0,
                                 Status = false,
                                 MemberCardLevelID = memberLevel.LevelID,
+                                CreateDate = DateTime.Now,
+                                CreateBy = User.Name.Trim(),
+
                             };
-                            db.MemberCards.Add(memberCard);
+                            memberCards.Add(memberCard);
                         }
+                        db.MemberCards.AddRange(memberCards);
                         db.SaveChanges();
                     }
 

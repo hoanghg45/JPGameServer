@@ -249,7 +249,7 @@ var KTWizard1 = function () {
 			}
 			///
 			function SetReviewStep() {
-				if ($('input[name = "LevelName"]').val() == "Welcome") {
+				if ($('input[name = "LevelName"]').val() == "Welcome" && !isEnterInfor) {
 					$('#NameContain').hide()
 				} else {
 					
@@ -274,11 +274,12 @@ var KTWizard1 = function () {
 				$('input[name = "Point"]').val(point)
 			}
 			function SkipInfoStep(nextStep) {
-				var levelName = $('input[name="LevelName"]').val();
-				var currLevelName = $('input[name="CurrLevelName"]').val();
+				var oldTotal = Number($('input[name="CurrTotal"]').val().replaceAll(',',''));
+				var newTotal = Number($('input[name="TotalMoneyPay"]').val().replaceAll(',',''));
+				
 
 
-				isEnterInfor = currLevelName == "Welcome" && levelName != currLevelName
+				isEnterInfor = oldTotal < 3000000 && newTotal >= 3000000
 				return isEnterInfor ? nextStep : nextStep+1
 			}
 			return false;  // Do not change wizard step, further action will be handled by he validator

@@ -237,7 +237,7 @@ var KTWizard1 = function () {
 				$('input[name = "Point"]').val($('input[name = "PointPlus"]').val())
 			}
 			function SkipInfoStep(nextStep) {
-				isWelcome = $('input[name = "LevelName"]').val() == "Welcome"
+				isWelcome = Number($('input[name = "MoneyPay"]').val().replaceAll(',','')) < 3000000
 				return isWelcome ? 3 : nextStep
 			}
 			return false;  // Do not change wizard step, further action will be handled by he validator

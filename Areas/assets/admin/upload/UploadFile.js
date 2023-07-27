@@ -108,14 +108,14 @@ var Add = function () {
                 contentType: false,
                 beforeSend: function () {
                     Swal.fire({
-                        title: 'Loading...',
+                        title: 'Đang xử lí',
+                        allowEscapeKey: false,
                         allowOutsideClick: false,
-                        onBeforeOpen: () => {
+                        onOpen: () => {
                             Swal.showLoading();
                         }
                     });
                 },
-
                 success: function (response) {
                     Swal.close();
                     if (response.status) {
