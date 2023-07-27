@@ -1,6 +1,9 @@
-﻿using JPGame.Areas.Security;
+﻿using JPGame.Areas.Admin.Extension;
+using JPGame.Areas.Security;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,7 +19,54 @@ namespace JPGame.Areas.Admin.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public JsonResult DataTable(int page = 0)
+        {
+            var data = db.MemberCards.Select(a => new
+            {
+                a.MemberCardID,
+                Level = a.MemberCardLevel.CardLevel.LevelName.Trim(),
+                Owner = a.Accounts.Any()? a.Accounts.FirstOrDefault().AccountName.Trim() : "",
+                Status = a.Status.HasValue && a.Status == true,
+                CreateAt= a.CreateDate
+                
+            });
 
+
+            //Xử lí phân trang
+
+            //Số dữ liệu trên 1 trang
+            int pageSize = 10;
+            page = (page > 0) ? page : 1;
+            int start = (int)(page - 1) * pageSize;
+
+            ViewBag.pageCurrent = page;
+            int totalBill = data.Count();
+            float totalNumsize = (totalBill / (float)pageSize);
+
+            int numSize = (int)Math.Ceiling(totalNumsize);
+            ViewBag.numSize = numSize;
+            data = data.OrderByDescending(d => d.CreateAt).Skip(start).Take(pageSize);
+
+            var fromto = PaginationExtension.FromTo(totalBill, (int)page, pageSize);
+
+            int from = fromto.Item1;
+            int to = fromto.Item2;
+            return this.Json(
+          new
+          {
+              data,
+              pageCurrent = page,
+              numSize,
+              total = totalBill,
+              size = pageSize,
+              from,
+              to
+
+          }
+          , JsonRequestBehavior.AllowGet
+          );
+        }
         // GET: Admin/MemberCard/Details/5
         public ActionResult Details(int id)
         {
@@ -445,6 +495,60 @@ namespace JPGame.Areas.Admin.Controllers
             {
                 return View();
             }
+        }
+        [HttpPost]
+        public ActionResult UploadExcel(HttpPostedFileBase file)
+        {
+            try
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    // Xử lý file Excel tại đây (lưu vào thư mục, đọc dữ liệu, ...)
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    using (var package = new ExcelPackage(file.InputStream))
+                    {
+                        // Chọn sheet trong file (ví dụ chọn sheet đầu tiên)
+                        var workSheet = package.Workbook.Worksheets[0];
+
+                        // Đọc dữ liệu từ sheet và xử lý theo nhu cầu của bạn
+                        for (int row = 2; row <= workSheet.Dimension.Rows; row++)
+                        {
+
+
+                            var CardID = workSheet.Cells[row, 2].Text;
+                            var Type = workSheet.Cells[row, 4].Text;
+                            if (string.IsNullOrEmpty(CardID) || string.IsNullOrEmpty(Type))
+                            {
+                                return Json(new { status = false, message = $"Thông tin ở dòng {row} không đầy đủ!" });
+                            }
+                            Type = Type.ToLower();
+                            if (!db.MemberCardLevels.Any(l => l.CardLevel.LevelName.Trim().ToLower().Equals(Type)))
+                            {
+                                return Json(new { status = false, message = $"Loại thẻ ở dòng {row} không tồn tại!" });
+                            }
+                            var memberLevel = db.MemberCardLevels.Where(l => l.CardLevel.LevelName.Trim().ToLower().Equals(Type)).FirstOrDefault();
+                            var memberCard = new MemberCard
+                            {
+                                MemberCardID = CardID.Trim(),
+                                Balance = 0,
+                                Points = 0,
+                                Status = false,
+                                MemberCardLevelID = memberLevel.LevelID,
+                            };
+                            db.MemberCards.Add(memberCard);
+                        }
+                        db.SaveChanges();
+                    }
+
+                    return Json(new { status = true });
+                }
+
+                return Json(new { status = false, message = "Không có file nào được thêm" });
+            }catch (Exception e)
+            {
+                return Json(new { status = false, message = e });
+            }
+           
         }
     }
 }

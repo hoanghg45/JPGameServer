@@ -19,7 +19,9 @@ namespace JPGame
         public Nullable<double> Money { get; set; }
         public Nullable<System.DateTime> ChargeDate { get; set; }
         public string CreateBy { get; set; }
+        public string AccountID { get; set; }
     
         public virtual MemberCard MemberCard { get; set; }
+        public virtual Account Account { get; set; }
     }
 }

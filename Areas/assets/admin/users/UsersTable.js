@@ -20,8 +20,8 @@ var isFull = false;
     InitSearch()
 })()
 
-function ShowTable(pagenumber,search) {
-    
+function ShowTable(pagenumber, search) {
+
     $.ajax({
         type: "GET",
         url: "/Administrator/DataTable",
@@ -40,22 +40,23 @@ function ShowTable(pagenumber,search) {
             if (data.data && data.data.length > 0) {
                 $.each(data.data, function (i, v) {
                     let tr = `<tr>
-                <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
-                <td>${v.UserName}</td>
-                <td>${v.Name}</td>
-                <td>${v.Status}</td>
+                            <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
+                            <td>${v.UserName}</td>
+                            <td>${v.Name}</td>
+                            <td>${v.Role}</td>
+                            <td>${v.Status}</td>
                
-                  <td nowrap="nowrap">
-					<a href="/Admin/SettingGameAdmin/Edit/${v.UserID}" class="btn btn-sm btn-clean btn-icon" title="Sửa">
-                    <i class="la la-edit"></i>
-                    </a>
-                     <a href="javascript:Remove(${v.UserID})" class="btn btn-sm btn-clean btn-icon" title="Xóa">
-                            <i class="la la-trash"></i>
+                            <td nowrap="nowrap">
+				            <a href="/Admin/Administrator/Edit/${v.ID}" class="btn btn-sm btn-clean btn-icon" title="Sửa">
+                            <i class="la la-edit"></i>
                             </a>
-                    </td>
-                </tr>`
+                                <a href="javascript:Remove('${v.ID}')" class="btn btn-sm btn-clean btn-icon" title="Xóa">
+                                    <i class="la la-trash"></i>
+                                    </a>
+                            </td>
+                            </tr>`
 
-               
+
                     body.append(tr)
                 })
                 pagenumber++
@@ -78,31 +79,57 @@ function ShowTable(pagenumber,search) {
         }
     })
 
-    function Remove(id) {
-        $.ajax({
-            type: "Post",
-            url: "/Administrator/Delete",
-            data: {
-               id
-            },
+   
+  
+}
+function Remove(id) {
 
-            datatype: 'json',
-            success: function (data) {
-                if (data.status == 'success')
-                    toastr.error('Đã xóa thành công')
-                else
-                    toastr.error(data.message,'Lỗi')
-            },
-            error: function () {
-               
-            }
-    }
+    Swal.fire({
+        title: 'Bạn có muốn xóa dữ liệu này?',
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: 'Có, xóa!',
+
+        customClass: {
+            actions: 'my-actions',
+            cancelButton: 'order-1 right-gap',
+            confirmButton: 'order-2',
+            denyButton: 'order-3',
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "Post",
+                url: "/Administrator/Delete",
+                data: {
+                    id
+                },
+
+                datatype: 'json',
+                success: function (data) {
+                    if (data.status == 'success') {
+                        toastr.success('Đã xóa thành công')
+                        $('#accounttable').find('tbody').empty()
+                        ShowTable(1)
+                    }
+                
+                    else
+                        toastr.error(data.message, 'Lỗi')
+                },
+                error: function () {
+
+                }
+            })
+        }
+    })
+ 
 }
 function InitSearch() {
     $('#kt_datatable_search_query').keypress(function (e) {
         if (e.which == 13) {
             $('#accounttable').find('tbody').empty()
             search = $('#kt_datatable_search_query').val().trim()
+            
             ShowTable(1, search)
         }
     })
