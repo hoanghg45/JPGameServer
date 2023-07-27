@@ -258,9 +258,6 @@
     <Compile Include="qa\mcardsea.aspx.designer.cs">
       <DependentUpon>mcardsea.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Role.cs">
-      <DependentUpon>Context.tt</DependentUpon>
-    </Compile>
     <Compile Include="SettingGame.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -287,16 +284,11 @@
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
     <Content Include="Areas\assets\admin\membercardlevel\AddMemberCard.js" />
     <Content Include="Areas\assets\admin\membercardlevel\MemberCardLevel.js" />
-    <Content Include="Areas\assets\admin\membercard\CreateMemberCard.js" />
     <Content Include="Areas\assets\admin\membercard\MemberCard.js" />
     <Content Include="Areas\assets\admin\membercard\MoneyCharge.js" />
     <Content Include="Areas\assets\admin\module\module.js" />
     <Content Include="Areas\assets\admin\promotion\AddPromotion.js" />
     <Content Include="Areas\assets\admin\promotion\Promotion.js" />
-    <Content Include="Areas\assets\admin\upload\UploadFile.js" />
-    <Content Include="Areas\assets\admin\users\CreateUser.js" />
-    <Content Include="Areas\assets\admin\users\UpdateUser.js" />
-    <Content Include="Areas\assets\admin\users\UsersTable.js" />
     <Content Include="Areas\assets\css\pages\error\error-3.css" />
     <Content Include="Areas\assets\css\pages\error\error-4.css" />
     <Content Include="Areas\assets\css\pages\error\error-5.css" />
@@ -2213,6 +2205,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Card.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\owl.carousel.css" />
     <Content Include="Content\data.css" />
@@ -2366,6 +2359,8 @@
     <Content Include="Areas\Admin\Views\SettingGameAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SettingGameAdmin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\SettingGameAdmin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCard\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCard\MoneyCharge.cshtml" />
     <Content Include="Areas\Admin\Views\MemberCardLevel\AddMemberCard.cshtml" />
     <EntityDeploy Include="Context.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -2374,13 +2369,8 @@
     <Content Include="Context.edmx.diagram">
       <DependentUpon>Context.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\Admin\Views\MemberCard\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\MemberCard\MoneyCharge.cshtml" />
-    <Content Include="Areas\Admin\Views\MemberCardLevel\AddMemberCard.cshtml" />
-    <Content Include="Areas\Admin\Views\Administrator\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Administrator\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\Administrator\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\MemberCard\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Administrator\Index.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -2432,7 +2422,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Views\SettingGame\" />
     <Folder Include="Models\" />
     <Folder Include="Views\SystemGame\" />
   </ItemGroup>
