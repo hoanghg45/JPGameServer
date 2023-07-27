@@ -1,5 +1,6 @@
 ﻿using JPGame.Areas.Admin.Extension;
 using JPGame.Areas.Security;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
@@ -204,86 +205,83 @@ namespace JPGame.Areas.Admin.Controllers
             }
 
         }
-        //[HttpPost]
-        //public JsonResult Upload(HttpPostedFileBase file)
-        //{
-        //    try
-        //    {
-        //        if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
-        //        {
-        //            string currentDirectory = HostingEnvironment.MapPath("~");
-        //            string fileName = file.FileName;
-        //            string fileContentType = file.ContentType;
-        //            byte[] fileBytes = new byte[file.ContentLength];
-        //            var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-        //            using (var package = new ExcelPackage(file.InputStream))
-        //            {
-        //                ExcelWorksheet currentSheet = package.Workbook.Worksheets.First();
-        //                var workSheet = currentSheet;
-        //                var noOfCol = workSheet.Dimension.End.Column;
-        //                var noOfRow = workSheet.Dimension.End.Row;
-        //                ImportError[] importError = new ImportError[noOfRow];
-        //                for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-        //                {
-        //                    try
-        //                    {
-        //                        if (workSheet.Cells[rowIterator, 1].Value != null)
-        //                        {
-        //                            var id = workSheet.Cells[rowIterator, 1].Value == null ? null : workSheet.Cells[rowIterator, 1].Value.ToString();
-        //                            var name = workSheet.Cells[rowIterator, 2].Value == null ? null : workSheet.Cells[rowIterator, 2].Value.ToString();
-        //                            if (name == null)
-        //                            {
-        //                                importError[rowIterator - 1] = new ImportError(rm.GetString("nonamesentered").ToString(), rowIterator);
-        //                                continue;
-        //                            }
-        //                            if (id == null)
-        //                            {
-        //                                importError[rowIterator - 1] = new ImportError(rm.GetString("havenotenteredthecode").ToString(), rowIterator);
-        //                                continue;
-        //                            }
-        //                            var checkColor = db.Colors.SingleOrDefault(x => x.Id == id);
-        //                            if (checkColor == null)
-        //                            {
-        //                                var user = (User)Session["user"];
-        //                                var color = new Color();
-        //                                color.Id = id;
-        //                                color.Name = name;
-        //                                color.Status = true;
-        //                                color.CreateDate = DateTime.Now;
-        //                                color.CreateBy = user.Name;
-        //                                color.ModifyDate = DateTime.Now;
-        //                                color.ModifyBy = user.Name;
-        //                                db.Colors.Add(color);
-        //                                db.SaveChanges();
-        //                            }
-        //                            else
-        //                            {
-        //                                importError[rowIterator - 1] = new ImportError(rm.GetString("alreadyhavecode").ToString(), rowIterator);
-        //                                continue;
-        //                            }
-        //                        }
-        //                    }
-        //                    catch (DbEntityValidationException ex)
-        //                    {
-        //                        foreach (var error in ex.EntityValidationErrors)
-        //                        {
-        //                            foreach (var validationError in error.ValidationErrors)
-        //                            {
-        //                                Console.WriteLine("Lỗi xác thực: {0}", validationError.ErrorMessage);
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //                importError = importError.Where(enem => enem != null).ToArray();
-        //                return Json(new { code = 200, msg = importError.Select(i => i.ToString()).ToList() }, JsonRequestBehavior.AllowGet);
-        //            }
-        //        }
-        //        return Json(new { code = 300, }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Json(new { code = 500, msg = rm.GetString("false").ToString() + " !!!" + e.Message }, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
+        [HttpPost]
+        public JsonResult Import(HttpPostedFileBase file)
+        {
+            try
+            {
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                {
+                    string currentDirectory = HostingEnvironment.MapPath("~");
+                    string fileName = file.FileName;
+                    string fileContentType = file.ContentType;
+                    byte[] fileBytes = new byte[file.ContentLength];
+                    var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+                    using (var package = new ExcelPackage(file.InputStream))
+                    {
+                        ExcelWorksheet currentSheet = package.Workbook.Worksheets.First();
+                        var workSheet = currentSheet;
+                        var noOfCol = workSheet.Dimension.End.Column;
+                        var noOfRow = workSheet.Dimension.End.Row;
+                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                        {
+                            try
+                            {
+                                if (workSheet.Cells[rowIterator, 1].Value != null)
+                                {
+                                    var id = workSheet.Cells[rowIterator, 1].Value == null ? null : workSheet.Cells[rowIterator, 1].Value.ToString();
+                                    var ip = workSheet.Cells[rowIterator, 2].Value == null ? null : workSheet.Cells[rowIterator, 2].Value.ToString();
+                                    var name = workSheet.Cells[rowIterator, 3].Value == null ? null : workSheet.Cells[rowIterator, 3].Value.ToString();
+                                    var price = workSheet.Cells[rowIterator, 4].Value == null ? null : workSheet.Cells[rowIterator, 4].Value.ToString();
+                                    if ( id == null || price == null)
+                                    {
+                                        continue;
+                                    }
+                                    var checkGame = db.SettingGames.SingleOrDefault(x => x.Id == id);
+                                    if (checkGame == null)
+                                    {
+                                        string UserID = Session["UserID"].ToString();
+                                        var user = db.Users.Find(UserID);
+                                        var settingGame = new SettingGame();
+                                        settingGame.Id = id;
+                                        settingGame.IP = ip;
+                                        settingGame.Price = float.Parse(price);
+                                        settingGame.Name = name;
+                                        settingGame.Status = true;
+                                        settingGame.CreateDate = DateTime.Now;
+                                        settingGame.CreateBy = user.Name;
+                                        settingGame.ModifyDate = DateTime.Now;
+                                        settingGame.ModifyBy = user.Name;
+                                        db.SettingGames.Add(settingGame);
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+                            catch (DbEntityValidationException ex)
+                            {
+                                foreach (var error in ex.EntityValidationErrors)
+                                {
+                                    foreach (var validationError in error.ValidationErrors)
+                                    {
+                                        Console.WriteLine("Lỗi xác thực: {0}", validationError.ErrorMessage);
+                                    }
+                                }
+                            }
+                        }
+                      
+                        return Json(new { code = 200, msg = "Thành công"}, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                return Json(new { code = 300, }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "fail"+ e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
