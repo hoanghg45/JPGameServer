@@ -37,12 +37,12 @@ namespace JPGame
         public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<PersonalGift> PersonalGifts { get; set; }
         public virtual DbSet<Promotion> Promotions { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SettingGame> SettingGames { get; set; }
         public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<SpecialMemory> SpecialMemories { get; set; }
         public virtual DbSet<TypeSlider> TypeSliders { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<VIPGift> VIPGifts { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
     }
 }
