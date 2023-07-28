@@ -69,7 +69,7 @@ function ShowTable(pagenumber, search) {
             }
             $('.spinner').hide();
             isLoadingData = false;
-            $('#QtyNote').text(`Displaying ${data.to} of ${data.total} records`)
+            $('#QtyNote').text(`Hiển thị ${data.to} trên ${data.total} dữ liệu`)
         },
         error: function () {
             // Xử lý lỗi (nếu cần thiết)
