@@ -20,14 +20,16 @@ var isFull = false;
     InitSearch()
 })()
 
-function ShowTable(pagenumber, search) {
+function ShowTable(pagenumber, search, status, level) {
 
     $.ajax({
         type: "GET",
         url: "/MemberCard/DataTable",
         data: {
             page: pagenumber,
-            search
+            search,
+            status,
+            level
         },
 
         datatype: 'json',
@@ -126,12 +128,23 @@ function Remove(id) {
 
 }
 function InitSearch() {
+ 
     $('#kt_datatable_search_query').keypress(function (e) {
         if (e.which == 13) {
             $('#membercardtable').find('tbody').empty()
-            search = $('#kt_datatable_search_query').val().trim()
+            
 
-            ShowTable(1, search)
+            SearchData()
         }
     })
+
+    $('#search_status, #search_level').change(function () {
+        SearchData()
+    })
+}
+function SearchData() {
+    let search = $('#kt_datatable_search_query').val().trim()
+    let status = $('#search_status').val().trim()
+    let level = $('#search_level').val().trim()
+    ShowTable(1, search, status, level)
 }

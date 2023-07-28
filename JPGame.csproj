@@ -70,6 +70,9 @@
     <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.IO.RecyclableMemoryStream.1.4.1\lib\net46\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
     </Reference>
+    <Reference Include="NinjaNye.SearchExtensions, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\NinjaNye.SearchExtensions.3.0.1\lib\net45\NinjaNye.SearchExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -258,6 +261,7 @@
     <Compile Include="qa\mcardsea.aspx.designer.cs">
       <DependentUpon>mcardsea.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Role.cs" />
     <Compile Include="SettingGame.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -278,17 +282,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Admin\Views\MemberCard\Index.cshtml" />
     <Content Include="Areas\assets\admin\accounts\AccountsTable.js" />
     <Content Include="Areas\assets\admin\FormatDate.js" />
     <Content Include="Areas\assets\admin\layout.js" />
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
     <Content Include="Areas\assets\admin\membercardlevel\AddMemberCard.js" />
     <Content Include="Areas\assets\admin\membercardlevel\MemberCardLevel.js" />
+    <Content Include="Areas\assets\admin\membercard\CreateMemberCard.js" />
     <Content Include="Areas\assets\admin\membercard\MemberCard.js" />
     <Content Include="Areas\assets\admin\membercard\MoneyCharge.js" />
     <Content Include="Areas\assets\admin\module\module.js" />
     <Content Include="Areas\assets\admin\promotion\AddPromotion.js" />
     <Content Include="Areas\assets\admin\promotion\Promotion.js" />
+    <Content Include="Areas\assets\admin\upload\UploadFile.js" />
+    <Content Include="Areas\assets\admin\users\CreateUser.js" />
+    <Content Include="Areas\assets\admin\users\UpdateUser.js" />
+    <Content Include="Areas\assets\admin\users\UsersTable.js" />
     <Content Include="Areas\assets\css\pages\error\error-3.css" />
     <Content Include="Areas\assets\css\pages\error\error-4.css" />
     <Content Include="Areas\assets\css\pages\error\error-5.css" />

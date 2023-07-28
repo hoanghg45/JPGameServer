@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
@@ -15,7 +14,7 @@
                     @*begin::Page Title*@
                     <h5 class="text-dark font-weight-bold my-1 mr-5">Danh sách tài khoản</h5>
                     @*end::Page Title
-                        begin::Breadcrumb*@
+                    begin::Breadcrumb*@
                     <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
                         <li class="breadcrumb-item">
                             <a href="" class="text-muted">Quản trị</a>
@@ -40,7 +39,7 @@
         </div>
     </div>
     @*end::Subheader
-        begin::Entry*@
+    begin::Entry*@
 
     @*begin::Container*@
 
@@ -71,7 +70,7 @@
                     @*end::Button*@
                 </div>
                 @*end::Dropdown
-                    begin::Button*@
+                begin::Button*@
                 <a href="/Admin/Administrator/Create" class="btn btn-warning font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         @*begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg*@
@@ -90,19 +89,44 @@
         </div>
         <div class="card-body">
             @*begin: Search Form
-                begin::Search Form*@
+            begin::Search Form*@
             <div class="mb-7">
                 <div class="row align-items-center">
-                    <div class="col-lg-3">
+                    <div class="col-lg-9 col-xl-8">
                         <div class="row align-items-center">
-
-                            <div class="input-icon">
-                                <input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
-                                <span>
-                                    <i class="flaticon2-search-1 text-muted"></i>
-                                </span>
-                            </div>
-
+                           
+                                <div class="col-md-4 my-2 my-md-0">
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
+                                        <span>
+                                            <i class="flaticon2-search-1 text-muted"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block">Trạng thái:</label>
+                                        <select class="form-control select2" id="search_status">
+                                            <option value="">All</option>
+                                            <option value="True">True</option>
+                                            <option value="False">False</option>
+                                       
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block">Cấp độ thẻ:</label>
+                                        <select class="form-control select2" id="search_level">
+                                            <option value="">All</option>
+                                            @foreach (var level in ViewBag.Level)
+                                            {
+                                                <option value="@level.ID">@level.LevelName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            
                         </div>
                     </div>
 
@@ -119,7 +143,7 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Mã thẻ</th>
-                            <th scope="col">Loại thẻ</th>
+                            <th scope="col">Cấp độ thẻ</th>
                             <th scope="col">Người sở hữu</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
@@ -177,10 +201,14 @@
         </div>
     </div>
 </div>
+
 <script src="~/Areas/assets/admin/membercard/MemberCard.js"></script>
 <script src="~/Areas/assets/admin/FormatDate.js"></script>
 <script src="~/Areas/assets/admin/upload/UploadFile.js"></script>
-@*<script>
+
+
+@*
+<script>
     document.addEventListener('DOMContentLoaded', function (e) {
         FormValidation.formValidation(document.getElementById('uploadForm'), {
             fields: {

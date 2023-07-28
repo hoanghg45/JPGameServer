@@ -1,5 +1,6 @@
 ﻿using JPGame.Areas.Admin.Extension;
 using JPGame.Areas.Security;
+using NinjaNye.SearchExtensions;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,11 @@ namespace JPGame.Areas.Admin.Controllers
         // GET: Admin/MemberCard
         public ActionResult Index()
         {
+            ViewBag.Level = db.CardLevels.ToList();
             return View();
         }
         [HttpGet]
-        public JsonResult DataTable(int page = 0, string search ="")
+        public JsonResult DataTable(int page = 0, string search ="", string level= "",bool? status =null)
         {
             var data = db.MemberCards.Select(a => new
             {
@@ -33,7 +35,25 @@ namespace JPGame.Areas.Admin.Controllers
                 
             });
 
-            data = data.WhereIf(!string.IsNullOrEmpty(search), a => a.MemberCardID.Contains(search));
+
+            // Lọc theo loại thẻ (type)
+             data = data.WhereIf(!string.IsNullOrEmpty(level), a => a.Level.Equals(level))
+            // Lọc theo trạng thái (status)
+                    .WhereIf(status.HasValue,a => a.Status == status);
+
+            // tìm kiếm 
+            if (!string.IsNullOrEmpty(search))
+            {
+                data.Search(x => x.MemberCardID,
+                            x => x.Level,
+                            x => x.Owner
+
+                                 ).Containing(search.Trim());
+            }
+           
+
+            
+
 
             //Xử lí phân trang
 
@@ -175,7 +195,7 @@ namespace JPGame.Areas.Admin.Controllers
                 string OldCardID = collection["CurrCardID"];
                 string NewCardID = collection["NewCardID"];
                 var MemberCardLevel = db.MemberCards.Find(collection["MemberCardLevelID"]);
-                var oldCard = db.MemberCards.Find(OldCardID);
+                 var oldCard = db.MemberCards.Find(OldCardID);
                 var newCard = db.MemberCards.Find(NewCardID);
                 if (oldCard == null)
                 {
@@ -193,11 +213,31 @@ namespace JPGame.Areas.Admin.Controllers
                 double ChargeMoney = Double.Parse(collection["MoneyPay"].Replace(",", ""));//Số tiền nạp
                 double FinalMoney = Double.Parse(collection["Money"].Replace(",", ""));//Số tiền sau khi đã tính
                 double FinalPoint = Double.Parse(collection["Point"].Replace(",", ""));//Số điểm sau khi đã tính
-                var FirstLevel = db.CardLevels.Where(l => l.ID.Trim().Equals("level1")).FirstOrDefault();
+                var LevelFee = db.CardLevels.OrderBy(f => f.LevelFee).Select(f => f.LevelFee).ToArray();
                 //Nếu không thay đổi cấp độ
                 if (oldCard.MemberCardLevel.CardLevel.LevelName.Equals(newCard.MemberCardLevel.CardLevel.LevelName))
                 {
-                    //if(oldCard.Balance < FirstLevel.LevelFee || newCard.Balance )
+                    double oldSumMoney = Double.Parse(collection["CurrTotal"].Replace(",", ""));
+                    double newSumMoney = Double.Parse(collection["TotalMoneyPay"].Replace(",", ""));
+
+                    if (oldSumMoney < LevelFee[1] && newSumMoney >= LevelFee[1])
+                    {
+                        string accname = collection["AccountName"];
+                        var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
+                        if (string.IsNullOrEmpty(accname) || acc == null)
+                        {
+                            return this.Json(
+                          new
+                          {
+                              status = "Error",
+                              message = "Tài khoản không tồn tại!"
+
+                          }
+                          , JsonRequestBehavior.AllowGet
+                          );
+                        }
+                        acc.MemberCardID = oldCard.MemberCardID;
+                    }
                     oldCard.Balance = FinalMoney;
                     oldCard.Points = FinalPoint;
                 }
@@ -223,43 +263,22 @@ namespace JPGame.Areas.Admin.Controllers
                     newCard.Points = FinalPoint;
                     newCard.Status = true;
                     newCard.CreateDate = DateTime.Now;
-                 
-                    //Nếu thẻ welcome được nâng cấp
-                    if (oldCard.MemberCardLevel.CardLevel.LevelName.Trim().Equals("Welcome"))
-                    {
-                        string accname = collection["AccountName"];
-                        var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
-                        if (string.IsNullOrEmpty(accname) || acc == null)
-                        {
-                            return this.Json(
-                          new
-                          {
-                              status = "Error",
-                              message = "Tài khoản không tồn tại!"
 
-                          }
-                          , JsonRequestBehavior.AllowGet
-                          );
-                        }
-                        acc.MemberCardID = newCard.MemberCardID;
-                    }
-                    else
+                    //Nếu thẻ được nâng cấp
+                    var oldCardAccount = oldCard.Accounts.FirstOrDefault();
+                    if (oldCardAccount == null)
                     {
-                        var acc = oldCard.Accounts.FirstOrDefault();
-                        if (acc == null)
-                        {
-                            return this.Json(
-                          new
-                          {
-                              status = "Error",
-                              message = "Tài khoản sở hữu thẻ cũ không tồn tại!"
+                        return this.Json(
+                      new
+                      {
+                          status = "Error",
+                          message = "Tài khoản sở hữu thẻ cũ không tồn tại!"
 
-                          }
-                          , JsonRequestBehavior.AllowGet
-                          );
-                        }
-                        acc.MemberCardID = newCard.MemberCardID;
+                      }
+                      , JsonRequestBehavior.AllowGet
+                      );
                     }
+                    oldCardAccount.MemberCardID = newCard.MemberCardID;
 
 
                 }
