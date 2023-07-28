@@ -206,82 +206,62 @@ namespace JPGame.Areas.Admin.Controllers
 
         }
         [HttpPost]
-        public JsonResult Import(HttpPostedFileBase file)
+        public ActionResult Import(HttpPostedFileBase file)
         {
             try
             {
-                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                if (file != null && file.ContentLength > 0)
                 {
-                    string currentDirectory = HostingEnvironment.MapPath("~");
-                    string fileName = file.FileName;
-                    string fileContentType = file.ContentType;
-                    byte[] fileBytes = new byte[file.ContentLength];
-                    var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+                    // Xử lý file Excel tại đây (lưu vào thư mục, đọc dữ liệu, ...)
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                     using (var package = new ExcelPackage(file.InputStream))
                     {
-                        ExcelWorksheet currentSheet = package.Workbook.Worksheets.First();
-                        var workSheet = currentSheet;
-                        var noOfCol = workSheet.Dimension.End.Column;
-                        var noOfRow = workSheet.Dimension.End.Row;
-                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                        // Chọn sheet trong file (ví dụ chọn sheet đầu tiên)
+                        var workSheet = package.Workbook.Worksheets[0];
+
+                        // Đọc dữ liệu từ sheet và xử lý theo nhu cầu của bạn
+                        for (int row = 2; row <= workSheet.Dimension.Rows; row++)
                         {
-                            try
+                            var id = workSheet.Cells[row, 1].Text;
+                            var ip = workSheet.Cells[row, 2].Text;
+                            var name = workSheet.Cells[row, 3].Text;
+                            var price = workSheet.Cells[row, 4].Text;
+                            if (string.IsNullOrEmpty(id)|| string.IsNullOrEmpty(price) )
                             {
-                                if (workSheet.Cells[rowIterator, 1].Value != null)
-                                {
-                                    var id = workSheet.Cells[rowIterator, 1].Value == null ? null : workSheet.Cells[rowIterator, 1].Value.ToString();
-                                    var ip = workSheet.Cells[rowIterator, 2].Value == null ? null : workSheet.Cells[rowIterator, 2].Value.ToString();
-                                    var name = workSheet.Cells[rowIterator, 3].Value == null ? null : workSheet.Cells[rowIterator, 3].Value.ToString();
-                                    var price = workSheet.Cells[rowIterator, 4].Value == null ? null : workSheet.Cells[rowIterator, 4].Value.ToString();
-                                    if ( id == null || price == null)
-                                    {
-                                        continue;
-                                    }
-                                    var checkGame = db.SettingGames.SingleOrDefault(x => x.Id == id);
-                                    if (checkGame == null)
-                                    {
-                                        string UserID = Session["UserID"].ToString();
-                                        var user = db.Users.Find(UserID);
-                                        var settingGame = new SettingGame();
-                                        settingGame.Id = id;
-                                        settingGame.IP = ip;
-                                        settingGame.Price = float.Parse(price);
-                                        settingGame.Name = name;
-                                        settingGame.Status = true;
-                                        settingGame.CreateDate = DateTime.Now;
-                                        settingGame.CreateBy = user.Name;
-                                        settingGame.ModifyDate = DateTime.Now;
-                                        settingGame.ModifyBy = user.Name;
-                                        db.SettingGames.Add(settingGame);
-                                        db.SaveChanges();
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
-                                }
+                                continue;
                             }
-                            catch (DbEntityValidationException ex)
-                            {
-                                foreach (var error in ex.EntityValidationErrors)
+                            var checkGame = db.SettingGames.Find(id);
+                            if(checkGame == null){
+                                string UserID = Session["UserID"].ToString();
+                                var user = db.Users.Find(UserID);
+                                SettingGame settingGame = new SettingGame()
                                 {
-                                    foreach (var validationError in error.ValidationErrors)
-                                    {
-                                        Console.WriteLine("Lỗi xác thực: {0}", validationError.ErrorMessage);
-                                    }
-                                }
+                                    Id = id,
+                                    IP = ip,
+                                    Name = name,
+                                    Price = float.Parse(price),
+                                    CreateDate = DateTime.Now,
+                                    CreateBy = user.Name,
+                                    ModifyDate = DateTime.Now,
+                                    ModifyBy = user.Name,
+                                    Status = true
+                                };
+                                db.SettingGames.Add(settingGame);
                             }
                         }
-                      
-                        return Json(new { code = 200, msg = "Thành công"}, JsonRequestBehavior.AllowGet);
+                        db.SaveChanges();
                     }
+
+                    return Json(new { status = true });
                 }
-                return Json(new { code = 300, }, JsonRequestBehavior.AllowGet);
+
+                return Json(new { status = false, message = "Không có file nào được thêm" });
             }
             catch (Exception e)
             {
-                return Json(new { code = 500, msg = "fail"+ e.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = false, message = e });
             }
+
         }
     }
 }

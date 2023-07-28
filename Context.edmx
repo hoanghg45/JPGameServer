@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Accounts">
           <Key>
             <PropertyRef Name="AccountID" />
@@ -502,7 +502,8 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -526,7 +527,7 @@
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="MemberCard" Relationship="Self.FK_Accounts_MemberCards" FromRole="Accounts" ToRole="MemberCards" />
-          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_Accounts" FromRole="Account" ToRole="MemberCardChargeRecord" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Self.FK_MemberCardChargeRecords_Accounts" FromRole="Accounts" ToRole="MemberCardChargeRecords" />
         </EntityType>
         <EntityType Name="Blog">
           <Key>
@@ -603,13 +604,13 @@
             <PropertyRef Name="RecordID" />
           </Key>
           <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="MemberCardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Money" Type="Double" />
           <Property Name="ChargeDate" Type="DateTime" Precision="3" />
           <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_MemberCardChargeRecords_Accounts" FromRole="MemberCardChargeRecords" ToRole="Accounts" />
           <NavigationProperty Name="MemberCard" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCardChargeRecords" ToRole="MemberCards" />
-          <Property Name="AccountID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Account" Relationship="Model.FK_MemberCardChargeRecords_Accounts" FromRole="MemberCardChargeRecord" ToRole="Account" />
         </EntityType>
         <EntityType Name="MemberCardLevel">
           <Key>
@@ -695,6 +696,15 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="User" Relationship="Self.FK_Promotion_Users" FromRole="Promotions" ToRole="Users" />
         </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_User_Roles" FromRole="Roles" ToRole="Users" />
+        </EntityType>
         <EntityType Name="SettingGame">
           <Key>
             <PropertyRef Name="Id" />
@@ -765,7 +775,7 @@
           <NavigationProperty Name="Modules" Relationship="Self.FK_Modules_Users" FromRole="Users" ToRole="Modules" />
           <NavigationProperty Name="Modules1" Relationship="Self.FK_Modules_Users1" FromRole="Users" ToRole="Modules" />
           <NavigationProperty Name="Promotions" Relationship="Self.FK_Promotion_Users" FromRole="Users" ToRole="Promotions" />
-          <NavigationProperty Name="Role1" Relationship="Model.FK_User_Roles" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="Role1" Relationship="Self.FK_User_Roles" FromRole="Users" ToRole="Roles" />
         </EntityType>
         <EntityType Name="VIPGift">
           <Key>
@@ -786,6 +796,18 @@
             </Principal>
             <Dependent Role="Accounts">
               <PropertyRef Name="MemberCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberCardChargeRecords_Accounts">
+          <End Role="Accounts" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="MemberCardChargeRecords" Type="Self.MemberCardChargeRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecords">
+              <PropertyRef Name="AccountID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -909,6 +931,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_Roles">
+          <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="Role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Slider_TypeSlider">
           <End Role="TypeSliders" Type="Self.TypeSlider" Multiplicity="0..1" />
           <End Role="Sliders" Type="Self.Slider" Multiplicity="*" />
@@ -934,6 +968,7 @@
           <EntitySet Name="Modules" EntityType="Self.Module" />
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGift" />
           <EntitySet Name="Promotions" EntityType="Self.Promotion" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="SettingGames" EntityType="Self.SettingGame" />
           <EntitySet Name="Sliders" EntityType="Self.Slider" />
           <EntitySet Name="SpecialMemories" EntityType="Self.SpecialMemory" />
@@ -943,6 +978,10 @@
           <AssociationSet Name="FK_Accounts_MemberCards" Association="Self.FK_Accounts_MemberCards">
             <End Role="MemberCards" EntitySet="MemberCards" />
             <End Role="Accounts" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardChargeRecords_Accounts" Association="Self.FK_MemberCardChargeRecords_Accounts">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
           </AssociationSet>
           <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
             <End Role="CardLevels" EntitySet="CardLevels" />
@@ -984,53 +1023,15 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Promotions" EntitySet="Promotions" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_Roles" Association="Self.FK_User_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
           <AssociationSet Name="FK_Slider_TypeSlider" Association="Self.FK_Slider_TypeSlider">
             <End Role="TypeSliders" EntitySet="TypeSliders" />
             <End Role="Sliders" EntitySet="Sliders" />
           </AssociationSet>
-          <EntitySet Name="Roles" EntityType="Model.Role" />
-          <AssociationSet Name="FK_MemberCardChargeRecords_Accounts" Association="Model.FK_MemberCardChargeRecords_Accounts">
-            <End Role="Account" EntitySet="Accounts" />
-            <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_Roles" Association="Model.FK_User_Roles">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="User" EntitySet="Users" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Role">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Users" Relationship="Model.FK_User_Roles" FromRole="Role" ToRole="User" />
-        </EntityType>
-        <Association Name="FK_MemberCardChargeRecords_Accounts">
-          <End Type="Model.Account" Role="Account" Multiplicity="0..1" />
-          <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="AccountID" />
-            </Principal>
-            <Dependent Role="MemberCardChargeRecord">
-              <PropertyRef Name="AccountID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_Roles">
-          <End Type="Model.Role" Role="Role" Multiplicity="0..1" />
-          <End Type="Model.User" Role="User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Role">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="Role" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1132,8 +1133,8 @@
           <EntitySetMapping Name="MemberCardChargeRecords">
             <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
               <MappingFragment StoreEntitySet="MemberCardChargeRecords">
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
                 <ScalarProperty Name="Money" ColumnName="Money" />
                 <ScalarProperty Name="ChargeDate" ColumnName="ChargeDate" />
@@ -1219,6 +1220,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Model.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="SettingGames">
             <EntityTypeMapping TypeName="Model.SettingGame">
               <MappingFragment StoreEntitySet="SettingGame">
@@ -1296,15 +1306,6 @@
                 <ScalarProperty Name="Moctail" ColumnName="Moctail" />
                 <ScalarProperty Name="VipRoom" ColumnName="VipRoom" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Roles">
-            <EntityTypeMapping TypeName="Model.Role">
-              <MappingFragment StoreEntitySet="Roles">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
