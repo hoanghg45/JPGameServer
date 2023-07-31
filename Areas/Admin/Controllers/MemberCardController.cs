@@ -550,8 +550,12 @@ namespace JPGame.Areas.Admin.Controllers
                         {
 
                            
-                            var CardID = workSheet.Cells[row, 2].Text;
+                            var CardID = workSheet.Cells[row, 2].Text.Trim().Substring(1);
                             var Type = workSheet.Cells[row, 4].Text;
+                            if(string.IsNullOrEmpty(CardID) && string.IsNullOrEmpty(Type))
+                            {
+                                break;
+                            }
                             if (string.IsNullOrEmpty(CardID) || string.IsNullOrEmpty(Type))
                             {
                                 return Json(new { status = false, message = $"Thông tin ở dòng {row} không đầy đủ!" });
