@@ -4,10 +4,11 @@
         type: 'get',
         success: function (data) {
             if (data.code == 200) {
+                var balance = data.user.Balance == null ?"0 đ": data.user.Balance.toLocaleString("en-US") + 'đ'
                 $('#login').text("Thông Tin").attr("href", "/thong-tin-nguoi-dung/")
                 $('#register').text("Đăng Xuất").attr("href", "").attr('name', 'logout')
                 $('a[name="fullname"],input[name="fullname"],h1[name="fullname"]').text(data.user.FullName).val(data.user.FullName)
-                $('a[name="balance"]').text(data.user.Balance.toLocaleString("en-US")+'đ')
+                $('a[name="balance"]').text(balance)
                 $('div[name="point"]').text(data.user.Points)
                 $('.card_info').css("background-image", "url('" + data.user.Image + "')")
                 $('a[name="email"],input[name="email"]').text(data.user.Email).val(data.user.Email)

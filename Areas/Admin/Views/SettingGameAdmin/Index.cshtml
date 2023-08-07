@@ -184,7 +184,7 @@
         var isLoadingData = false;
         var isFull = false;
         (function DataTable() {
-
+            
             ShowTable(page, search)
             $('.table-responsive').scroll(function () {
                 search = $('#kt_datatable_search_query').val().trim()
@@ -192,8 +192,9 @@
                 var scrollTop = $(this).scrollTop() + 3;
                 var scrollHeight = $(this)[0].scrollHeight;
                 var windowHeight = $(this).outerHeight();
-
+             
                 if (scrollTop + windowHeight >= scrollHeight && !isLoadingData && !isFull) {
+            
                     // Đạt đến cuối trang và không đang lấy dữ liệu
                     $('.spinner').show();
                     // Gọi hàm để lấy dữ liệu tiếp theo

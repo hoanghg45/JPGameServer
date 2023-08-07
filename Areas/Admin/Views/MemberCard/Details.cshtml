@@ -1,0 +1,264 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Subheader-->
+    <div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center flex-wrap mr-1">
+                <!--begin::Page Heading-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <!--begin::Page Title-->
+                    <h5 class="text-dark font-weight-bold my-1 mr-5">Chi tiết thẻ</h5>
+                    <!--end::Page Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item">
+                            <a href="" class="text-muted">Ứng dụng</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="" class="text-muted">Thẻ thành viên</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="" class="text-muted">Chi tiết thẻ</a>
+                        </li>
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page Heading-->
+            </div>
+            <!--end::Info-->
+            <!--begin::Toolbar-->
+            <div class="d-flex align-items-center">
+                <!--begin::Actions-->
+               
+            </div>
+            <!--end::Toolbar-->
+        </div>
+    </div>
+    <!--end::Subheader-->
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--begin::Card-->
+                    <div class="card card-custom gutter-b example example-compact">
+                        <div class="card-header">
+                            <h3 class="card-title">Thông tin thẻ</h3>
+
+                        </div>
+                        <!--begin::Form-->
+                        <form id="PromotionForm" class="form">
+                            <div class="card-body">
+                                <div class="form-group fv-plugins-icon-container" id="scan">
+                                    <h4 class="mb-10 font-weight-bold text-dark">Quét thẻ</h4>
+                                    <!--begin::Select-->
+                                    <h6 class="font-weight-bolder mb-3">Đưa thẻ vào máy đọc</h6>
+                                    <div class="form-group">
+                                        <button type="button" id="CheckCardBtn" class="btn btn-success mr-3">
+                                            Kiểm tra
+                                        </button>
+                                        <button type="button" id="loadingBtn" class="btn btn-outline-warning spinner spinner-darker-warning spinner-left mr-3">
+                                            Đang kiểm tra
+                                        </button>
+                                        <i id="iconStatus" class="flaticon2-check-mark text-success"></i>
+                                        <input name="CardID" value="@Model" hidden />
+                                    </div>
+                                    <span id="textNoti" class="form-text text-muted"></span>
+                                    <!--end::Select-->
+                                    <!--end::Select-->
+
+                                </div>
+                                <div class="form-group fv-plugins-icon-container row">
+                                    <div class="col-lg-6">
+
+                                        <label>Số tiền thẻ hiện có:</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrBalance" aria-describedby="basic-addon2" />
+                                            <div class="input-group-append"><span class="input-group-text">đ</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label>Tổng tiền thẻ đã nạp:</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrTotal" aria-describedby="basic-addon2" />
+                                            <div class="input-group-append"><span class="input-group-text">đ</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group fv-plugins-icon-container ">
+                                    <label>Số điểm hiện có:</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrPoints" aria-describedby="basic-addon2" />
+                                        <div class="input-group-append"><span class="input-group-text">đ</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="separator separator-dashed my-10"></div>
+                                <h6 class="font-weight-bolder mb-3">Thông tin loại thẻ</h6>
+                                <div class="form-group fv-plugins-icon-container">
+
+                                    <label>Cấp độ thẻ:</label>
+                                    <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="CurrLevelName" />
+
+
+                                </div>
+
+
+                                <div class="form-group fv-plugins-icon-container">
+                                    <label>Quà tặng:</label>
+                                    <input class="form-control form-control-solid form-control-lg" readonly style="width:100%" name="CurrGiftLevelName" />
+
+                                </div>
+
+                                <div class="form-group fv-plugins-icon-container ">
+                                    <div class="form-group">
+                                        <label>Quà tặng đặc biệt</label>
+                                        <div class="checkbox-inline">
+                                            <label class="checkbox checkbox-disabled">
+                                                <input type="checkbox" id="CurrPersonal" disabled="disabled" name="CurrCheckGifs" />
+                                                <span></span>
+                                                Quà tặng cá nhân
+                                            </label>
+                                            <label class="checkbox checkbox-disabled">
+                                                <input type="checkbox" id="CurrSpecial" disabled="disabled" name="CurrCheckGifs" />
+                                                <span></span>
+                                                Quà tặng dịp đặc biệt (sinh nhật,..)
+                                            </label>
+                                            <label class="checkbox checkbox-disabled">
+                                                <input type="checkbox" id="CurrHoliday" disabled="disabled" name="CurrCheckGifs" />
+                                                <span></span>
+                                                Quà tặng ngày lễ
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group fv-plugins-icon-container">
+                                        <label>Kỉ niệm đặt biệt</label>
+                                        <div class="checkbox-inline">
+                                            <label class="checkbox checkbox-disabled">
+                                                <input type="checkbox" id="CurrAvailableTemplates" disabled="disabled" name="CurrCheckMemory" />
+                                                <span></span>
+                                                Tự tạo mẫu
+                                            </label>
+                                            <label class="checkbox checkbox-disabled">
+                                                <input type="checkbox" id="CurrCustomizeAvailableTemplate" disabled="disabled" name="CurrCheckMemory" />
+                                                <span></span>
+                                                Chọn những mẫu có sẵn
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group fv-plugins-icon-container">
+                                    <label>VIP</label>
+                                    <div class="checkbox-list">
+                                        <label class="checkbox checkbox-disabled">
+                                            <input type="checkbox" id="CurrVIP" disabled="disabled" name="CurrCheckVIP" />
+                                            <span></span>
+                                            Có
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group fv-plugins-icon-container">
+                                    <label>Đặc quyền VIP</label>
+                                    <div class="checkbox-inline">
+                                        <label class="checkbox checkbox-disabled" id="labelMocktail">
+                                            <input type="checkbox" id="CurrMocktail" disabled="disabled" name="CurrCheckVIPGifts" />
+                                            <span></span>
+                                            Ưu đãi Mocktail
+                                        </label>
+                                        <label class="checkbox checkbox-disabled">
+                                            <input type="checkbox" id="CurrVipRoom" disabled="disabled" name="CurrCheckVIPGifts" />
+                                            <span></span>
+                                            Ưu đãi bàn và phòng VVIP
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="UserInfor">
+                                <div class="separator separator-dashed my-10"></div>
+                                <h6 class="font-weight-bolder mb-3">Thông tin thành viên</h6>
+                                <div class="form-group fv-plugins-icon-container">
+                                    <label>Tên tài khoản</label>
+                                    <input readonly type="text" class="form-control form-control-solid form-control-lg" name="AccountName" placeholder="Tên tài khoản">
+
+
+                                </div>
+                                <!--end::Input-->
+                                <!--begin::Input-->
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <!--begin::Input-->
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Họ và tên</label>
+                                            <input type="text" class="form-control form-control-solid form-control-lg" readonly name="FullName">
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <!--begin::Input-->
+                                            <label>Ngày sinh</label>
+                                            <input type="text" class="form-control form-control-solid form-control-lg" readonly name="DateOfBirth">
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--end::Input-->
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <!--begin::Input-->
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Địa chỉ Email</label>
+                                            <input type="email" class="form-control form-control-solid form-control-lg" readonly name="Email">
+
+                                        </div>
+                                        <!--end::Input-->
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <!--begin::Input-->
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Số điện thoại</label>
+                                            <input type="text" class="form-control form-control-solid form-control-lg" readonly name="Phone">
+
+                                        </div>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+    
+
+                        </form>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Card-->
+
+                </div>
+
+            </div>
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+<script type="text/javascript">
+    var CardID = null
+
+    if (@Html.Raw(Json.Encode(@Model)) != null) {
+        CardID = @Html.Raw(Json.Encode(@Model));
+        console.log(CardID)
+    }
+       var ReaderID = null
+    if (@Html.Raw(Json.Encode(@ViewBag.ReaderID)) != null) {
+        ReaderID = @Html.Raw(Json.Encode(@ViewBag.ReaderID));
+
+    }
+</script>
+<script src="~/Areas/assets/admin/membercard/DetailMembercard.js"></script>

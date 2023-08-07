@@ -99,6 +99,17 @@ namespace JPGame.Areas.Admin.Controllers
                 }
                 var Card = db.MemberCards.Find(card);
                 var Reader = db.SettingGames.Find(reader);
+                if(Reader == null)
+                {
+                    return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = "Reader khong dung!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+                }
                 bool cardMoney = Card.Balance.HasValue && Card.Balance > 0 ;
                 bool rsl = false;
                 var status = "fail";
@@ -108,6 +119,10 @@ namespace JPGame.Areas.Admin.Controllers
                     {
                         status = "ok";
                         rsl = true;
+                        if(Card.Points!= null)
+                        {
+                            Card.Points += Reader.PushPoint;
+                        }
                         Card.Balance = Card.Balance - Reader.Price;
                         db.SaveChanges();
                     }
@@ -129,6 +144,102 @@ namespace JPGame.Areas.Admin.Controllers
                     , JsonRequestBehavior.AllowGet);
 
             }catch(Exception e)
+            {
+                return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = e
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+        [System.Web.Http.HttpGet]
+        public JsonResult CheckAccount(string card, string reader)
+        {
+            try
+            {
+
+                if (string.IsNullOrEmpty(card) || string.IsNullOrEmpty(reader))
+                {
+                    return Json(
+                    new
+                    {
+                        status = "fail",
+                        message = "Lỗi hãy thử lại!"
+
+                    }
+                    , JsonRequestBehavior.AllowGet);
+                }
+                if (!db.MemberCards.Any(c => c.MemberCardID.Equals(card)))
+                {
+                    return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = "Thẻ không tồn tại vui lòng thử lại!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+                }
+                var Card = db.MemberCards.Find(card);
+                var Reader = db.SettingGames.Find(reader);
+                if (Reader == null)
+                {
+                    return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = "Reader khong dung!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+                }
+                bool rsl = false;
+                var status = "fail";
+                var cardInfo = db.MemberCards.Where(c => c.MemberCardID.Equals(card))
+                    .Select(r => new
+                    {
+                        r.MemberCardLevel.CardLevel.LevelName,
+                        r.Balance,
+                        r.Points,
+
+                    }).FirstOrDefault();
+                    
+                if (Card != null)
+                {
+                    status = "ok";
+                    return Json(
+                   new
+                   {
+
+                       status = status,
+
+                       message = cardInfo
+                   }
+                   , JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    status = "fail";
+                    rsl = false;
+                }
+
+                return Json(
+                    new
+                    {
+
+                        status = status,
+
+                        message = rsl
+                    }
+                    , JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception e)
             {
                 return Json(
                    new

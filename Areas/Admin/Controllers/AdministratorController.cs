@@ -96,6 +96,7 @@ namespace JPGame.Areas.Admin.Controllers
         public ActionResult Create()
         {
            ViewBag.Roles = db.Roles.ToList();
+           ViewBag.Readers = db.NFCReaders.ToList();
             return View();
         }
 
@@ -124,6 +125,7 @@ namespace JPGame.Areas.Admin.Controllers
                 user.UserID = base64String + date.Year + date.Month + date.Day + date.Hour + date.Minute + date.Second + date.Millisecond;
                 user.CreateDate = DateTime.Now;
                 user.Status = true;
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 db.Users.Add(user);
                 db.SaveChanges();
 
@@ -152,6 +154,7 @@ namespace JPGame.Areas.Admin.Controllers
         public ActionResult Edit(string id)
         {
             ViewBag.Roles = db.Roles.ToList();
+            ViewBag.Readers = db.NFCReaders.ToList();
             var user = db.Users.Find(id);
             if(string.IsNullOrEmpty(id)|| user == null)
             {

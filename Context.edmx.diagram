@@ -4,21 +4,23 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5991570b68f54216874a8f15fa00984a" Name="Diagram1">
+      <Diagram DiagramId="37e5b84502df4067b9178af07fccb051" Name="Diagram1">
         <EntityTypeShape EntityType="Model.Account" Width="1.5" PointX="16.75" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Blog" Width="1.5" PointX="5.75" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Blog" Width="1.5" PointX="12.75" PointY="7.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.CardLevel" Width="1.5" PointX="10" PointY="7.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Game" Width="1.5" PointX="12.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Cashier" Width="1.5" PointX="5.75" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Game" Width="1.5" PointX="12.75" PointY="12.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Gift" Width="1.5" PointX="10" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.LiveCard" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.MemberCardChargeRecord" Width="1.5" PointX="19" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.MemberCardLevel" Width="1.5" PointX="12.25" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.MemberCard" Width="1.5" PointX="14.5" PointY="2.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Module" Width="1.5" PointX="5.25" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.NFCReader" Width="1.5" PointX="8" PointY="14.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.PersonalGift" Width="1.5" PointX="7.75" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Promotion" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Role" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.SettingGame" Width="1.5" PointX="7.75" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.SettingGame" Width="1.5" PointX="14.75" PointY="8.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Slider" Width="1.5" PointX="3" PointY="13.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.SpecialMemory" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.TypeSlider" Width="1.5" PointX="0.75" PointY="13.875" IsExpanded="true" />
@@ -27,6 +29,7 @@
         <AssociationConnector Association="Model.FK_Accounts_MemberCards" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_MemberCardChargeRecords_Accounts" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_MemberCardLevel_CardLevel" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_NFCReaders_Cashiers" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_Gift_PersonalGift" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_Gift_SpecialMemory" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_MemberCardLevel_Gift" ManuallyRouted="false" />
@@ -38,6 +41,10 @@
         <AssociationConnector Association="Model.FK_Promotion_Users" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_User_Roles" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_Slider_TypeSlider" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Model.ReportRecharge" Width="1.5" PointX="15.375" PointY="12.75" />
+        <EntityTypeShape EntityType="Model.PayType" Width="1.5" PointX="0.75" PointY="10.875" />
+        <AssociationConnector Association="Model.FK_MemberCardChargeRecords_PayType" />
+        <EntityTypeShape EntityType="Model.ReportCreateCard" Width="1.5" PointX="10.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

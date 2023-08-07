@@ -187,14 +187,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                                             <span class="menu-text">Danh sách</span>
                                                         </a>
                                                     </li>
-                                                    <li class="menu-item" aria-haspopup="true">
+                                                    @*<li class="menu-item" aria-haspopup="true">
                                                         <a href="custom/apps/user/add-user.html" class="menu-link">
                                                             <i class="menu-bullet menu-bullet-dot">
                                                                 <span></span>
                                                             </i>
                                                             <span class="menu-text">Add User</span>
                                                         </a>
-                                                    </li>
+                                                    </li>*@
 
                                                 </ul>
                                             </div>
@@ -236,6 +236,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                                                     </ul>
                                                 }
+
                                                 @if (role == "admin" || role == "cashier")
                                                 {
                                                     <ul class="menu-subnav">
@@ -257,6 +258,18 @@ License: You must have a valid license purchased only from themeforest(the above
                                                                     <span></span>
                                                                 </i>
                                                                 <span class="menu-text">Nạp tiền</span>
+                                                            </a>
+                                                        </li>
+
+
+                                                    </ul> 
+                                                    <ul class="menu-subnav">
+                                                        <li class="menu-item" aria-haspopup="true">
+                                                            <a href="@Url.Action("Details", "MemberCard", new { Area = "Admin" })" class="menu-link">
+                                                                <i class="menu-bullet menu-bullet-dot">
+                                                                    <span></span>
+                                                                </i>
+                                                                <span class="menu-text">Chi tiết thẻ</span>
                                                             </a>
                                                         </li>
 
@@ -457,7 +470,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     <div class="container-fluid d-flex align-items-stretch justify-content-between">
                         <!--begin::Header Menu Wrapper-->
                         <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
-                            
+
                         </div>
                         <!--end::Header Menu Wrapper-->
                         <!--begin::Topbar-->
@@ -534,7 +547,6 @@ License: You must have a valid license purchased only from themeforest(the above
                         </div>
                         <!--end::Copyright-->
                         <!--begin::Nav-->
-                       
                         <!--end::Nav-->
                     </div>
                     <!--end::Container-->
@@ -552,7 +564,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
             <h3 class="font-weight-bold m-0">
                 User Profile
-                
+
             </h3>
             <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_quick_user_close">
                 <i class="ki ki-close icon-xs text-muted"></i>
@@ -627,13 +639,13 @@ License: You must have a valid license purchased only from themeforest(the above
                     </div>
                 </a>
                 <!--end:Item-->
-             
+
             </div>
             <!--end::Nav-->
             <!--begin::Separator-->
             <div class="separator separator-dashed my-7"></div>
             <!--end::Separator-->
-        
+
         </div>
         <!--end::Content-->
     </div>
@@ -733,6 +745,8 @@ License: You must have a valid license purchased only from themeforest(the above
     <script src="~/Areas/assets/js/pages/widgets.js"></script>
     <script src="~/Areas/assets/admin/layout.js"></script>
     <script src="~/Areas/assets/admin/FormatDate.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="~/signalr/hubs"></script>
     <script>
         toastr.options = {
             "closeButton": true,

@@ -75,6 +75,16 @@
                                             <option value="@role.ID">@role.Description</option>
                                         }
                                     </select>
+                                </div> 
+                                <div class="form-group">
+                                    <label>Reader :</label>
+                                  
+                                    <select class="form-control select2" style="width:100%" id="SelectReader" name="ReaderID">
+                                        @foreach (var reader in ViewBag.Readers)
+                                        {
+                                            <option value="@reader.ReaderID">@reader.ReaderID</option>
+                                        }
+                                    </select>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-6">

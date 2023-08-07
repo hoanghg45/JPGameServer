@@ -107,9 +107,9 @@
                                     <div class="d-flex align-items-center">
                                         <label class="mr-3 mb-0 d-none d-md-block">Trạng thái:</label>
                                         <select class="form-control select2" id="search_status">
-                                            <option value="">All</option>
-                                            <option value="True">True</option>
-                                            <option value="False">False</option>
+                                            <option value="">Tất cả</option>
+                                            <option value="True">Đã kích hoạt</option>
+                                            <option value="False">Chưa kích hoạt</option>
                                        
                                         </select>
                                     </div>
@@ -118,10 +118,30 @@
                                     <div class="d-flex align-items-center">
                                         <label class="mr-3 mb-0 d-none d-md-block">Cấp độ thẻ:</label>
                                         <select class="form-control select2" id="search_level">
-                                            <option value="">All</option>
+                                            <option value="">Tất cả</option>
+                                            @{
+                                                bool isWelcome = true;
+                                            }
                                             @foreach (var level in ViewBag.Level)
                                             {
-                                                <option value="@level.ID">@level.LevelName</option>
+                                                if (level.LevelName == "Welcome")
+                                                {
+                                                    if (isWelcome)
+                                                    {
+                                                        <option value="@level.ID">@level.LevelName (Chưa có thông tin thành viên)</option>
+                                                        isWelcome = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@level.ID">@level.LevelName (Đã có thông tin thành viên)</option>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <option value="@level.ID">@level.LevelName</option>
+
+                                                }
                                             }
                                         </select>
                                     </div>
@@ -142,7 +162,8 @@
                     <thead style="position: sticky; top: 0px; background: white">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Mã thẻ</th>
+                            @*<th scope="col">Mã thẻ</th>*@
+                            <th scope="col">Serial Number</th>
                             <th scope="col">Cấp độ thẻ</th>
                             <th scope="col">Người sở hữu</th>
                             <th scope="col">Trạng thái</th>

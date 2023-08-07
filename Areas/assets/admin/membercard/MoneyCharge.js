@@ -220,6 +220,13 @@ var KTWizard1 = function () {
 					if (status == 'Valid') {
 						let nextStep = wizard.getNewStep()
 						if (nextStep == 3) {
+							if ($("input[name='radiospay']:checked").val() == 2 && $("input[name='Paycode']").val() == "") {
+								$('#PaycodeNoti').show()
+								KTUtil.scrollTop();
+								return
+							} 
+                        }
+						if (nextStep == 3) {
 							/// Nếu là thẻ welcome thì bỏ bước thông tin
 							nextStep = SkipInfoStep(nextStep)
 
@@ -329,7 +336,7 @@ var KTWizard1 = function () {
 
 
 						toastr.success('Thành công!')
-						location.reload()
+						SaveReportRecharge(data, result.userID, result.userName)
 					} else {
 
 						toastr.error(data.message, 'Lỗi')
@@ -343,6 +350,35 @@ var KTWizard1 = function () {
 		}
 	}
 
+	function SaveReportRecharge(data, userID, userName) {
+		var idCard = "";
+
+		$.each(data, function (k, v) {
+			if (v.name == "NewCardID") {
+				idCard = v.value
+			}
+		})
+
+		$.ajax({
+			type: "POST",
+			url: "/MemberCard/SaveReportRecharge",
+			data: {
+				userID: userID, idCard: idCard
+			},
+			success: function (result) {
+				if (result.status == "Success") {
+					let paytype = $('input[name="radiospay"]:checked').data('type');
+					Print(data, userID, result.sp, userName, "PHIEU NAP TIEN", result.cashier, paytype, result.member);
+					Print(data, userID, result.sp, userName, "PHIEU NAP TIEN", result.cashier, paytype, result.member);
+				} else {
+					toastr.error(data.message, 'Lỗi')
+				}
+			},
+			error: function () {
+				toastr.error('Lỗi')
+			}
+		})
+	}
 	return {
 		// public functions
 		init: function () {
@@ -357,13 +393,42 @@ var KTWizard1 = function () {
 
 jQuery(document).ready(function () {
 	KTWizard1.init();
+
+	var membercardHub = $.connection.membercardHub;
+	console.log(membercardHub)
+	membercardHub.client.notify = function (message) {
+		
+
+		if (message && message.toLowerCase() == "cardscanned" && ReaderID != null) {
+			ScanTag()
+		}
+	}
+	$.connection.hub.start().done(function () {
+		console.log('Hub started');
+	});
+	/*signalr method for push server message to client*/
+
 	InitInputEvent()
 	initMasks()
 	InitLoadingButton()
+	$('#PaycodeNoti').hide()
 	
 });
 
+function ScanTag() {
+	///Lấy thông tin mỗi khi quét thẻ khi đang ở trang quét thẻ
+	let isInOldCardStep = $('[data-wizard-state="current"]').first().data('step') == 1
+	let isInNewCardStep = $('[data-wizard-state="current"]').first().data('step') == 4
+	if (isInOldCardStep) {
+		$('#CheckCurrCardBtn').trigger("click");
+	}
+	if (isInNewCardStep) {
+		$('#CheckChargeCurrCardBtn').trigger("click");
+	}
 
+
+
+}
 function GetUser(UserName) {
 	$.ajax({
 		type: "GET",
@@ -498,9 +563,9 @@ function GetCurrCard($this) {
 				$('input[name="CurrPoints"]').val(data.card.Points)
 				
 				$('input[name="CurrBalance"]').val(data.card.Balance.toLocaleString('en-US'))
-				$('input[name="FullNameReview"]').val(data.card.Owner == null ? "": data.card.Owner)
-				
-				$('input[name="CurrTotal"]').val(data.card.Total.toLocaleString('en-US'))
+				$('input[name="FullNameReview"]').val(data.card.Owner == null ? "" : data.card.Owner)
+				let total = data.card.Total == null ? 0 : data.card.Total.toLocaleString('en-US')
+				$('input[name="CurrTotal"]').val(total)
 				$('#CurrAvailableTemplates').prop("checked", data.card.AvailableTemplates);
 				$('#CurrCustomizeAvailableTemplate').prop("checked", data.card.CustomizeAvailableTemplate);
 				$('#CurrHoliday').prop("checked", data.card.Holiday);

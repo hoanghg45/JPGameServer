@@ -13,6 +13,9 @@ namespace JPGame.Areas.Admin.Controllers
         // GET: Admin/Dashboard
         public ActionResult Index()
         {
+            string reader = Session["ReaderID"].ToString();
+            MemberCardComponent MC = new MemberCardComponent();
+            MC.RegisterNotification(reader);
             return View();
         }
     }

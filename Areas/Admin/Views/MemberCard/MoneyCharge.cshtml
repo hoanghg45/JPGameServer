@@ -45,7 +45,7 @@
                         <div class="wizard-nav border-bottom">
                             <div class="wizard-steps p-8 p-lg-10">
                                 <!--begin::Wizard Step 1 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
+                                <div class="wizard-step" data-step="1" data-wizard-type="step" data-wizard-state="current">
                                     <div class="wizard-label">
                                         <i class="wizard-icon la la-credit-card"></i>
                                         <h3 class="wizard-title">1. Quét thẻ</h3>
@@ -65,7 +65,7 @@
 
                                 <!--end::Wizard Step 1 Nav-->
                                 <!--begin::Wizard Step 2 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" >
+                                <div class="wizard-step" data-wizard-type="step" data-step="2" data-wizard-state="pending">
                                     <div class="wizard-label">
                                         <i class="wizard-icon fas fa-cash-register"></i>
                                         <h3 class="wizard-title">2. Nạp tiền</h3>
@@ -85,7 +85,7 @@
 
                                 <!--end::Wizard Step 2 Nav-->
                                 <!--begin::Wizard Step 3 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" >
+                                <div class="wizard-step" data-wizard-type="step" data-step="3" data-wizard-state="pending">
                                     <div class="wizard-label">
                                         <i class="wizard-icon flaticon-user-add"></i>
                                         <h3 class="wizard-title">3. Thông tin thành viên</h3>
@@ -104,15 +104,15 @@
                                 </div>
                                 <!--end::Wizard Step 3 Nav-->
                                 <!--begin::Wizard Step 4 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending">
+                                <div class="wizard-step" data-wizard-type="step" data-step="4" data-wizard-state="pending">
                                     <div class="wizard-label">
                                         <i class="wizard-icon flaticon-notepad"></i>
                                         <h3 class="wizard-title">4. Kiểm tra thông tin sau nạp</h3>
                                     </div>
-                                    
+
                                 </div>
                                 <!--end::Wizard Step 4 Nav-->
-                                
+
 
                             </div>
                         </div>
@@ -144,11 +144,11 @@
                                         <h6 class="font-weight-bolder mb-3">Thông tin</h6>
                                         @*<div class="form-group fv-plugins-icon-container">
 
-            <label>Người sở hữu:</label>
-            <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="FullName" />
+                                                <label>Người sở hữu:</label>
+                                                <input class="form-control form-control-solid form-control-lg " readonly style="width:100%" name="FullName" />
 
 
-        </div>*@
+                                            </div>*@
 
                                         <div class="form-group fv-plugins-icon-container row">
                                             <div class="col-lg-6">
@@ -192,22 +192,22 @@
 
                                         </div>
                                         @*<div class="form-group fv-plugins-icon-container row">
-            <div class="col-lg-6">
-                <label>Tỉ lệ tiền tặng:</label>
-                <div class="input-group">
-                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrRewardRate" aria-describedby="basic-addon2" />
-                    <div class="input-group-append"><span class="input-group-text">%</span></div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <label>Số điểm cộng:</label>
-                <div class="input-group">
-                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrPointPlus" aria-describedby="basic-addon2" />
-                    <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
-                </div>
-            </div>
+                                                <div class="col-lg-6">
+                                                    <label>Tỉ lệ tiền tặng:</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrRewardRate" aria-describedby="basic-addon2" />
+                                                        <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label>Số điểm cộng:</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-solid form-control-lg" readonly name="CurrPointPlus" aria-describedby="basic-addon2" />
+                                                        <div class="input-group-append"><span class="input-group-text">Điểm</span></div>
+                                                    </div>
+                                                </div>
 
-        </div>*@
+                                            </div>*@
                                         <div class="form-group fv-plugins-icon-container ">
                                             <div class="form-group">
                                                 <label>Quà tặng đặc biệt</label>
@@ -282,6 +282,31 @@
                                             <label>Số tiền nạp</label>
                                             <input type="text" class="form-control form-control-solid form-control-lg money" name="MoneyPay" placeholder="Số tiền nạp">
 
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Hình thức nạp</label>
+                                            <div class="radio-inline">
+                                                <label class="radio">
+                                                    <input type="radio" checked value="1" name="radiospay" />
+                                                    <span></span>
+                                                    Tiền mặt
+                                                </label>
+                                                <label class="radio">
+                                                    <input type="radio" value="2" name="radiospay" />
+                                                    <span></span>
+                                                    Chuyển khoản
+                                                </label>
+                                                <label class="radio">
+                                                    <input type="radio" value="3" name="radiospay" />
+                                                    <span></span>
+                                                    Quẹt thẻ
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Mã giao dịch</label>
+                                            <input type="text" class="form-control form-control-solid form-control-lg" name="Paycode" placeholder="Mã giao dịch">
+                                            <span id="PaycodeNoti" class="text-danger">Vui lòng nhập mã giao dịch</span>
                                         </div>
                                         <!--end::Input-->
                                         <div class="form-group fv-plugins-icon-container row">
@@ -544,8 +569,48 @@
     </div>
     <!--end::Entry-->
 </div>
+<ul class="sticky-toolbar nav flex-column pl-2 pr-2 pt-3 pb-3 mt-4">
+    <li class="nav-item mb-2" id="kt_demo_panel_toggle" data-toggle="tooltip" title="" data-placement="right" data-original-title="Cài Đặt Máy In">
+        <a class="btn btn-sm btn-icon btn-bg-light btn-icon-success btn-hover-success" data-toggle="modal" data-target="#settingprint">
+            <i class="icon-2x text-dark-50 flaticon2-printer"></i>
+        </a>
+    </li>
+</ul>
+<div class="modal fade" id="settingprint" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cài Đặt Máy In</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group row">
+                    <select class="form-control" id="listaDeImpresoras"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary " id="btnRefrescarLista">Chạy Lại APP In</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--end::Content-->
 <!--begin::Page Scripts(used by this page)-->
+<script src="~/Areas/assets/Print/Impresora.js"></script>
+<script src="~/Areas/assets/Print/script.js"></script>
+<!--end::Content-->
+<!--begin::Page Scripts(used by this page)-->
+<script type="text/javascript">
+    var ReaderID = null
+    if (@Html.Raw(Json.Encode(@ViewBag.ReaderID)) != null) {
+        ReaderID = @Html.Raw(Json.Encode(@ViewBag.ReaderID));
+
+    }
+</script>
 <script src="~/Areas/assets/admin/membercard/MoneyCharge.js"></script>
 <!--end::Page Scripts-->
 <!--begin::Page Custom Styles(used by this page)-->

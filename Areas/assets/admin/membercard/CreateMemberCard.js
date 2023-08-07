@@ -195,7 +195,15 @@ var KTWizard1 = function () {
 						let nextStep = wizard.getNewStep()
 						if (nextStep == 2) {
 							/// Nếu là thẻ welcome thì bỏ bước thông tin
-							nextStep = SkipInfoStep(nextStep)
+							if ($("input[name='radiospay']:checked").val() == 2 && $("input[name='Paycode']").val() == "") {
+								$('#PaycodeNoti').show()
+								KTUtil.scrollTop();
+								return
+							} else {
+								nextStep = SkipInfoStep(nextStep)
+                            }
+
+							
 
                         }
 						if (nextStep == 3) {
@@ -279,7 +287,7 @@ var KTWizard1 = function () {
 			let data = $('#createMemberCardForm').serializeArray()
             $.ajax({
                 type: "POST",
-				url: "/MemberCard/Create",
+				url: "/Admin/MemberCard/Create",
                 data: data,
                 datatype: "json",
                 success: function (result) {
@@ -287,7 +295,7 @@ var KTWizard1 = function () {
 
                     
 						toastr.success('Thành công!')
-						location.reload()
+						SaveReportCreateCard(data, result.userID, result.userName)
                     } else {
                        
                         toastr.error(data.message,'Lỗi')
@@ -300,7 +308,34 @@ var KTWizard1 = function () {
         
         }
 	}
+	function SaveReportCreateCard(data, userID, userName) {
+		var idCard = "";
+		$.each(data, function (k, v) {
+			if (v.name == "CardID") {
+				idCard = v.value
+			}
+		})
+		$.ajax({
+			type: "POST",
+			url: "/MemberCard/SaveReportCreateCard",
+			data: {
+				userID: userID, idCard: idCard
+			},
+			success: function (result) {
+				if (result.status == "Success") {
+					let paytype = $('input[name="radiospay"]:checked').data('type');
 
+					Print(data, userID, result.sp, userName, "PHIEU CAP THE", result.cashier,paytype,result.member);
+					Print(data, userID, result.sp, userName, "PHIEU CAP THE", result.cashier,paytype,result.member);
+				} else {
+					toastr.error(data.message, 'Lỗi')
+				}
+			},
+			error: function () {
+				toastr.error('Lỗi')
+			}
+		})
+	}
 	return {
 		// public functions
 		init: function () {
@@ -315,11 +350,33 @@ var KTWizard1 = function () {
 
 jQuery(document).ready(function () {
 	KTWizard1.init();
+	var membercardHub = $.connection.membercardHub;
+	console.log(membercardHub)
+	membercardHub.client.notify = function (message) {
+
+
+
+		if (message && message.toLowerCase() == "cardscanned" && ReaderID != null) {
+			ScanTag()
+		}
+	}
+	$.connection.hub.start().done(function () {
+		console.log('Hub started');
+	});
+	/*signalr method for push server message to client*/
 	InitInputEvent()
 	initMasks()
 	InitLoadingButton()
+	$('#PaycodeNoti').hide()
 });
+function ScanTag() {
+	///Lấy thông tin mỗi khi quét thẻ khi đang ở trang quét thẻ
+	let isScanStep = $('[data-wizard-state="current"]').first().data('step') == 4
+	if (isScanStep) {
+		$('#CheckCardBtn').trigger("click");
+	}
 
+}
 
 function GetUser(UserName) {
 	$.ajax({
@@ -363,6 +420,7 @@ function GetMemberCardLevel(LevelFee) {
 		success: function (data) {
 			if (data.status == "Success") {
 				
+				$('input[name="MemberCardLevelID"]').val(data.data.CardLevelID)
 				$('input[name="LevelName"]').val(data.data.LevelName)
 				$('input[name="GiftLevelName"]').val(data.data.GiftLevelName)
 				$('input[name="RewardRate"]').val(data.data.RewardRate)

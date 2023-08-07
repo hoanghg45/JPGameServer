@@ -63,6 +63,9 @@ namespace JPGame.Areas.Admin.Controllers
             }
             Session["UserID"] = user.UserID;
             Session["Role"] = user.Role.Trim();
+            if(!string.IsNullOrEmpty(user.ReaderID))
+            Session["ReaderID"] = user.ReaderID.Trim();
+            
 
             return Json(
               new

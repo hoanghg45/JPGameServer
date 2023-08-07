@@ -269,7 +269,7 @@ namespace JPGame.Areas.Admin.Controllers
             try
             {
 
-                    if (LevelFee == 0 || LevelFee < 500000)
+                    if (LevelFee == 0 || LevelFee < 150000)
                     {
                         return this.Json(
                         new

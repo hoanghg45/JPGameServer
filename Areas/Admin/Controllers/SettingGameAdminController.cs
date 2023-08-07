@@ -42,9 +42,7 @@ namespace JPGame.Areas.Admin.Controllers
                 a.ModifyDate,
                 a.ModifyBy,
                 a.Status,
-            });
-
-
+            }).Where(x=>x.Name.Contains(search) || x.Name.ToLower().Contains(search));
             //Xử lí phân trang
             var z = data.ToList();
             //Số dữ liệu trên 1 trang
@@ -130,6 +128,7 @@ namespace JPGame.Areas.Admin.Controllers
                 string UserID = Session["UserID"].ToString();
                 var user = db.Users.Find(UserID);
                 var s = db.SettingGames.Find(settingGame.Id);
+                s.PushPoint = settingGame.PushPoint;
                 s.Name = settingGame.Name;
                 s.Price = settingGame.Price;
                 s.CreateBy = user.Name;

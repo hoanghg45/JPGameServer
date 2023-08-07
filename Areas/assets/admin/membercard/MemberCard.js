@@ -11,10 +11,11 @@ var isFull = false;
         var windowHeight = $(this).outerHeight();
 
         if (scrollTop + windowHeight >= scrollHeight && !isLoadingData && !isFull) {
+            
             // Đạt đến cuối trang và không đang lấy dữ liệu
             $('.spinner').show();
             // Gọi hàm để lấy dữ liệu tiếp theo
-            ShowTable(page);
+            ScrollData(page);
         }
     });
     InitSearch()
@@ -36,25 +37,24 @@ function ShowTable(pagenumber, search, status, level) {
         success: function (data) {
             let $table = $('#membercardtable')
             let body = $table.find('tbody')
-
+            isFull = false
             //Hiển thị dữ liệu trong bảng
 
             if (data.data && data.data.length > 0) {
                 $.each(data.data, function (i, v) {
+                    /*  <td>${v.MemberCardID}</td>*/    
                     let tr = `<tr>
                             <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
-                            <td>${v.MemberCardID}</td>
+                        
+                            <td>${v.Code}</td>
                             <td>${v.Level}</td>
                             <td>${v.Owner}</td>
-                            <td>${v.Status}</td>
+                            <td>${v.StatusDes}</td>
                
                             <td nowrap="nowrap">
-				            <a href="/Admin/Administrator/Edit/${v.ID}" class="btn btn-sm btn-clean btn-icon" title="Sửa">
+				            <a href="/Admin/MemberCard/Details/${v.Code}" class="btn btn-sm btn-clean btn-icon" title="Sửa">
                             <i class="la la-edit"></i>
-                            </a>
-                                <a href="javascript:Remove('${v.ID}')" class="btn btn-sm btn-clean btn-icon" title="Xóa">
-                                    <i class="la la-trash"></i>
-                                    </a>
+                            
                             </td>
                             </tr>`
 
@@ -102,7 +102,7 @@ function Remove(id) {
         if (result.isConfirmed) {
             $.ajax({
                 type: "Post",
-                url: "/Administrator/Delete",
+                url: "/MemberCard/Delete",
                 data: {
                     id
                 },
@@ -128,23 +128,33 @@ function Remove(id) {
 
 }
 function InitSearch() {
- 
+
     $('#kt_datatable_search_query').keypress(function (e) {
         if (e.which == 13) {
-            $('#membercardtable').find('tbody').empty()
-            
 
             SearchData()
         }
     })
 
-    $('#search_status, #search_level').change(function () {
-        SearchData()
-    })
+    setTimeout(function () {
+        $('#search_status, #search_level').on('select2:select', function (e) {
+
+            SearchData()
+        });
+    }, 300)
+
 }
 function SearchData() {
     let search = $('#kt_datatable_search_query').val().trim()
-    let status = $('#search_status').val().trim()
+    let status = $('#search_status').val()
     let level = $('#search_level').val().trim()
+    $('#membercardtable').find('tbody').empty()
     ShowTable(1, search, status, level)
+}
+function ScrollData(page){
+    let search = $('#kt_datatable_search_query').val().trim()
+    let status = $('#search_status').val()
+    let level = $('#search_level').val().trim()
+    
+    ShowTable(page, search, status, level)
 }

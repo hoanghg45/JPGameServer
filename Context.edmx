@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Accounts">
           <Key>
             <PropertyRef Name="AccountID" />
@@ -51,6 +51,14 @@
           <Property Name="LevelFee" Type="float" />
           <Property Name="Color" Type="varchar" MaxLength="50" />
           <Property Name="Image" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Cashiers">
+          <Key>
+            <PropertyRef Name="CashierID" />
+          </Key>
+          <Property Name="CashierID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Location" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Games">
           <Key>
@@ -101,6 +109,8 @@
           <Property Name="Money" Type="float" />
           <Property Name="ChargeDate" Type="datetime" />
           <Property Name="CreateBy" Type="nchar" MaxLength="50" />
+          <Property Name="TypePay" Type="int" />
+          <Property Name="Paycode" Type="nchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="MemberCardLevels">
           <Key>
@@ -127,6 +137,7 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="Status" Type="bit" />
           <Property Name="MultipliedMoney" Type="bit" />
+          <Property Name="Code39" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Modules">
           <Key>
@@ -146,6 +157,21 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nchar" MaxLength="50" />
           <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="NFCReaders">
+          <Key>
+            <PropertyRef Name="ReaderID" />
+          </Key>
+          <Property Name="ReaderID" Type="nchar" MaxLength="200" Nullable="false" />
+          <Property Name="ReaderName" Type="nvarchar(max)" />
+          <Property Name="Cashier" Type="int" />
+        </EntityType>
+        <EntityType Name="PayType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PersonalGifts">
           <Key>
@@ -175,6 +201,32 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="ReportCreateCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCard" Type="varchar" MaxLength="100" />
+          <Property Name="IdUser" Type="nchar" MaxLength="50" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="ReportRecharge">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCard" Type="varchar" MaxLength="100" />
+          <Property Name="IdUser" Type="nchar" MaxLength="50" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
         <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="ID" />
@@ -196,6 +248,7 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
+          <Property Name="PushPoint" Type="float" />
         </EntityType>
         <EntityType Name="Sliders">
           <Key>
@@ -247,6 +300,7 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
+          <Property Name="ReaderID" Type="nchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="VIPGifts">
           <Key>
@@ -329,6 +383,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MemberCardChargeRecords_PayType">
+          <End Role="PayType" Type="Self.PayType" Multiplicity="0..1" />
+          <End Role="MemberCardChargeRecords" Type="Self.MemberCardChargeRecords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PayType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecords">
+              <PropertyRef Name="TypePay" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MemberCardLevel_CardLevel">
           <End Role="CardLevels" Type="Self.CardLevels" Multiplicity="0..1" />
           <End Role="MemberCardLevels" Type="Self.MemberCardLevels" Multiplicity="*" />
@@ -389,6 +455,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_NFCReaders_Cashiers">
+          <End Role="Cashiers" Type="Self.Cashiers" Multiplicity="0..1" />
+          <End Role="NFCReaders" Type="Self.NFCReaders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cashiers">
+              <PropertyRef Name="CashierID" />
+            </Principal>
+            <Dependent Role="NFCReaders">
+              <PropertyRef Name="Cashier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Promotion_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Promotions" Type="Self.Promotions" Multiplicity="*" />
@@ -429,6 +507,7 @@
           <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Blogs" EntityType="Self.Blogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardLevels" EntityType="Self.CardLevels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cashiers" EntityType="Self.Cashiers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Games" EntityType="Self.Games" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gifts" EntityType="Self.Gifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LiveCards" EntityType="Self.LiveCards" Schema="dbo" store:Type="Tables" />
@@ -436,8 +515,12 @@
           <EntitySet Name="MemberCardLevels" EntityType="Self.MemberCardLevels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCards" EntityType="Self.MemberCards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modules" EntityType="Self.Modules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NFCReaders" EntityType="Self.NFCReaders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayType" EntityType="Self.PayType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReportCreateCard" EntityType="Self.ReportCreateCard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReportRecharge" EntityType="Self.ReportRecharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SettingGame" EntityType="Self.SettingGame" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sliders" EntityType="Self.Sliders" Schema="dbo" store:Type="Tables" />
@@ -469,6 +552,10 @@
             <End Role="MemberCards" EntitySet="MemberCards" />
             <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
           </AssociationSet>
+          <AssociationSet Name="FK_MemberCardChargeRecords_PayType" Association="Self.FK_MemberCardChargeRecords_PayType">
+            <End Role="PayType" EntitySet="PayType" />
+            <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
+          </AssociationSet>
           <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
             <End Role="CardLevels" EntitySet="CardLevels" />
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
@@ -489,6 +576,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Modules" EntitySet="Modules" />
           </AssociationSet>
+          <AssociationSet Name="FK_NFCReaders_Cashiers" Association="Self.FK_NFCReaders_Cashiers">
+            <End Role="Cashiers" EntitySet="Cashiers" />
+            <End Role="NFCReaders" EntitySet="NFCReaders" />
+          </AssociationSet>
           <AssociationSet Name="FK_Promotion_Users" Association="Self.FK_Promotion_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Promotions" EntitySet="Promotions" />
@@ -502,8 +593,7 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -556,6 +646,15 @@
           <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MemberCardLevels" Relationship="Self.FK_MemberCardLevel_CardLevel" FromRole="CardLevels" ToRole="MemberCardLevels" />
+        </EntityType>
+        <EntityType Name="Cashier">
+          <Key>
+            <PropertyRef Name="CashierID" />
+          </Key>
+          <Property Name="CashierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="NFCReaders" Relationship="Self.FK_NFCReaders_Cashiers" FromRole="Cashiers" ToRole="NFCReaders" />
         </EntityType>
         <EntityType Name="Game">
           <Key>
@@ -611,6 +710,9 @@
           <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="Account" Relationship="Self.FK_MemberCardChargeRecords_Accounts" FromRole="MemberCardChargeRecords" ToRole="Accounts" />
           <NavigationProperty Name="MemberCard" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCardChargeRecords" ToRole="MemberCards" />
+          <Property Name="TypePay" Type="Int32" />
+          <Property Name="Paycode" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="PayType" Relationship="Model.FK_MemberCardChargeRecords_PayType" FromRole="MemberCardChargeRecord" ToRole="PayType" />
         </EntityType>
         <EntityType Name="MemberCardLevel">
           <Key>
@@ -644,6 +746,7 @@
           <NavigationProperty Name="Accounts" Relationship="Self.FK_Accounts_MemberCards" FromRole="MemberCards" ToRole="Accounts" />
           <NavigationProperty Name="MemberCardChargeRecords" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCards" ToRole="MemberCardChargeRecords" />
           <NavigationProperty Name="MemberCardLevel" Relationship="Self.FK_MemberCard_MemberCardLevel" FromRole="MemberCards" ToRole="MemberCardLevels" />
+          <Property Name="Code39" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -665,6 +768,15 @@
           <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="User" Relationship="Self.FK_Modules_Users" FromRole="Modules" ToRole="Users" />
           <NavigationProperty Name="User1" Relationship="Self.FK_Modules_Users1" FromRole="Modules" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="NFCReader">
+          <Key>
+            <PropertyRef Name="ReaderID" />
+          </Key>
+          <Property Name="ReaderID" Type="String" MaxLength="200" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="ReaderName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Cashier" Type="Int32" />
+          <NavigationProperty Name="Cashier1" Relationship="Self.FK_NFCReaders_Cashiers" FromRole="NFCReaders" ToRole="Cashiers" />
         </EntityType>
         <EntityType Name="PersonalGift">
           <Key>
@@ -718,6 +830,7 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="PushPoint" Type="Double" />
         </EntityType>
         <EntityType Name="Slider">
           <Key>
@@ -776,6 +889,7 @@
           <NavigationProperty Name="Modules1" Relationship="Self.FK_Modules_Users1" FromRole="Users" ToRole="Modules" />
           <NavigationProperty Name="Promotions" Relationship="Self.FK_Promotion_Users" FromRole="Users" ToRole="Promotions" />
           <NavigationProperty Name="Role1" Relationship="Self.FK_User_Roles" FromRole="Users" ToRole="Roles" />
+          <Property Name="ReaderID" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="VIPGift">
           <Key>
@@ -820,6 +934,18 @@
             </Principal>
             <Dependent Role="MemberCardLevels">
               <PropertyRef Name="CardLevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NFCReaders_Cashiers">
+          <End Role="Cashiers" Type="Self.Cashier" Multiplicity="0..1" />
+          <End Role="NFCReaders" Type="Self.NFCReader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cashiers">
+              <PropertyRef Name="CashierID" />
+            </Principal>
+            <Dependent Role="NFCReaders">
+              <PropertyRef Name="Cashier" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -959,6 +1085,7 @@
           <EntitySet Name="Accounts" EntityType="Self.Account" />
           <EntitySet Name="Blogs" EntityType="Self.Blog" />
           <EntitySet Name="CardLevels" EntityType="Self.CardLevel" />
+          <EntitySet Name="Cashiers" EntityType="Self.Cashier" />
           <EntitySet Name="Games" EntityType="Self.Game" />
           <EntitySet Name="Gifts" EntityType="Self.Gift" />
           <EntitySet Name="LiveCards" EntityType="Self.LiveCard" />
@@ -966,6 +1093,7 @@
           <EntitySet Name="MemberCardLevels" EntityType="Self.MemberCardLevel" />
           <EntitySet Name="MemberCards" EntityType="Self.MemberCard" />
           <EntitySet Name="Modules" EntityType="Self.Module" />
+          <EntitySet Name="NFCReaders" EntityType="Self.NFCReader" />
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGift" />
           <EntitySet Name="Promotions" EntityType="Self.Promotion" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
@@ -986,6 +1114,10 @@
           <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
             <End Role="CardLevels" EntitySet="CardLevels" />
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NFCReaders_Cashiers" Association="Self.FK_NFCReaders_Cashiers">
+            <End Role="Cashiers" EntitySet="Cashiers" />
+            <End Role="NFCReaders" EntitySet="NFCReaders" />
           </AssociationSet>
           <AssociationSet Name="FK_Gift_PersonalGift" Association="Self.FK_Gift_PersonalGift">
             <End Role="PersonalGifts" EntitySet="PersonalGifts" />
@@ -1031,7 +1163,60 @@
             <End Role="TypeSliders" EntitySet="TypeSliders" />
             <End Role="Sliders" EntitySet="Sliders" />
           </AssociationSet>
+          <EntitySet Name="ReportRecharges" EntityType="Model.ReportRecharge" />
+          <EntitySet Name="PayTypes" EntityType="Model.PayType" />
+          <AssociationSet Name="FK_MemberCardChargeRecords_PayType" Association="Model.FK_MemberCardChargeRecords_PayType">
+            <End Role="PayType" EntitySet="PayTypes" />
+            <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
+          </AssociationSet>
+          <EntitySet Name="ReportCreateCards" EntityType="Model.ReportCreateCard" />
         </EntityContainer>
+        <EntityType Name="ReportRecharge">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdUser" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PayType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_PayType" FromRole="PayType" ToRole="MemberCardChargeRecord" />
+        </EntityType>
+        <Association Name="FK_MemberCardChargeRecords_PayType">
+          <End Type="Model.PayType" Role="PayType" Multiplicity="0..1" />
+          <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PayType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecord">
+              <PropertyRef Name="TypePay" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ReportCreateCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdUser" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1088,6 +1273,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Cashiers">
+            <EntityTypeMapping TypeName="Model.Cashier">
+              <MappingFragment StoreEntitySet="Cashiers">
+                <ScalarProperty Name="CashierID" ColumnName="CashierID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Games">
             <EntityTypeMapping TypeName="Model.Game">
               <MappingFragment StoreEntitySet="Games">
@@ -1133,6 +1327,8 @@
           <EntitySetMapping Name="MemberCardChargeRecords">
             <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
               <MappingFragment StoreEntitySet="MemberCardChargeRecords">
+                <ScalarProperty Name="Paycode" ColumnName="Paycode" />
+                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
                 <ScalarProperty Name="RecordID" ColumnName="RecordID" />
                 <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
@@ -1157,6 +1353,7 @@
           <EntitySetMapping Name="MemberCards">
             <EntityTypeMapping TypeName="Model.MemberCard">
               <MappingFragment StoreEntitySet="MemberCards">
+                <ScalarProperty Name="Code39" ColumnName="Code39" />
                 <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
                 <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
                 <ScalarProperty Name="Points" ColumnName="Points" />
@@ -1187,6 +1384,15 @@
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
                 <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NFCReaders">
+            <EntityTypeMapping TypeName="Model.NFCReader">
+              <MappingFragment StoreEntitySet="NFCReaders">
+                <ScalarProperty Name="ReaderID" ColumnName="ReaderID" />
+                <ScalarProperty Name="ReaderName" ColumnName="ReaderName" />
+                <ScalarProperty Name="Cashier" ColumnName="Cashier" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1241,6 +1447,7 @@
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
                 <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PushPoint" ColumnName="PushPoint" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1286,6 +1493,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="Model.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ReaderID" ColumnName="ReaderID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1306,6 +1514,42 @@
                 <ScalarProperty Name="Moctail" ColumnName="Moctail" />
                 <ScalarProperty Name="VipRoom" ColumnName="VipRoom" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportRecharges">
+            <EntityTypeMapping TypeName="Model.ReportRecharge">
+              <MappingFragment StoreEntitySet="ReportRecharge">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayTypes">
+            <EntityTypeMapping TypeName="Model.PayType">
+              <MappingFragment StoreEntitySet="PayType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportCreateCards">
+            <EntityTypeMapping TypeName="Model.ReportCreateCard">
+              <MappingFragment StoreEntitySet="ReportCreateCard">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

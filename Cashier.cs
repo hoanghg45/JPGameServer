@@ -12,17 +12,19 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class SettingGame
+    public partial class Cashier
     {
-        public string Id { get; set; }
-        public string IP { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Cashier()
+        {
+            this.NFCReaders = new HashSet<NFCReader>();
+        }
+    
+        public int CashierID { get; set; }
         public string Name { get; set; }
-        public Nullable<double> Price { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
-        public string CreateBy { get; set; }
-        public Nullable<System.DateTime> ModifyDate { get; set; }
-        public string ModifyBy { get; set; }
-        public Nullable<bool> Status { get; set; }
-        public Nullable<double> PushPoint { get; set; }
+        public string Location { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NFCReader> NFCReaders { get; set; }
     }
 }

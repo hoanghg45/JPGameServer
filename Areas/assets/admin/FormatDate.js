@@ -1,5 +1,6 @@
 ﻿
 function jsonTodDate(jsonDate) {
+    
     const backToDate = new Date(parseInt(jsonDate));
     return backToDate;
 }
@@ -30,6 +31,7 @@ function formatDate(jsonDate) {
         padTo2Digits(date.getDate()),
     ].join('-');
 }
+
 function timeCal(lastlogin) {
     lastlogin = lastlogin.substring(4, 24)
 
@@ -39,7 +41,7 @@ function timeCal(lastlogin) {
     return cal
 }
 function getTime(jsonDate) {
-
+    jsonDate = jsonDate.substr(6)
     let JavaScriptDate = jsonTodDate(jsonDate)
     var dateObject = new Date(JavaScriptDate);
     return dateObject.getHours() + ':' + ((dateObject.getMinutes() < 10) ? ('0' + dateObject.getMinutes()) : dateObject.getMinutes())
