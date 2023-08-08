@@ -45,6 +45,8 @@
         <EntityTypeShape EntityType="Model.PayType" Width="1.5" PointX="0.75" PointY="10.875" />
         <AssociationConnector Association="Model.FK_MemberCardChargeRecords_PayType" />
         <EntityTypeShape EntityType="Model.ReportCreateCard" Width="1.5" PointX="10.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Model.InShift" Width="1.5" PointX="12.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Model.OutShift" Width="1.5" PointX="14.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

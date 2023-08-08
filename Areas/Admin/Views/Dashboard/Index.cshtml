@@ -492,6 +492,191 @@
     </div>
     <!--end::Entry-->
 </div>
+<ul class="sticky-toolbar nav flex-column pl-2 pr-2 pt-3 pb-3 mt-4">
+    <li class="nav-item mb-2" id="kt_demo_panel_toggle" data-toggle="tooltip" title="" data-placement="right" data-original-title="Báo Cáo Đầu Ca">
+        <a class="btn btn-sm btn-icon btn-bg-light btn-icon-success btn-hover-success" data-toggle="modal" data-target="#InShift">
+            <i class="icon-2x text-dark-50 flaticon-statistics"></i>
+        </a>
+    </li>
+    <li class="nav-item mb-2" id="kt_demo_panel_toggle" data-toggle="tooltip" title="" data-placement="right" data-original-title="Báo Cáo Kết Ca">
+        <a class="btn btn-sm btn-icon btn-bg-light btn-icon-success btn-hover-success" data-toggle="modal" data-target="#OutShift">
+            <i class="icon-2x text-dark-50 flaticon-statistics"></i>
+        </a>
+    </li>
+</ul>
+<div class="modal fade" id="InShift" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Báo Cáo Đầu Ca</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Ca:</label>
+                        <input name="shift" type="text" class="form-control form-control-solid" required placeholder="" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tiền Đầu Ca:</label>
+                        <input name="kt_money_input" id="FirstShiftMoney" type="text" class="form-control form-control-solid" required placeholder="Tiền Đầu Ca" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="save()">Lưu Và In</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="OutShift" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Báo Cáo Kết Ca</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Phiếu Đầu Ca:</label>
+                        <input name="inShift" onkeyup="InShift()" type="text" class="form-control form-control-solid" required placeholder="Phiếu Đầu Ca" />
+                    </div>
+                    <div class="form-group">
+                        <label>Ca:</label>
+                        <input name="shift" type="text" class="form-control form-control-solid" required placeholder="" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tiền Đầu Ca:</label>
+                        <input name="kt_money_input" id="FirstShiftMoney1" type="text" class="form-control form-control-solid" required placeholder="Tiền Đầu Ca" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tiền Cuối Ca:</label>
+                        <input name="kt_money_input" id="EndShiftMoney" type="text" class="form-control form-control-solid" required placeholder="Tiền Cuối Ca" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tiền Thực Nhận:</label>
+                        <input name="kt_money_input" id="RealMoneySale" type="text" class="form-control form-control-solid" required placeholder="Tiền Thực Nhận" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary " onclick="save2()">Lưu Và In</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Areas/assets/ReportShift/ReportShift.js"></script>
+    <script src="~/Areas/assets/Print/Impresora.js"></script>
+    <script src="~/Areas/assets/Print/script.js"></script>
+    <script>
+
+        function InShift() {
+            var inShift = $('input[name="inShift"]').val().trim();
+            inShift = Number(inShift);
+            $.ajax({
+                type: "GET",
+                url: "/Admin/ReportShift/InShift",
+                data: { inShift: inShift },
+                success: function (result) {
+                    if (result.status == "success") {
+                        $('#FirstShiftMoney1').val(result.shift.FirstShiftMoney)
+                        $('input[name="shift"]').val(GetShift(getTime(result.shift.CreateDate + '')))
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Đã có lỗi xảy ra, vui lòng thử lại!',
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+
+                        icon: 'error',
+                        title: 'Something wrong!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+        }
+        function save() {
+            var FirstShiftMoney = $('#FirstShiftMoney').val().trim()
+            FirstShiftMoney = FirstShiftMoney.replaceAll(".", "");
+            $.ajax({
+                type: "POST",
+                url: "/Admin/ReportShift/Adds",
+                data: { FirstShiftMoney: FirstShiftMoney },
+                success: function (result) {
+                    if (result.status == "success") {
+                        toastr.success("Thành Công")
+                        PrintFirstShiftMoney(result.cashiersName, result.sp, result.userName)
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Đã có lỗi xảy ra, vui lòng thử lại!',
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+
+                        icon: 'error',
+                        title: 'Something wrong!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+        }
+        function save2() {
+            var FirstShiftMoney = $('#FirstShiftMoney1').val().trim().replaceAll(".", "");
+            var EndShiftMoney = $('#EndShiftMoney').val().trim().replaceAll(".", "");
+            var RealMoneySale = $('#RealMoneySale').val().trim().replaceAll(".", "");
+            $.ajax({
+                type: "POST",
+                url: "/Admin/ReportShift/Adds1",
+                data: { FirstShiftMoney: FirstShiftMoney, EndShiftMoney: EndShiftMoney, RealMoneySale: RealMoneySale },
+                success: function (result) {
+                    if (result.status == "success") {
+                        toastr.success("Thành Công")
+                        PrintEndShiftMoney(result.cashiersName, result.sp, result.userName)
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Đã có lỗi xảy ra, vui lòng thử lại!',
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+
+                        icon: 'error',
+                        title: 'Something wrong!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+        }
+    </script>
+}
 
 
 
