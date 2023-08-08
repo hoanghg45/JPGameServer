@@ -74,7 +74,7 @@ function GetCurrCard($this) {
 				if (data.card.isHaveOwner) {
 					$('#UserInfor').show()
 					$('input[name="FullName"]').val(data.card.Owner.FullName)
-					$('input[name="DateOfBirth"]').val(data.card.Owner.DateOfBirth)
+					$('input[name="DateOfBirth"]').val(formatDate(data.card.Owner.DateOfBirth))
 					$('input[name="AccountName"]').val(data.card.Owner.UserName)
 					$('input[name="Email"]').val(data.card.Owner.Email)
 					$('input[name="Phone"]').val(data.card.Owner.Phone)
@@ -113,7 +113,7 @@ function GetDetailCard(id) {
 			if (data.status == "Success") {
 				$('#iconStatus').addClass("flaticon2-check-mark text-success");
 				$('#textNoti').text("Thẻ hợp lệ!");
-				$('input[name="CurrCardID"]').val(data.card.MemberCardID)
+				$('input[name="CurrCardID"]').val(data.card.Code)
 
 				$('input[name="CurrLevelName"]').val(data.card.LevelName)
 				$('input[name="CurrGiftLevelName"]').val(data.card.GiftLevelName)

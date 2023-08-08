@@ -121,7 +121,7 @@ namespace JPGame.Areas.Admin.Controllers
                 string CardID = collection["CardID"];
                 string level = collection["MemberCardLevelID"];
                 var MemberCardLevel = db.CardLevels.Find(collection["MemberCardLevelID"]);
-                var card = db.MemberCards.Find(CardID);
+                var card = db.MemberCards.Where(m => m.Code39.Equals(CardID)).FirstOrDefault();
                 if (card == null)
                 {
                             return this.Json(
@@ -213,9 +213,9 @@ namespace JPGame.Areas.Admin.Controllers
                 var user = db.Users.Find(currUser);
                 string OldCardID = collection["CurrCardID"];
                 string NewCardID = collection["NewCardID"];
-                var MemberCardLevel = db.MemberCards.Find(collection["MemberCardLevelID"]);
-                 var oldCard = db.MemberCards.Find(OldCardID);
-                var newCard = db.MemberCards.Find(NewCardID);
+                var MemberCardLevel = db.MemberCardLevels.Find(collection["MemberCardLevelID"]);
+                var oldCard = db.MemberCards.Where(m => m.Code39.Equals(OldCardID)).FirstOrDefault();
+                var newCard = db.MemberCards.Where(m => m.Code39.Equals(NewCardID)).FirstOrDefault();
                 if (oldCard == null)
                 {
                     return this.Json(
@@ -363,7 +363,7 @@ namespace JPGame.Areas.Admin.Controllers
                 db.SaveChanges();
                 var sp = db.ReportRecharges.OrderBy(x => x.Status == true).ToList().LastOrDefault();
                 var cashier = db.NFCReaders.Where(x => x.ReaderID == user.ReaderID).ToList().LastOrDefault().Cashier1.Name;
-                string membername = db.MemberCards.Find(idCard).Accounts.Any() ? db.MemberCards.Find(idCard).Accounts.FirstOrDefault().FullName.Trim() : "";
+                string membername = db.MemberCards.Where(m => m.Code39.Equals(idCard)).FirstOrDefault().Accounts.Any() ? db.MemberCards.Find(idCard).Accounts.FirstOrDefault().FullName.Trim() : "";
                 return this.Json(
                  new
                  {
@@ -408,7 +408,7 @@ namespace JPGame.Areas.Admin.Controllers
                 db.SaveChanges();
                 var sp = db.ReportCreateCards.OrderBy(x => x.Status == true).ToList().LastOrDefault();
                 var cashier = db.NFCReaders.Where(x => x.ReaderID == user.ReaderID).ToList().LastOrDefault().Cashier1.Name;
-                string membername = db.MemberCards.Find(idCard).Accounts.Any() ? db.MemberCards.Find(idCard).Accounts.FirstOrDefault().FullName.Trim() : "";
+                string membername = db.MemberCards.Where(m => m.Code39.Equals(idCard)).FirstOrDefault().Accounts.Any() ? db.MemberCards.Find(idCard).Accounts.FirstOrDefault().FullName.Trim() : "";
                 return this.Json(
                  new
                  {
@@ -461,7 +461,8 @@ namespace JPGame.Areas.Admin.Controllers
                 var memberCard = db.MemberCards.Where(c => c.MemberCardID.Equals(currCard.CardID))
                     .Select(c => new
                     {
-                        c.MemberCardID,
+                        
+                        MemberCardID = c.Code39,
                         c.MemberCardLevel.CardLevelID,
                         c.MemberCardLevel.CardLevel.LevelName,
                         c.MemberCardLevel.Gift.GiftLevelName,
@@ -549,7 +550,8 @@ namespace JPGame.Areas.Admin.Controllers
                 var memberCard = db.MemberCards.Where(c => c.Code39.Equals(id))
                     .Select(c => new
                     {
-                        c.MemberCardID,
+                        
+                        Code = c.Code39,
                         c.MemberCardLevel.CardLevelID,
                         c.MemberCardLevel.CardLevel.LevelName,
                         c.MemberCardLevel.Gift.GiftLevelName,
@@ -696,7 +698,7 @@ namespace JPGame.Areas.Admin.Controllers
                 new
                 {
                     status = "Success",
-                    card = memberCard.MemberCardID
+                    card = memberCard.Code39
 
                 }
                 , JsonRequestBehavior.AllowGet
