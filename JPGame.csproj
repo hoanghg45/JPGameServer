@@ -206,6 +206,7 @@
     <Compile Include="Areas\Admin\Controllers\MemberCardLevelController.cs" />
     <Compile Include="Areas\Admin\Controllers\ModulesAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\PromotionAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ReportShiftController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingGameAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\SliderAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\TypeSliderAdminController.cs" />
@@ -253,6 +254,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="InShift.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="LiveCard.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -271,6 +275,9 @@
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="NFCReader.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OutShift.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
     <Compile Include="PayType.cs">
@@ -2252,6 +2259,7 @@
     <Content Include="Areas\assets\plugins\global\fonts\socicon\socicon.svg" />
     <Content Include="Areas\assets\plugins\global\plugins.bundle.css" />
     <Content Include="Areas\assets\plugins\global\plugins.bundle.js" />
+    <Content Include="Areas\assets\ReportShift\ReportShift.js" />
     <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -2480,6 +2488,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Views\ReportShift\" />
     <Folder Include="Models\" />
     <Folder Include="Views\SystemGame\" />
   </ItemGroup>

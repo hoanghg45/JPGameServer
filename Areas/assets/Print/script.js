@@ -25,6 +25,101 @@ const obtenerListaDeImpresoras = () => {
 
 $btnRefrescarLista.addEventListener("click", obtenerListaDeImpresoras);
 
+function PrintEndShiftMoney(cashiersName, sp, userName) {
+    let impresora = new Impresora(RUTA_API);
+    impresora.cut();
+    impresora.cutPartial();
+    impresora.setFontSize(3, 2);
+    impresora.write("JP SPORT GAME\n");
+    impresora.setFontSize(1, 1);
+    impresora.write("TANG 7, GIGAMALL, 240 - 242 PHAM VAN DONG\n P HIEP BINH CHANH, Q THU DUC, TP HCM\n");
+    impresora.write("SDT: \n");
+    impresora.feed(1);
+    impresora.setFontSize(2, 2);
+    impresora.write("BAO CAO DAU CA\n");
+    impresora.feed(1);
+    impresora.setFontSize(1, 1);
+    impresora.setAlign("left");
+    impresora.write("QUAY:");
+    impresora.write(cashiersName + "\n");
+    impresora.write("SO PHIEU:");
+    impresora.write(sp.Id + "\n");
+    impresora.write("THU NGAN:");
+    impresora.write(userName.trim() + "\n");
+    impresora.write("THOI GIAN THU:");
+    impresora.write(formatDate(sp.CreateDate) + " " + getTime(sp.CreateDate + '') + "\n");
+    impresora.write("CA:");
+    impresora.write(GetShift(getTime(sp.CreateDate + '')) + "\n");
+    impresora.feed(1);
+    impresora.write("===============================================\n");
+    impresora.feed(1);
+    impresora.write("SO TIEN VAO CA:");
+    impresora.write(sp.FirstShiftMoney + "\n");
+    impresora.write("SO TIEN KET CA:");
+    impresora.write(sp.EndShiftMoney + "\n");
+    impresora.write("SO TIEN THUC NHAN:");
+    impresora.write(sp.RealMoneySale + "\n");
+    impresora.feed(1);
+    impresora.write("===============================================\n");
+    impresora.feed(1);
+    impresora.setAlign("center");
+    impresora.write("(BAO CAO KET QUA CHI TIET)\n");
+    impresora.write("WIFI: JP SPORT GAME\nPASSWORD: tang7gigamall\n");
+    impresora.feed(1);
+    impresora.cut();
+    impresora.cutPartial(); // Pongo este y también cut porque en ocasiones no funciona con cut, solo con cutPartial
+    impresora.end()
+        .then(valor => {
+            location.reload();
+        });
+}
+
+function PrintFirstShiftMoney(cashiersName, sp, userName) {
+    let impresora = new Impresora(RUTA_API);
+    impresora.cut();
+    impresora.cutPartial();
+    impresora.setFontSize(3, 2);
+    impresora.write("JP SPORT GAME\n");
+    impresora.setFontSize(1, 1);
+    impresora.write("TANG 7, GIGAMALL, 240 - 242 PHAM VAN DONG\n P HIEP BINH CHANH, Q THU DUC, TP HCM\n");
+    impresora.write("SDT: \n");
+    impresora.feed(1);
+    impresora.setFontSize(2, 2);
+    impresora.write("BAO CAO DAU CA\n");
+    impresora.feed(1);
+    impresora.setFontSize(1, 1);
+    impresora.setAlign("left");
+    impresora.write("QUAY:");
+    impresora.write(cashiersName + "\n");
+    impresora.write("SO PHIEU:");
+    impresora.write(sp.Id + "\n");
+    impresora.write("THU NGAN:");
+    impresora.write(userName.trim() + "\n");
+    impresora.write("THOI GIAN THU:");
+    impresora.write(formatDate(sp.CreateDate) + " " + getTime(sp.CreateDate + '') + "\n");
+    impresora.write("CA:");
+    impresora.write(GetShift(getTime(sp.CreateDate + ''))+"\n");
+    impresora.feed(1);
+    impresora.write("===============================================\n");
+    impresora.feed(1);
+    impresora.write("SO TIEN VAO CA:");
+    impresora.write(sp.FirstShiftMoney + "\n");
+    impresora.feed(1);
+    impresora.write("===============================================\n");
+    impresora.feed(1);
+    impresora.setAlign("center");
+    impresora.write("(BAO CAO KET QUA CHI TIET)\n");
+    impresora.write("WIFI: JP SPORT GAME\nPASSWORD: tang7gigamall\n");
+    impresora.feed(1);
+    impresora.cut();
+    impresora.cutPartial(); // Pongo este y también cut porque en ocasiones no funciona con cut, solo con cutPartial
+    impresora.end()
+        .then(valor => {
+            location.reload();
+        });
+}
+
+
 function Print(data, userID, sp, userName, name, cashier,paytype,member) {
     var MoneyPay = "",LevelNameReview=""
     $.each(data, function (k, v) {

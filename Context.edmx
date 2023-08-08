@@ -90,6 +90,20 @@
           <Property Name="SpecialMemoryID" Type="varchar" MaxLength="50" />
           <Property Name="PersonalGiftID" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="InShift">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsers" Type="nchar" MaxLength="50" />
+          <Property Name="Cashiers" Type="int" />
+          <Property Name="FirstShiftMoney" Type="float" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
         <EntityType Name="LiveCards">
           <Key>
             <PropertyRef Name="ID" />
@@ -165,6 +179,23 @@
           <Property Name="ReaderID" Type="nchar" MaxLength="200" Nullable="false" />
           <Property Name="ReaderName" Type="nvarchar(max)" />
           <Property Name="Cashier" Type="int" />
+        </EntityType>
+        <EntityType Name="OutShift">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdInShift" Type="int" />
+          <Property Name="IdUsers" Type="nchar" MaxLength="50" />
+          <Property Name="Cashiers" Type="int" />
+          <Property Name="RealMoneySale" Type="float" />
+          <Property Name="EndShiftMoney" Type="float" />
+          <Property Name="FirstShiftMoney" Type="float" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="bit" />
         </EntityType>
         <EntityType Name="PayType">
           <Key>
@@ -510,12 +541,14 @@
           <EntitySet Name="Cashiers" EntityType="Self.Cashiers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Games" EntityType="Self.Games" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gifts" EntityType="Self.Gifts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InShift" EntityType="Self.InShift" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LiveCards" EntityType="Self.LiveCards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCardChargeRecords" EntityType="Self.MemberCardChargeRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCardLevels" EntityType="Self.MemberCardLevels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCards" EntityType="Self.MemberCards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modules" EntityType="Self.Modules" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NFCReaders" EntityType="Self.NFCReaders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OutShift" EntityType="Self.OutShift" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayType" EntityType="Self.PayType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
@@ -1170,6 +1203,8 @@
             <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
           </AssociationSet>
           <EntitySet Name="ReportCreateCards" EntityType="Model.ReportCreateCard" />
+          <EntitySet Name="InShifts" EntityType="Model.InShift" />
+          <EntitySet Name="OutShifts" EntityType="Model.OutShift" />
         </EntityContainer>
         <EntityType Name="ReportRecharge">
           <Key>
@@ -1216,6 +1251,37 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="InShift">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="IdUsers" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Cashiers" Type="Int32" />
+          <Property Name="FirstShiftMoney" Type="Double" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="OutShift">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsers" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Cashiers" Type="Int32" />
+          <Property Name="RealMoneySale" Type="Double" />
+          <Property Name="EndShiftMoney" Type="Double" />
+          <Property Name="FirstShiftMoney" Type="Double" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="IdInShift" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1550,6 +1616,39 @@
                 <ScalarProperty Name="IdUser" ColumnName="IdUser" />
                 <ScalarProperty Name="IdCard" ColumnName="IdCard" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InShifts">
+            <EntityTypeMapping TypeName="Model.InShift">
+              <MappingFragment StoreEntitySet="InShift">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="FirstShiftMoney" ColumnName="FirstShiftMoney" />
+                <ScalarProperty Name="Cashiers" ColumnName="Cashiers" />
+                <ScalarProperty Name="IdUsers" ColumnName="IdUsers" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OutShifts">
+            <EntityTypeMapping TypeName="Model.OutShift">
+              <MappingFragment StoreEntitySet="OutShift">
+                <ScalarProperty Name="IdInShift" ColumnName="IdInShift" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="FirstShiftMoney" ColumnName="FirstShiftMoney" />
+                <ScalarProperty Name="EndShiftMoney" ColumnName="EndShiftMoney" />
+                <ScalarProperty Name="RealMoneySale" ColumnName="RealMoneySale" />
+                <ScalarProperty Name="Cashiers" ColumnName="Cashiers" />
+                <ScalarProperty Name="IdUsers" ColumnName="IdUsers" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
