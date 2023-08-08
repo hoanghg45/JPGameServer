@@ -67,5 +67,34 @@ namespace JPGame.Areas.Admin.Controllers
          , JsonRequestBehavior.AllowGet
          );
         }
+        public ActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult Create(Account formData)
+        {
+            try
+            {
+                if (formData.AccountName != null)
+                {
+                    var date = DateTime.Now;
+                    byte[] bytes = System.Text.Encoding.UTF8.GetBytes(formData.AccountName);
+                    string base64String = Convert.ToBase64String(bytes);
+                    formData.AccountID = base64String + date.Year + date.Month + date.Day + date.Hour + date.Minute + date.Second + date.Millisecond;
+                }
+                formData.CreateDate = DateTime.Now;
+                formData.ModifyDate = DateTime.Now;
+                formData.Password = BCrypt.Net.BCrypt.HashPassword("123456");
+                db.Accounts.Add(formData);
+                db.SaveChanges();
+                return Json(new { code = 200, msg = "Thành Công" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Đã Có Tài Khoản " + formData.AccountName }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

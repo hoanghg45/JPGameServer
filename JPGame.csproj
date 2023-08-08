@@ -2425,6 +2425,7 @@
     </Content>
     <Content Include="Areas\Admin\Views\Administrator\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\MemberCard\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\AccountsAdmin\Create.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
