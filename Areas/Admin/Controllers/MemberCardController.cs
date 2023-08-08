@@ -2,8 +2,10 @@
 using JPGame.Areas.Security;
 using NinjaNye.SearchExtensions;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -157,6 +159,7 @@ namespace JPGame.Areas.Admin.Controllers
                 card.Balance = Double.Parse(collection["Money"].Replace(",", ""));
                 card.Points = Double.Parse(collection["Point"].Replace(",", ""));
                 card.Status = true;
+                card.ModifyDate = DateTime.Now;
                 var paytype = int.Parse(collection["radiospay"]);
                 string paycode = collection["Paycode"] == ""? null: collection["Paycode"].ToString();
                 var chargeRecord = new MemberCardChargeRecord
@@ -259,6 +262,7 @@ namespace JPGame.Areas.Admin.Controllers
                     }
                     oldCard.Balance = FinalMoney;
                     oldCard.Points = FinalPoint;
+                    oldCard.ModifyDate = DateTime.Now;
                 }
                 else
                 {
@@ -281,8 +285,8 @@ namespace JPGame.Areas.Admin.Controllers
                     newCard.Balance = FinalMoney;
                     newCard.Points = FinalPoint;
                     newCard.Status = true;
-                    newCard.CreateDate = DateTime.Now;
-
+                   
+                    newCard.ModifyDate = DateTime.Now;
                     //Nếu thẻ được nâng cấp
                     var oldCardAccount = oldCard.Accounts.FirstOrDefault();
                     if (oldCardAccount == null)
@@ -842,6 +846,50 @@ namespace JPGame.Areas.Admin.Controllers
                 return Json(new { status = false, message = e });
             }
            
+        }
+        public ActionResult ExportToExcel()
+        {
+            var data = db.MemberCards.Select(m => new {
+                m.Code39,
+                CardLevel = m.MemberCardLevel.CardLevel.LevelName.Trim(),
+                Status = m.Status.Value ? "Đã kích hoạt" : "Chưa kích hoạt",
+                Owner = m.Accounts.Any() ? m.Accounts.FirstOrDefault().AccountName : "",
+                
+
+            }).ToList(); // Lấy dữ liệu từ cơ sở dữ liệu
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+
+                // Thêm tiêu đề cho các cột
+                worksheet.Cells[1, 1].Value = "Mã thẻ";
+                worksheet.Cells[1, 2].Value = "Cấp độ thẻ";
+                worksheet.Cells[1, 3].Value = "Trạng thái";
+                worksheet.Cells[1, 4].Value = "Sở hữu";
+                // Thêm dữ liệu từ data vào các ô
+                for (int i = 0; i < data.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = data[i].Code39;
+                    worksheet.Cells[i + 2, 2].Value = data[i].CardLevel;
+                    worksheet.Cells[i + 2, 3].Value = data[i].Status;
+                    worksheet.Cells[i + 2, 4].Value = data[i].Owner;
+                }
+                var headerCells = worksheet.Cells[1, 1, 1, worksheet.Dimension.Columns];
+                worksheet.View.FreezePanes(2, 1);
+                // Set their text to bold, italic and underline.
+                headerCells.Style.Font.Bold = true;
+                headerCells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                headerCells.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+                worksheet.Cells["A:AZ"].AutoFitColumns();
+                var range = worksheet.Cells[worksheet.Dimension.Address];
+                range.AutoFilter = true;
+                ///Setting thêm cho sheet detail
+                //Select only the header cells
+                // Lưu package thành file Excel
+                var stream = new MemoryStream(package.GetAsByteArray());
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "membercard-data.xlsx");
+            }
         }
     }
 }

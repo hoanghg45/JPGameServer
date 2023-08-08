@@ -322,6 +322,7 @@
   <ItemGroup>
     <Content Include="Areas\Admin\Views\MemberCard\Index.cshtml" />
     <Content Include="Areas\assets\admin\accounts\AccountsTable.js" />
+    <Content Include="Areas\assets\admin\accounts\CreateAccount.js" />
     <Content Include="Areas\assets\admin\FormatDate.js" />
     <Content Include="Areas\assets\admin\layout.js" />
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />

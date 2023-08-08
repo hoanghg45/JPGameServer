@@ -88,11 +88,11 @@ namespace JPGame.Areas.Admin.Controllers
                 formData.Password = BCrypt.Net.BCrypt.HashPassword("123456");
                 db.Accounts.Add(formData);
                 db.SaveChanges();
-                return Json(new { code = 200, msg = "Thành Công" }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = "success", msg = "Thành Công" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
-                return Json(new { code = 500, msg = "Đã Có Tài Khoản " + formData.AccountName }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = "error", msg = "Đã Có Tài Khoản " + formData.AccountName }, JsonRequestBehavior.AllowGet);
             }
         }
 

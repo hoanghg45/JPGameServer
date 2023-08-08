@@ -32,7 +32,7 @@ function ShowTable(pagenumber) {
         success: function (data) {
             let $table = $('#accounttable')
             let body = $table.find('tbody')
-
+            isFull = false
             //Hiển thị dữ liệu trong bảng
 
             if (data.data && data.data.length > 0) {
@@ -70,3 +70,4 @@ function ShowTable(pagenumber) {
         }
     })
 }
+
