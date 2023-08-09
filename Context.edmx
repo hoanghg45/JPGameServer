@@ -244,6 +244,21 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
+          <Property Name="Money" Type="float" />
+          <Property Name="TypePay" Type="int" />
+        </EntityType>
+        <EntityType Name="ReportGameHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdGame" Type="varchar" MaxLength="50" />
+          <Property Name="IdCard" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="bit" />
         </EntityType>
         <EntityType Name="ReportRecharge">
           <Key>
@@ -257,6 +272,8 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
+          <Property Name="Money" Type="float" />
+          <Property Name="TypePay" Type="int" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -510,6 +527,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ReportGameHistory_MemberCards">
+          <End Role="MemberCards" Type="Self.MemberCards" Multiplicity="0..1" />
+          <End Role="ReportGameHistory" Type="Self.ReportGameHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCards">
+              <PropertyRef Name="MemberCardID" />
+            </Principal>
+            <Dependent Role="ReportGameHistory">
+              <PropertyRef Name="IdCard" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReportGameHistory_SettingGame">
+          <End Role="SettingGame" Type="Self.SettingGame" Multiplicity="0..1" />
+          <End Role="ReportGameHistory" Type="Self.ReportGameHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettingGame">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReportGameHistory">
+              <PropertyRef Name="IdGame" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Slider_TypeSlider">
           <End Role="TypeSliders" Type="Self.TypeSliders" Multiplicity="0..1" />
           <End Role="Sliders" Type="Self.Sliders" Multiplicity="*" />
@@ -553,6 +594,7 @@
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportCreateCard" EntityType="Self.ReportCreateCard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReportGameHistory" EntityType="Self.ReportGameHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportRecharge" EntityType="Self.ReportRecharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SettingGame" EntityType="Self.SettingGame" Schema="dbo" store:Type="Tables" />
@@ -616,6 +658,14 @@
           <AssociationSet Name="FK_Promotion_Users" Association="Self.FK_Promotion_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Promotions" EntitySet="Promotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportGameHistory_MemberCards" Association="Self.FK_ReportGameHistory_MemberCards">
+            <End Role="MemberCards" EntitySet="MemberCards" />
+            <End Role="ReportGameHistory" EntitySet="ReportGameHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportGameHistory_SettingGame" Association="Self.FK_ReportGameHistory_SettingGame">
+            <End Role="SettingGame" EntitySet="SettingGame" />
+            <End Role="ReportGameHistory" EntitySet="ReportGameHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_Slider_TypeSlider" Association="Self.FK_Slider_TypeSlider">
             <End Role="TypeSliders" EntitySet="TypeSliders" />
@@ -780,6 +830,7 @@
           <NavigationProperty Name="MemberCardChargeRecords" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCards" ToRole="MemberCardChargeRecords" />
           <NavigationProperty Name="MemberCardLevel" Relationship="Self.FK_MemberCard_MemberCardLevel" FromRole="MemberCards" ToRole="MemberCardLevels" />
           <Property Name="Code39" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ReportGameHistories" Relationship="Model.FK_ReportGameHistory_MemberCards" FromRole="MemberCard" ToRole="ReportGameHistory" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -864,6 +915,7 @@
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="PushPoint" Type="Double" />
+          <NavigationProperty Name="ReportGameHistories" Relationship="Model.FK_ReportGameHistory_SettingGame" FromRole="SettingGame" ToRole="ReportGameHistory" />
         </EntityType>
         <EntityType Name="Slider">
           <Key>
@@ -1205,6 +1257,15 @@
           <EntitySet Name="ReportCreateCards" EntityType="Model.ReportCreateCard" />
           <EntitySet Name="InShifts" EntityType="Model.InShift" />
           <EntitySet Name="OutShifts" EntityType="Model.OutShift" />
+          <EntitySet Name="ReportGameHistories" EntityType="Model.ReportGameHistory" />
+          <AssociationSet Name="FK_ReportGameHistory_MemberCards" Association="Model.FK_ReportGameHistory_MemberCards">
+            <End Role="MemberCard" EntitySet="MemberCards" />
+            <End Role="ReportGameHistory" EntitySet="ReportGameHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportGameHistory_SettingGame" Association="Model.FK_ReportGameHistory_SettingGame">
+            <End Role="SettingGame" EntitySet="SettingGames" />
+            <End Role="ReportGameHistory" EntitySet="ReportGameHistories" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ReportRecharge">
           <Key>
@@ -1218,6 +1279,8 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="Money" Type="Double" />
+          <Property Name="TypePay" Type="Int32" />
         </EntityType>
         <EntityType Name="PayType">
           <Key>
@@ -1251,6 +1314,8 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="Money" Type="Double" />
+          <Property Name="TypePay" Type="Int32" />
         </EntityType>
         <EntityType Name="InShift">
           <Key>
@@ -1283,6 +1348,45 @@
           <Property Name="Status" Type="Boolean" />
           <Property Name="IdInShift" Type="Int32" />
         </EntityType>
+        <EntityType Name="ReportGameHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdGame" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdCard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="MemberCard" Relationship="Model.FK_ReportGameHistory_MemberCards" FromRole="ReportGameHistory" ToRole="MemberCard" />
+          <NavigationProperty Name="SettingGame" Relationship="Model.FK_ReportGameHistory_SettingGame" FromRole="ReportGameHistory" ToRole="SettingGame" />
+        </EntityType>
+        <Association Name="FK_ReportGameHistory_MemberCards">
+          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="0..1" />
+          <End Type="Model.ReportGameHistory" Role="ReportGameHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCard">
+              <PropertyRef Name="MemberCardID" />
+            </Principal>
+            <Dependent Role="ReportGameHistory">
+              <PropertyRef Name="IdCard" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReportGameHistory_SettingGame">
+          <End Type="Model.SettingGame" Role="SettingGame" Multiplicity="0..1" />
+          <End Type="Model.ReportGameHistory" Role="ReportGameHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettingGame">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReportGameHistory">
+              <PropertyRef Name="IdGame" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1586,6 +1690,8 @@
           <EntitySetMapping Name="ReportRecharges">
             <EntityTypeMapping TypeName="Model.ReportRecharge">
               <MappingFragment StoreEntitySet="ReportRecharge">
+                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
@@ -1608,6 +1714,8 @@
           <EntitySetMapping Name="ReportCreateCards">
             <EntityTypeMapping TypeName="Model.ReportCreateCard">
               <MappingFragment StoreEntitySet="ReportCreateCard">
+                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
@@ -1648,6 +1756,20 @@
                 <ScalarProperty Name="RealMoneySale" ColumnName="RealMoneySale" />
                 <ScalarProperty Name="Cashiers" ColumnName="Cashiers" />
                 <ScalarProperty Name="IdUsers" ColumnName="IdUsers" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportGameHistories">
+            <EntityTypeMapping TypeName="Model.ReportGameHistory">
+              <MappingFragment StoreEntitySet="ReportGameHistory">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="IdGame" ColumnName="IdGame" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

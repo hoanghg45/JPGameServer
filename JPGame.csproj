@@ -301,6 +301,9 @@
     <Compile Include="ReportCreateCard.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="ReportGameHistory.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="ReportRecharge.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>

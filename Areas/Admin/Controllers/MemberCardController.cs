@@ -348,7 +348,7 @@ namespace JPGame.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public JsonResult SaveReportRecharge(string userID, string idCard)
+        public JsonResult SaveReportRecharge(string userID, string idCard, string money, string paytype)
         {
             try
             {
@@ -393,11 +393,12 @@ namespace JPGame.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public JsonResult SaveReportCreateCard(string userID, string idCard)
+        public JsonResult SaveReportCreateCard(string userID, string idCard, string money, string paytype)
         {
             try
             {
                 var user = db.Users.Find(userID.Trim());
+                
                 ReportCreateCard reportCreateCard = new ReportCreateCard()
                 {
                     IdCard = idCard,
@@ -406,6 +407,7 @@ namespace JPGame.Areas.Admin.Controllers
                     ModifyDate = DateTime.Now,
                     CreateBy = user.Name,
                     ModifyBy = user.Name,
+                    Money = double.Parse(money),
                     Status = true
                 };
                 db.ReportCreateCards.Add(reportCreateCard);

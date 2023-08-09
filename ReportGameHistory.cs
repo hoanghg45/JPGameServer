@@ -12,26 +12,18 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class SettingGame
+    public partial class ReportGameHistory
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SettingGame()
-        {
-            this.ReportGameHistories = new HashSet<ReportGameHistory>();
-        }
-    
-        public string Id { get; set; }
-        public string IP { get; set; }
-        public string Name { get; set; }
-        public Nullable<double> Price { get; set; }
+        public int Id { get; set; }
+        public string IdGame { get; set; }
+        public string IdCard { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
-        public Nullable<double> PushPoint { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReportGameHistory> ReportGameHistories { get; set; }
+        public virtual MemberCard MemberCard { get; set; }
+        public virtual SettingGame SettingGame { get; set; }
     }
 }

@@ -310,6 +310,8 @@ var KTWizard1 = function () {
 	}
 	function SaveReportCreateCard(data, userID, userName) {
 		var idCard = "";
+		let paytypeid = $('input[name="radiospay"]:checked').val();
+		let money = $('input[name = "MoneyPay"]').val().replaceAll(',','')
 		$.each(data, function (k, v) {
 			if (v.name == "CardID") {
 				idCard = v.value
@@ -319,12 +321,12 @@ var KTWizard1 = function () {
 			type: "POST",
 			url: "/MemberCard/SaveReportCreateCard",
 			data: {
-				userID: userID, idCard: idCard
+				userID: userID, idCard: idCard, money, paytype: paytypeid
 			},
 			success: function (result) {
 				if (result.status == "Success") {
+					
 					let paytype = $('input[name="radiospay"]:checked').data('type');
-
 					Print(data, userID, result.sp, userName, "PHIEU CAP THE", result.cashier,paytype,result.member);
 					Print(data, userID, result.sp, userName, "PHIEU CAP THE", result.cashier,paytype,result.member);
 				} else {

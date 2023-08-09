@@ -352,7 +352,8 @@ var KTWizard1 = function () {
 
 	function SaveReportRecharge(data, userID, userName) {
 		var idCard = "";
-
+		let paytypeid = $('input[name="radiospay"]:checked').val();
+		let money = $('input[name = "MoneyPay"]').val().replaceAll(',', '')
 		$.each(data, function (k, v) {
 			if (v.name == "NewCardID") {
 				idCard = v.value
@@ -363,7 +364,7 @@ var KTWizard1 = function () {
 			type: "POST",
 			url: "/MemberCard/SaveReportRecharge",
 			data: {
-				userID: userID, idCard: idCard
+				userID: userID, idCard: idCard, paytype: paytypeid, money
 			},
 			success: function (result) {
 				if (result.status == "Success") {
