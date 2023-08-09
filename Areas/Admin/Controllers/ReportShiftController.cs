@@ -18,7 +18,7 @@ namespace JPGame.Areas.Admin.Controllers
         }
         [HttpGet]
         public JsonResult InShift(int inShift)
-        {
+        {   
 
             try
             {
@@ -120,7 +120,7 @@ namespace JPGame.Areas.Admin.Controllers
                     CreateDate = DateTime.Now,
                     ModifyDate = DateTime.Now,
                     CreateBy = user.Name,
-                    ModifyBy = user.Name,
+                    ModifyBy = user.Name,   
                     Status = true
                 };
                 db.OutShifts.Add(outShift);

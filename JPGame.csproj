@@ -206,6 +206,7 @@
     <Compile Include="Areas\Admin\Controllers\MemberCardLevelController.cs" />
     <Compile Include="Areas\Admin\Controllers\ModulesAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\PromotionAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ReportController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReportShiftController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingGameAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\SliderAdminController.cs" />
@@ -340,6 +341,7 @@
     <Content Include="Areas\assets\admin\membercard\MemberCard.js" />
     <Content Include="Areas\assets\admin\membercard\MoneyCharge.js" />
     <Content Include="Areas\assets\admin\module\module.js" />
+    <Content Include="Areas\assets\admin\report\Reports.js" />
     <Content Include="Areas\assets\Print\Impresora.js" />
     <Content Include="Areas\assets\Print\script.js" />
     <Content Include="Areas\assets\admin\promotion\AddPromotion.js" />
@@ -2435,6 +2437,7 @@
     <Content Include="Areas\Admin\Views\Administrator\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\MemberCard\Details.cshtml" />
     <Content Include="Areas\Admin\Views\AccountsAdmin\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\Index.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
