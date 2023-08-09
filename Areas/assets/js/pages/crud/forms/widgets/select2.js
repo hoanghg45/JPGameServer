@@ -3,7 +3,7 @@ var KTSelect2 = function() {
     // Private functions
     var demos = function() {
         // basic
-        $('#kt_select2_1, #kt_select2_1_validate').select2({
+        $('#kt_select2_1, #kt_select2_1_validate, select[name="kt_select2_1"]').select2({
             placeholder: 'Select a state'
         });
 

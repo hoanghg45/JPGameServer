@@ -99,7 +99,21 @@ namespace JPGame.Areas.Admin.Controllers
                 }
                 var Card = db.MemberCards.Find(card);
                 var Reader = db.SettingGames.Find(reader);
-                if(Reader == null)
+                if (reader == "225077781")
+                {
+                    if (Card.Balance < 250000)
+                    {
+                        return Json(
+                         new
+                         {
+                             status = "fail",
+                             message = "số dư khong đủ!"
+
+                         }
+                         , JsonRequestBehavior.AllowGet);
+                    }
+                }
+                if (Reader == null)
                 {
                     return Json(
                    new
@@ -124,6 +138,15 @@ namespace JPGame.Areas.Admin.Controllers
                             Card.Points += Reader.PushPoint;
                         }
                         Card.Balance = Card.Balance - Reader.Price;
+                        db.SaveChanges();
+                        ReportGameHistory reportGameHistory = new ReportGameHistory()
+                        {
+                            IdGame = reader,
+                            IdCard = card,
+                            CreateDate = DateTime.Now,
+                            ModifyDate = DateTime.Now,
+                        };
+                        db.ReportGameHistories.Add(reportGameHistory);
                         db.SaveChanges();
                     }
                 }
