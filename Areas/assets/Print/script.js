@@ -149,7 +149,7 @@ function Print(data, userID, sp, userName, name, cashier,paytype,member) {
     impresora.write("SO PHIEU:");
     impresora.write(sp.ID + "\n");
     impresora.write("NHAN VIEN:");
-    impresora.write(userID.trim()+" - "+userName.trim() + "\n");
+    impresora.write(userName.trim() + "\n");
     impresora.write("THOI GIAN THU:");
     impresora.write(formatDate(sp.CreateDate) + " " + getTime(sp.CreateDate+'') + "\n");
     impresora.feed(1);
