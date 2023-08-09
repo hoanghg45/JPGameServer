@@ -301,6 +301,9 @@
     <Compile Include="ReportCreateCard.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="ReportGameHistory.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="ReportRecharge.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
@@ -2438,6 +2441,7 @@
     <Content Include="Areas\Admin\Views\MemberCard\Details.cshtml" />
     <Content Include="Areas\Admin\Views\AccountsAdmin\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Report\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\GameHistory.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

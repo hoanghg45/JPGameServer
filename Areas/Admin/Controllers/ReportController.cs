@@ -21,6 +21,10 @@ namespace JPGame.Areas.Admin.Controllers
         {
             return View();
         }
+        public ActionResult GameHistory()
+        {
+            return View();
+        }
         public class Report
         {
             public DateTime Date;
@@ -32,9 +36,8 @@ namespace JPGame.Areas.Admin.Controllers
             //public string Cashier2;
             public string Total;
             
-
         }
-
+      
         [HttpGet]
         public JsonResult DataTable(int page = 0,string From = "", string To = "")
         {
@@ -122,13 +125,160 @@ namespace JPGame.Areas.Admin.Controllers
           , JsonRequestBehavior.AllowGet
           );
         }
+        [HttpGet]
+        public JsonResult ReportGame(int page=0, string From ="2023-08-01", string To="2030-08-01",string game="-1",string card="-1")
+        {
+            var dateFrom = int.Parse(getDay(From)) + int.Parse(getMonth(From)) * 30 * int.Parse(getYear(From)); 
+            var dateTo = int.Parse(getDay(To)) + int.Parse(getMonth(To)) * 30 * int.Parse(getYear(To)); 
+            var data = db.ReportGameHistories.Select(a => new
+            {
+                a.Id,
+                a.IdGame,
+                a.SettingGame.Name,
+                a.MemberCard.Code39,
+                a.SettingGame.Price,
+                a.CreateDate,
+                a.Status,
+            }).Where(x=>x.CreateDate.Value.Day+x.CreateDate.Value.Month*30*x.CreateDate.Value.Year>= dateFrom
+                        && x.CreateDate.Value.Day + x.CreateDate.Value.Month * 30 * x.CreateDate.Value.Year<=dateTo);
+            if (game != "-1")
+            {
+               data= data.Where(x => x.IdGame == game);
+            }
+            if(card != "-1")
+            {
+                data = data.Where(x => x.Code39 == card);
+            }
+            //Xử lí phân trang
+            var z = data.ToList();
+            //Số dữ liệu trên 1 trang
+            int pageSize = 10;
+            page = (page > 0) ? page : 1;
+            int start = (int)(page - 1) * pageSize;
+
+            ViewBag.pageCurrent = page;
+            int totalBill = data.Count();
+            float totalNumsize = (totalBill / (float)pageSize);
+
+            int numSize = (int)Math.Ceiling(totalNumsize);
+            ViewBag.numSize = numSize;
+            data = data.OrderByDescending(d => d.CreateDate).Skip(start).Take(pageSize);
+
+            var fromto = PaginationExtension.FromTo(totalBill, (int)page, pageSize);
+
+            int from = fromto.Item1;
+            int to = fromto.Item2;
+            return this.Json(
+          new
+          {
+              data,
+              pageCurrent = page,
+              numSize,
+              total = totalBill,
+              size = pageSize,
+              from,
+              to
+
+          }
+          , JsonRequestBehavior.AllowGet
+          );
+        }
+        [HttpGet]
+        public JsonResult List()
+        {
+            var game = db.SettingGames.Select(a => new
+            {
+                a.Id,
+                a.Name,
+            });
+            var card = db.MemberCards.Select(a => new
+            {
+                a.Code39,
+            });
+            return this.Json(
+          new
+          {
+              game = game,
+              card= card
+
+          }
+          , JsonRequestBehavior.AllowGet
+          );
+        }
+        [HttpGet]
+        public ActionResult ExportToExcelGameHistory(string From, string To, string game, string card)
+        {
+            From = From == "" ? "2023-08-01" : From;
+            To = To == "" ? "2030-08-01" : To;
+            game = game == "" ? "-1" : game;
+            card = card == "" ? "-1" : card;
+            var dateFrom = int.Parse(getDay(From)) + int.Parse(getMonth(From)) * 30 * int.Parse(getYear(From));
+            var dateTo = int.Parse(getDay(To)) + int.Parse(getMonth(To)) * 30 * int.Parse(getYear(To));
+            var data = db.ReportGameHistories.Select(a => new
+            {
+                a.Id,
+                a.IdGame,
+                a.SettingGame.Name,
+                a.MemberCard.Code39,
+                a.SettingGame.Price,
+                a.CreateDate,
+                a.Status,
+            }).Where(x => x.CreateDate.Value.Day + x.CreateDate.Value.Month * 30 * x.CreateDate.Value.Year >= dateFrom
+                        && x.CreateDate.Value.Day + x.CreateDate.Value.Month * 30 * x.CreateDate.Value.Year <= dateTo);
+            if (game != "-1")
+            {
+                data = data.Where(x => x.IdGame == game);
+            }
+            if (card != "-1")
+            {
+                data = data.Where(x => x.Code39 == card);
+            }
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+
+                // Thêm tiêu đề cho các cột
+                worksheet.Cells[1, 1].Value = "Ngày";
+                worksheet.Cells[1, 2].Value = "Máy Game";
+                worksheet.Cells[1, 3].Value = "Thẻ";
+                worksheet.Cells[1, 4].Value = "Tiền";
+               
+                // Thêm dữ liệu từ data vào các ô
+                for (int i = 0; i < data.ToList().Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = data.ToList()[i].CreateDate.Value.Date.ToString();
+                    worksheet.Cells[i + 2, 2].Value = data.ToList()[i].Name;
+                    worksheet.Cells[i + 2, 3].Value = data.ToList()[i].Code39;
+                    worksheet.Cells[i + 2, 4].Value = data.ToList()[i].Price;
+                }
+                var headerCells = worksheet.Cells[1, 1, 1, worksheet.Dimension.Columns];
+                worksheet.View.FreezePanes(2, 1);
+                // Set their text to bold, italic and underline.
+                headerCells.Style.Font.Bold = true;
+                headerCells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                headerCells.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+                worksheet.Cells["A:AZ"].AutoFitColumns();
+                var range = worksheet.Cells[worksheet.Dimension.Address];
+                range.AutoFilter = true;
+                ///Setting thêm cho sheet detail
+                //Select only the header cells
+                // Lưu package thành file Excel
+                var stream = new MemoryStream(package.GetAsByteArray());
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "report-data.xlsx");
+            }
+        }
+
+
+
+       
         public ActionResult ExportToExcel()
         {
-           
-             List < Report > data = new List<Report>();
+
+            List<Report> data = new List<Report>();
             var dateFrom = new DateTime(2023, 8, 1);
             var dateTo = new DateTime(2030, 8, 10);
-          
+
             //var dateFrom = new DateTime(2023, 8, 3);
             //var dateTo = new DateTime(2023, 8, 10);
 
@@ -169,7 +319,7 @@ namespace JPGame.Areas.Admin.Controllers
                 worksheet.Cells[1, 2].Value = "Doanh số ca 1";
                 worksheet.Cells[1, 3].Value = "Doanh số ca 2";
                 worksheet.Cells[1, 4].Value = "Tổng doanh số ngày";
-               
+
                 // Thêm dữ liệu từ data vào các ô
                 for (int i = 0; i < data.Count; i++)
                 {
@@ -193,6 +343,21 @@ namespace JPGame.Areas.Admin.Controllers
                 var stream = new MemoryStream(package.GetAsByteArray());
                 return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "report-data.xlsx");
             }
+        }
+        public string getDay(string time)
+        {
+            var day = time.Split('-')[2];
+            return day;
+        }
+        public string getMonth(string time)
+        {
+            var month = time.Split('-')[1]; 
+            return month;
+        }
+        public string getYear(string time)
+        {
+            var year = time.Split('-')[0];
+            return year;
         }
     }
 }

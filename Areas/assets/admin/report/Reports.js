@@ -147,7 +147,7 @@ function SearchData() {
     let to = $('#kt_datatable_to_query').val().trim()
    
     $('#reporttable').find('tbody').empty()
-    ShowTable(1, from, to)
+    ShowTable(1, from, to,"2","2")
 }
 function ScrollData(page) {
     let from = $('#kt_datatable_from_query').val().trim()

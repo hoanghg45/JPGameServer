@@ -51,5 +51,6 @@ namespace JPGame
         public virtual DbSet<ReportCreateCard> ReportCreateCards { get; set; }
         public virtual DbSet<InShift> InShifts { get; set; }
         public virtual DbSet<OutShift> OutShifts { get; set; }
+        public virtual DbSet<ReportGameHistory> ReportGameHistories { get; set; }
     }
 }
