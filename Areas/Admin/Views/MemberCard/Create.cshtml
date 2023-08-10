@@ -132,6 +132,11 @@
 
                                         </div>
                                         <div class="form-group fv-plugins-icon-container">
+                                            <label>Mã khuyến mãi</label>
+                                            <input type="text" class="form-control form-control-solid form-control-lg " name="Promotion" placeholder="Mã khuyến mãi">
+
+                                        </div>
+                                        <div class="form-group fv-plugins-icon-container">
                                             <label>Hình thức nạp</label>
                                             <div class="radio-inline">
                                                 <label class="radio">
@@ -140,19 +145,36 @@
                                                     Tiền mặt
                                                 </label>
                                                 <label class="radio">
-                                                    <input type="radio" data-type="Chuyen khoan"  value="2" name="radiospay" />
+                                                    <input type="radio" data-type="Chuyen khoan" value="2" name="radiospay" />
                                                     <span></span>
                                                     Chuyển khoản
                                                 </label>
                                                 <label class="radio">
-                                                    <input type="radio" data-type="Quet the"  value="3" name="radiospay" />
+                                                    <input type="radio" data-type="Quet the" value="3" name="radiospay" />
                                                     <span></span>
                                                     Quẹt thẻ
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="form-group fv-plugins-icon-container row">
+                                            <div class="col-lg-6">
+                                                <label>Số tiền khách đưa <span class="text-danger"> (Hình thức tiền mặt)</span>:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg money" name="CusMoney" placeholder="Số tiền khách đưa">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>Số tiền trả khách:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg money" name="ChangeMoney" readonly placeholder="Số tiền trả khách">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
                                         <div class="form-group fv-plugins-icon-container">
-                                            <label>Mã giao dịch</label>
+                                            <label>Mã giao dịch  <span class="text-danger"> (Hình thức chuyển khoản)</span></label>
                                             <input type="text" class="form-control form-control-solid form-control-lg" name="Paycode" placeholder="Mã giao dịch">
                                             <span id="PaycodeNoti" class="text-danger">Vui lòng nhập mã giao dịch</span>
                                         </div>

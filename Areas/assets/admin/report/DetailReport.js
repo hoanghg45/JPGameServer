@@ -21,14 +21,14 @@ var isFull = false;
     InitSearch()
 })()
 
-function ShowTable(pagenumber,from, to) {
+function ShowTable(pagenumber, from, to) {
 
     $.ajax({
         type: "GET",
-        url: "/Report/DataTable",
+        url: "/Report/DataDetailReport",
         data: {
             page: pagenumber,
-          
+
             from,
             to
         },
@@ -129,7 +129,7 @@ function InitSearch() {
 
     //$('#kt_datatable_search_query').keypress(function (e) {
     //    if (e.which == 13) {
-                
+
     //        SearchData()
     //    }
     //})
@@ -145,17 +145,17 @@ function InitSearch() {
 function SearchData() {
     let from = $('#kt_datatable_from_query').val().trim()
     let to = $('#kt_datatable_to_query').val().trim()
-   
+
     $('#reporttable').find('tbody').empty()
-    ShowTable(1, from, to,"2","2")
+    ShowTable(1, from, to, "2", "2")
 }
 function ScrollData(page) {
     let from = $('#kt_datatable_from_query').val().trim()
     let to = $('#kt_datatable_to_query').val().trim()
-   
 
- 
-    ShowTable(page, from, to)
 
-  
+
+    ShowTable(1, from, to)
+
+
 }

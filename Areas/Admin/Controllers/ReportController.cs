@@ -25,6 +25,10 @@ namespace JPGame.Areas.Admin.Controllers
         {
             return View();
         }
+        public ActionResult DetailReport()
+        {
+            return View();
+        }
         public class Report
         {
             public DateTime Date;
@@ -114,6 +118,91 @@ namespace JPGame.Areas.Admin.Controllers
           new
           {
               data =filteredReports,
+              pageCurrent = page,
+              numSize,
+              total = totalBill,
+              size = pageSize,
+              from,
+              to
+
+          }
+          , JsonRequestBehavior.AllowGet
+          );
+        } 
+
+        [HttpGet]
+        public JsonResult DataDetailReport(int page = 0,string From = "", string To = "", string cashier="",int shift=0,string type="",int paytype=0)
+        {
+
+           
+            var dateFrom = new DateTime(2023, 8, 1);
+            var dateTo = new DateTime(2030, 8, 10);
+            if(!string.IsNullOrEmpty(From))
+                dateFrom = DateTime.ParseExact(From, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            if (!string.IsNullOrEmpty(To))
+                dateTo = DateTime.ParseExact(To, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            //var dateFrom = new DateTime(2023, 8, 3);
+            //var dateTo = new DateTime(2023, 8, 10);
+          
+
+            var records = db.MemberCardChargeRecords
+                        .Where(r => r.ChargeDate >= dateFrom && r.ChargeDate <= dateTo)
+                        .Where(r => r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 22)
+
+                        .Select(r => new
+                        {
+                            r.RecordID,
+                            Date = r.ChargeDate.Value,
+                            Shift = (r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 15) ? 1 : 2,
+                            r.Cashier,
+                            Money = r.Money.Value,
+                            Type = r.RecordType,
+                            TypePayID = r.PayType.ID,
+                            Typepay = r.PayType.Name,
+                            RecordType = r.RecordType.Equals("Create")?"Tạo thẻ":"Nạp thẻ",
+
+
+                        })
+                        ;
+            records = records.WhereIf(!string.IsNullOrEmpty(cashier), r => r.Cashier.Equals(cashier))
+                             .WhereIf(!string.IsNullOrEmpty(type), r => r.Type.Equals(type)) 
+                             .WhereIf(paytype != 0, r => r.TypePayID.Equals(paytype))
+                             .WhereIf(shift != 0, r => r.Shift == shift);
+            var c = records.ToList();
+            // Lọc theo loại thẻ (type)
+
+
+            // tìm kiếm 
+          
+
+
+
+
+
+            //Xử lí phân trang
+
+            //Số dữ liệu trên 1 trang
+            int pageSize = 10;
+            page = (page > 0) ? page : 1;
+            int start = (int)(page - 1) * pageSize;
+
+            ViewBag.pageCurrent = page;
+            int totalBill = records.Count();
+            float totalNumsize = (totalBill / (float)pageSize);
+
+            int numSize = (int)Math.Ceiling(totalNumsize);
+            ViewBag.numSize = numSize;
+
+            records = records.OrderByDescending(d => d.Date).Skip(start).Take(pageSize);
+
+            var fromto = PaginationExtension.FromTo(totalBill, (int)page, pageSize);
+
+            int from = fromto.Item1;
+            int to = fromto.Item2;
+            return this.Json(
+          new
+          {
+              data = records,
               pageCurrent = page,
               numSize,
               total = totalBill,
@@ -269,9 +358,91 @@ namespace JPGame.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult ExportDetailReport( string From = "", string To = "", string cashier = "", int shift = 0, string type = "", int paytype = 0)
+        {
 
 
-       
+            var dateFrom = new DateTime(2023, 8, 1);
+            var dateTo = new DateTime(2030, 8, 10);
+            if (!string.IsNullOrEmpty(From))
+                dateFrom = DateTime.ParseExact(From, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            if (!string.IsNullOrEmpty(To))
+                dateTo = DateTime.ParseExact(To, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            //var dateFrom = new DateTime(2023, 8, 3);
+            //var dateTo = new DateTime(2023, 8, 10);
+
+
+            var records = db.MemberCardChargeRecords
+                        .Where(r => r.ChargeDate >= dateFrom && r.ChargeDate <= dateTo)
+                        .Where(r => r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 22)
+
+                        .Select(r => new
+                        {
+                            r.RecordID,
+                            Date = r.ChargeDate.Value,
+                            Shift = (r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 15) ? 1 : 2,
+                            r.Cashier,
+                            Money = r.Money.Value,
+                            Type = r.RecordType,
+                            TypePayID = r.PayType.ID,
+                            Typepay = r.PayType.Name,
+                            RecordType = r.RecordType.Equals("Create") ? "Tạo thẻ" : "Nạp thẻ",
+
+
+                        })
+                        ;
+            records = records.WhereIf(!string.IsNullOrEmpty(cashier), r => r.Cashier.Equals(cashier))
+                             .WhereIf(!string.IsNullOrEmpty(type), r => r.Type.Equals(type))
+                             .WhereIf(paytype != 0, r => r.TypePayID.Equals(paytype))
+                             .WhereIf(shift != 0, r => r.Shift == shift);
+            var c = records.ToList();
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+
+                // Thêm tiêu đề cho các cột
+                worksheet.Cells[1, 1].Value = "Ngày";
+                worksheet.Cells[1, 2].Value = "Mã giao dịch";
+                
+                worksheet.Cells[1, 3].Value = "Ca";
+                worksheet.Cells[1,4 ].Value = "Quầy"; 
+                worksheet.Cells[1,5].Value = "Tiền";
+                worksheet.Cells[1,6].Value = "Loại thanh toán";
+                worksheet.Cells[1,7].Value = "Tác vụ";
+
+                // Thêm dữ liệu từ data vào các ô
+                for (int i = 0; i < records.ToList().Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = records.ToList()[i].Date.ToString("dd/MM/yyyy HH:mm");
+                    worksheet.Cells[i + 2, 2].Value = records.ToList()[i].RecordID;
+                    worksheet.Cells[i + 2, 3].Value = records.ToList()[i].Shift;
+                    worksheet.Cells[i + 2, 4].Value = records.ToList()[i].Cashier;
+                    worksheet.Cells[i + 2,  5].Value = records.ToList()[i].Money.ToString("#,##0");
+                    worksheet.Cells[i + 2, 6].Value = records.ToList()[i].Typepay;
+                    worksheet.Cells[i + 2, 7].Value = records.ToList()[i].RecordType;
+                    
+                }
+                var headerCells = worksheet.Cells[1, 1, 1, worksheet.Dimension.Columns];
+                worksheet.View.FreezePanes(2, 1);
+                // Set their text to bold, italic and underline.
+                headerCells.Style.Font.Bold = true;
+                headerCells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                headerCells.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+                worksheet.Cells["A:AZ"].AutoFitColumns();
+                var range = worksheet.Cells[worksheet.Dimension.Address];
+                range.AutoFilter = true;
+                ///Setting thêm cho sheet detail
+                //Select only the header cells
+                // Lưu package thành file Excel
+                var stream = new MemoryStream(package.GetAsByteArray());
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "detailreport-data.xlsx");
+            }
+
+        }
+
+
         public ActionResult ExportToExcel()
         {
 
@@ -301,9 +472,9 @@ namespace JPGame.Areas.Admin.Controllers
                     var report = new Report
                     {
                         Date = date,
-                        Shift1 = shift1.Sum(s => s.Money).ToString(),
-                        Shift2 = shift2.Sum(s => s.Money).ToString(),
-                        Total = (shift1.Sum(s => s.Money).Value + shift2.Sum(s => s.Money).Value).ToString()
+                        Shift1 = shift1.Sum(s => s.Money).Value.ToString("#,##0"),
+                        Shift2 = shift2.Sum(s => s.Money).Value.ToString("#,##0"),
+                        Total = (shift1.Sum(s => s.Money).Value + shift2.Sum(s => s.Money).Value).ToString("#,##0")
                     };
                     data.Add(report);
                 }

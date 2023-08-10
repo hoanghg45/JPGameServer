@@ -162,6 +162,7 @@ namespace JPGame.Areas.Admin.Controllers
                 card.ModifyDate = DateTime.Now;
                 var paytype = int.Parse(collection["radiospay"]);
                 string paycode = collection["Paycode"] == ""? null: collection["Paycode"].ToString();
+                string cashier = db.NFCReaders.Find(user.ReaderID).Cashier1.Name;
                 var chargeRecord = new MemberCardChargeRecord
                 {
                     MemberCardID = card.MemberCardID,
@@ -169,7 +170,9 @@ namespace JPGame.Areas.Admin.Controllers
                     ChargeDate = DateTime.Now,
                     CreateBy = currUser,
                     TypePay = paytype,
-                    Paycode = paycode
+                    Paycode = paycode,
+                    RecordType = "Create",
+                    Cashier = cashier
                 };
                 db.MemberCardChargeRecords.Add(chargeRecord);
                 db.SaveChanges();
@@ -307,8 +310,8 @@ namespace JPGame.Areas.Admin.Controllers
                 }
                 var paytype = int.Parse(collection["radiospay"]);
                 string paycode = collection["Paycode"] == "" ? null : collection["Paycode"].ToString();
+                string cashier = db.NFCReaders.Find(user.ReaderID).Cashier1.Name;
                 
-
                 //Lưu thời gian nạp tiền
                 var chargeRecord = new MemberCardChargeRecord
                 {
@@ -317,7 +320,9 @@ namespace JPGame.Areas.Admin.Controllers
                     ChargeDate = DateTime.Now,
                     CreateBy = currUser,                  
                     TypePay = paytype,
-                    Paycode = paycode
+                    Paycode = paycode,
+                    RecordType = "Recharge",
+                    Cashier = cashier
                 };
                 db.MemberCardChargeRecords.Add(chargeRecord);
 

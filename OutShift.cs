@@ -15,6 +15,7 @@ namespace JPGame
     public partial class OutShift
     {
         public int Id { get; set; }
+        public Nullable<int> IdInShift { get; set; }
         public string IdUsers { get; set; }
         public Nullable<int> Cashiers { get; set; }
         public Nullable<double> RealMoneySale { get; set; }
@@ -25,6 +26,5 @@ namespace JPGame
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
-        public Nullable<int> IdInShift { get; set; }
     }
 }

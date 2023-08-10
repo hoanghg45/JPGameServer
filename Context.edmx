@@ -125,6 +125,8 @@
           <Property Name="CreateBy" Type="nchar" MaxLength="50" />
           <Property Name="TypePay" Type="int" />
           <Property Name="Paycode" Type="nchar" MaxLength="100" />
+          <Property Name="RecordType" Type="nvarchar" MaxLength="100" />
+          <Property Name="Cashier" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MemberCardLevels">
           <Key>
@@ -246,19 +248,6 @@
           <Property Name="Status" Type="bit" />
           <Property Name="Money" Type="float" />
           <Property Name="TypePay" Type="int" />
-        </EntityType>
-        <EntityType Name="ReportGameHistory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdGame" Type="varchar" MaxLength="50" />
-          <Property Name="IdCard" Type="varchar" MaxLength="100" />
-          <Property Name="CreateDate" Type="datetime" />
-          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
-          <Property Name="ModifyDate" Type="datetime" />
-          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
-          <Property Name="Status" Type="bit" />
         </EntityType>
         <EntityType Name="ReportGameHistory">
           <Key>
@@ -713,7 +702,7 @@
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="MemberCard" Relationship="Self.FK_Accounts_MemberCards" FromRole="Accounts" ToRole="MemberCards" />
-          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Self.FK_MemberCardChargeRecords_Accounts" FromRole="Accounts" ToRole="MemberCardChargeRecords" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_Accounts" FromRole="Account" ToRole="MemberCardChargeRecord" />
         </EntityType>
         <EntityType Name="Blog">
           <Key>
@@ -785,6 +774,20 @@
           <NavigationProperty Name="SpecialMemory" Relationship="Self.FK_Gift_SpecialMemory" FromRole="Gifts" ToRole="SpecialMemories" />
           <NavigationProperty Name="MemberCardLevels" Relationship="Self.FK_MemberCardLevel_Gift" FromRole="Gifts" ToRole="MemberCardLevels" />
         </EntityType>
+        <EntityType Name="InShift">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsers" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Cashiers" Type="Int32" />
+          <Property Name="FirstShiftMoney" Type="Double" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
         <EntityType Name="LiveCard">
           <Key>
             <PropertyRef Name="ID" />
@@ -793,22 +796,6 @@
           <Property Name="CardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ReaderID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ScanAt" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="MemberCardChargeRecord">
-          <Key>
-            <PropertyRef Name="RecordID" />
-          </Key>
-          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AccountID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MemberCardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Money" Type="Double" />
-          <Property Name="ChargeDate" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="Account" Relationship="Self.FK_MemberCardChargeRecords_Accounts" FromRole="MemberCardChargeRecords" ToRole="Accounts" />
-          <NavigationProperty Name="MemberCard" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCardChargeRecords" ToRole="MemberCards" />
-          <Property Name="TypePay" Type="Int32" />
-          <Property Name="Paycode" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="PayType" Relationship="Model.FK_MemberCardChargeRecords_PayType" FromRole="MemberCardChargeRecord" ToRole="PayType" />
         </EntityType>
         <EntityType Name="MemberCardLevel">
           <Key>
@@ -839,11 +826,11 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="MultipliedMoney" Type="Boolean" />
-          <NavigationProperty Name="Accounts" Relationship="Self.FK_Accounts_MemberCards" FromRole="MemberCards" ToRole="Accounts" />
-          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCards" ToRole="MemberCardChargeRecords" />
-          <NavigationProperty Name="MemberCardLevel" Relationship="Self.FK_MemberCard_MemberCardLevel" FromRole="MemberCards" ToRole="MemberCardLevels" />
           <Property Name="Code39" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ReportGameHistories" Relationship="Model.FK_ReportGameHistory_MemberCards" FromRole="MemberCard" ToRole="ReportGameHistory" />
+          <NavigationProperty Name="Accounts" Relationship="Self.FK_Accounts_MemberCards" FromRole="MemberCards" ToRole="Accounts" />
+          <NavigationProperty Name="MemberCardLevel" Relationship="Self.FK_MemberCard_MemberCardLevel" FromRole="MemberCards" ToRole="MemberCardLevels" />
+          <NavigationProperty Name="ReportGameHistories" Relationship="Self.FK_ReportGameHistory_MemberCards" FromRole="MemberCards" ToRole="ReportGameHistory" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCard" ToRole="MemberCardChargeRecord" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -875,6 +862,31 @@
           <Property Name="Cashier" Type="Int32" />
           <NavigationProperty Name="Cashier1" Relationship="Self.FK_NFCReaders_Cashiers" FromRole="NFCReaders" ToRole="Cashiers" />
         </EntityType>
+        <EntityType Name="OutShift">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdInShift" Type="Int32" />
+          <Property Name="IdUsers" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Cashiers" Type="Int32" />
+          <Property Name="RealMoneySale" Type="Double" />
+          <Property Name="EndShiftMoney" Type="Double" />
+          <Property Name="FirstShiftMoney" Type="Double" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PayType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_PayType" FromRole="PayType" ToRole="MemberCardChargeRecord" />
+        </EntityType>
         <EntityType Name="PersonalGift">
           <Key>
             <PropertyRef Name="ID" />
@@ -905,6 +917,51 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="User" Relationship="Self.FK_Promotion_Users" FromRole="Promotions" ToRole="Users" />
         </EntityType>
+        <EntityType Name="ReportCreateCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdUser" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Money" Type="Double" />
+          <Property Name="TypePay" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ReportGameHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdGame" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdCard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="MemberCard" Relationship="Self.FK_ReportGameHistory_MemberCards" FromRole="ReportGameHistory" ToRole="MemberCards" />
+          <NavigationProperty Name="SettingGame" Relationship="Self.FK_ReportGameHistory_SettingGame" FromRole="ReportGameHistory" ToRole="SettingGame" />
+        </EntityType>
+        <EntityType Name="ReportRecharge">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdUser" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Money" Type="Double" />
+          <Property Name="TypePay" Type="Int32" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="ID" />
@@ -928,7 +985,7 @@
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="PushPoint" Type="Double" />
-          <NavigationProperty Name="ReportGameHistories" Relationship="Model.FK_ReportGameHistory_SettingGame" FromRole="SettingGame" ToRole="ReportGameHistory" />
+          <NavigationProperty Name="ReportGameHistories" Relationship="Self.FK_ReportGameHistory_SettingGame" FromRole="SettingGame" ToRole="ReportGameHistory" />
         </EntityType>
         <EntityType Name="Slider">
           <Key>
@@ -983,11 +1040,11 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="ReaderID" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="Modules" Relationship="Self.FK_Modules_Users" FromRole="Users" ToRole="Modules" />
           <NavigationProperty Name="Modules1" Relationship="Self.FK_Modules_Users1" FromRole="Users" ToRole="Modules" />
           <NavigationProperty Name="Promotions" Relationship="Self.FK_Promotion_Users" FromRole="Users" ToRole="Promotions" />
           <NavigationProperty Name="Role1" Relationship="Self.FK_User_Roles" FromRole="Users" ToRole="Roles" />
-          <Property Name="ReaderID" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="VIPGift">
           <Key>
@@ -1008,18 +1065,6 @@
             </Principal>
             <Dependent Role="Accounts">
               <PropertyRef Name="MemberCardID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardChargeRecords_Accounts">
-          <End Role="Accounts" Type="Self.Account" Multiplicity="0..1" />
-          <End Role="MemberCardChargeRecords" Type="Self.MemberCardChargeRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Accounts">
-              <PropertyRef Name="AccountID" />
-            </Principal>
-            <Dependent Role="MemberCardChargeRecords">
-              <PropertyRef Name="AccountID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1083,18 +1128,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MemberCardChargeRecords_MemberCards">
-          <End Role="MemberCards" Type="Self.MemberCard" Multiplicity="0..1" />
-          <End Role="MemberCardChargeRecords" Type="Self.MemberCardChargeRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberCards">
-              <PropertyRef Name="MemberCardID" />
-            </Principal>
-            <Dependent Role="MemberCardChargeRecords">
-              <PropertyRef Name="MemberCardID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_MemberCard_MemberCardLevel">
           <End Role="MemberCardLevels" Type="Self.MemberCardLevel" Multiplicity="0..1" />
           <End Role="MemberCards" Type="Self.MemberCard" Multiplicity="*" />
@@ -1116,6 +1149,18 @@
             </Principal>
             <Dependent Role="MemberCardLevels">
               <PropertyRef Name="VIPGiftID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReportGameHistory_MemberCards">
+          <End Role="MemberCards" Type="Self.MemberCard" Multiplicity="0..1" />
+          <End Role="ReportGameHistory" Type="Self.ReportGameHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCards">
+              <PropertyRef Name="MemberCardID" />
+            </Principal>
+            <Dependent Role="ReportGameHistory">
+              <PropertyRef Name="IdCard" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1155,6 +1200,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ReportGameHistory_SettingGame">
+          <End Role="SettingGame" Type="Self.SettingGame" Multiplicity="0..1" />
+          <End Role="ReportGameHistory" Type="Self.ReportGameHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettingGame">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReportGameHistory">
+              <PropertyRef Name="IdGame" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Roles">
           <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
           <End Role="Users" Type="Self.User" Multiplicity="*" />
@@ -1186,14 +1243,19 @@
           <EntitySet Name="Cashiers" EntityType="Self.Cashier" />
           <EntitySet Name="Games" EntityType="Self.Game" />
           <EntitySet Name="Gifts" EntityType="Self.Gift" />
+          <EntitySet Name="InShifts" EntityType="Self.InShift" />
           <EntitySet Name="LiveCards" EntityType="Self.LiveCard" />
-          <EntitySet Name="MemberCardChargeRecords" EntityType="Self.MemberCardChargeRecord" />
           <EntitySet Name="MemberCardLevels" EntityType="Self.MemberCardLevel" />
           <EntitySet Name="MemberCards" EntityType="Self.MemberCard" />
           <EntitySet Name="Modules" EntityType="Self.Module" />
           <EntitySet Name="NFCReaders" EntityType="Self.NFCReader" />
+          <EntitySet Name="OutShifts" EntityType="Self.OutShift" />
+          <EntitySet Name="PayTypes" EntityType="Self.PayType" />
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGift" />
           <EntitySet Name="Promotions" EntityType="Self.Promotion" />
+          <EntitySet Name="ReportCreateCards" EntityType="Self.ReportCreateCard" />
+          <EntitySet Name="ReportGameHistories" EntityType="Self.ReportGameHistory" />
+          <EntitySet Name="ReportRecharges" EntityType="Self.ReportRecharge" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="SettingGames" EntityType="Self.SettingGame" />
           <EntitySet Name="Sliders" EntityType="Self.Slider" />
@@ -1204,10 +1266,6 @@
           <AssociationSet Name="FK_Accounts_MemberCards" Association="Self.FK_Accounts_MemberCards">
             <End Role="MemberCards" EntitySet="MemberCards" />
             <End Role="Accounts" EntitySet="Accounts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardChargeRecords_Accounts" Association="Self.FK_MemberCardChargeRecords_Accounts">
-            <End Role="Accounts" EntitySet="Accounts" />
-            <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
           </AssociationSet>
           <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
             <End Role="CardLevels" EntitySet="CardLevels" />
@@ -1229,10 +1287,6 @@
             <End Role="Gifts" EntitySet="Gifts" />
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
           </AssociationSet>
-          <AssociationSet Name="FK_MemberCardChargeRecords_MemberCards" Association="Self.FK_MemberCardChargeRecords_MemberCards">
-            <End Role="MemberCards" EntitySet="MemberCards" />
-            <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
-          </AssociationSet>
           <AssociationSet Name="FK_MemberCard_MemberCardLevel" Association="Self.FK_MemberCard_MemberCardLevel">
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
             <End Role="MemberCards" EntitySet="MemberCards" />
@@ -1240,6 +1294,10 @@
           <AssociationSet Name="FK_MemberCardLevel_VIPGift" Association="Self.FK_MemberCardLevel_VIPGift">
             <End Role="VIPGifts" EntitySet="VIPGifts" />
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReportGameHistory_MemberCards" Association="Self.FK_ReportGameHistory_MemberCards">
+            <End Role="MemberCards" EntitySet="MemberCards" />
+            <End Role="ReportGameHistory" EntitySet="ReportGameHistories" />
           </AssociationSet>
           <AssociationSet Name="FK_Modules_Users" Association="Self.FK_Modules_Users">
             <End Role="Users" EntitySet="Users" />
@@ -1253,6 +1311,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Promotions" EntitySet="Promotions" />
           </AssociationSet>
+          <AssociationSet Name="FK_ReportGameHistory_SettingGame" Association="Self.FK_ReportGameHistory_SettingGame">
+            <End Role="SettingGame" EntitySet="SettingGames" />
+            <End Role="ReportGameHistory" EntitySet="ReportGameHistories" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_Roles" Association="Self.FK_User_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
@@ -1261,48 +1323,62 @@
             <End Role="TypeSliders" EntitySet="TypeSliders" />
             <End Role="Sliders" EntitySet="Sliders" />
           </AssociationSet>
-          <EntitySet Name="ReportRecharges" EntityType="Model.ReportRecharge" />
-          <EntitySet Name="PayTypes" EntityType="Model.PayType" />
+          <EntitySet Name="MemberCardChargeRecords" EntityType="Model.MemberCardChargeRecord" />
+          <AssociationSet Name="FK_MemberCardChargeRecords_Accounts" Association="Model.FK_MemberCardChargeRecords_Accounts">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardChargeRecords_MemberCards" Association="Model.FK_MemberCardChargeRecords_MemberCards">
+            <End Role="MemberCard" EntitySet="MemberCards" />
+            <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
+          </AssociationSet>
           <AssociationSet Name="FK_MemberCardChargeRecords_PayType" Association="Model.FK_MemberCardChargeRecords_PayType">
             <End Role="PayType" EntitySet="PayTypes" />
             <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
           </AssociationSet>
-          <EntitySet Name="ReportCreateCards" EntityType="Model.ReportCreateCard" />
-          <EntitySet Name="InShifts" EntityType="Model.InShift" />
-          <EntitySet Name="OutShifts" EntityType="Model.OutShift" />
-          <EntitySet Name="ReportGameHistories" EntityType="Model.ReportGameHistory" />
-          <AssociationSet Name="FK_ReportGameHistory_MemberCards" Association="Model.FK_ReportGameHistory_MemberCards">
-            <End Role="MemberCard" EntitySet="MemberCards" />
-            <End Role="ReportGameHistory" EntitySet="ReportGameHistories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReportGameHistory_SettingGame" Association="Model.FK_ReportGameHistory_SettingGame">
-            <End Role="SettingGame" EntitySet="SettingGames" />
-            <End Role="ReportGameHistory" EntitySet="ReportGameHistories" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="ReportRecharge">
+        <EntityType Name="MemberCardChargeRecord">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="RecordID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdCard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="IdUser" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Boolean" />
+          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MemberCardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Money" Type="Double" />
+          <Property Name="ChargeDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
           <Property Name="TypePay" Type="Int32" />
+          <Property Name="Paycode" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="RecordType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Cashier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Account" Relationship="Model.FK_MemberCardChargeRecords_Accounts" FromRole="MemberCardChargeRecord" ToRole="Account" />
+          <NavigationProperty Name="MemberCard" Relationship="Model.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCardChargeRecord" ToRole="MemberCard" />
+          <NavigationProperty Name="PayType" Relationship="Model.FK_MemberCardChargeRecords_PayType" FromRole="MemberCardChargeRecord" ToRole="PayType" />
         </EntityType>
-        <EntityType Name="PayType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_PayType" FromRole="PayType" ToRole="MemberCardChargeRecord" />
-        </EntityType>
+        <Association Name="FK_MemberCardChargeRecords_Accounts">
+          <End Type="Model.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecord">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberCardChargeRecords_MemberCards">
+          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="0..1" />
+          <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCard">
+              <PropertyRef Name="MemberCardID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecord">
+              <PropertyRef Name="MemberCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MemberCardChargeRecords_PayType">
           <End Type="Model.PayType" Role="PayType" Multiplicity="0..1" />
           <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
@@ -1312,91 +1388,6 @@
             </Principal>
             <Dependent Role="MemberCardChargeRecord">
               <PropertyRef Name="TypePay" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="ReportCreateCard">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdCard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="IdUser" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Boolean" />
-          <Property Name="Money" Type="Double" />
-          <Property Name="TypePay" Type="Int32" />
-        </EntityType>
-        <EntityType Name="InShift">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="IdUsers" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="Cashiers" Type="Int32" />
-          <Property Name="FirstShiftMoney" Type="Double" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="OutShift">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdUsers" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="Cashiers" Type="Int32" />
-          <Property Name="RealMoneySale" Type="Double" />
-          <Property Name="EndShiftMoney" Type="Double" />
-          <Property Name="FirstShiftMoney" Type="Double" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Boolean" />
-          <Property Name="IdInShift" Type="Int32" />
-        </EntityType>
-        <EntityType Name="ReportGameHistory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdGame" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IdCard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="MemberCard" Relationship="Model.FK_ReportGameHistory_MemberCards" FromRole="ReportGameHistory" ToRole="MemberCard" />
-          <NavigationProperty Name="SettingGame" Relationship="Model.FK_ReportGameHistory_SettingGame" FromRole="ReportGameHistory" ToRole="SettingGame" />
-        </EntityType>
-        <Association Name="FK_ReportGameHistory_MemberCards">
-          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="0..1" />
-          <End Type="Model.ReportGameHistory" Role="ReportGameHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberCard">
-              <PropertyRef Name="MemberCardID" />
-            </Principal>
-            <Dependent Role="ReportGameHistory">
-              <PropertyRef Name="IdCard" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReportGameHistory_SettingGame">
-          <End Type="Model.SettingGame" Role="SettingGame" Multiplicity="0..1" />
-          <End Type="Model.ReportGameHistory" Role="ReportGameHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SettingGame">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ReportGameHistory">
-              <PropertyRef Name="IdGame" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1497,6 +1488,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="InShifts">
+            <EntityTypeMapping TypeName="Model.InShift">
+              <MappingFragment StoreEntitySet="InShift">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdUsers" ColumnName="IdUsers" />
+                <ScalarProperty Name="Cashiers" ColumnName="Cashiers" />
+                <ScalarProperty Name="FirstShiftMoney" ColumnName="FirstShiftMoney" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="LiveCards">
             <EntityTypeMapping TypeName="Model.LiveCard">
               <MappingFragment StoreEntitySet="LiveCards">
@@ -1504,20 +1510,6 @@
                 <ScalarProperty Name="CardID" ColumnName="CardID" />
                 <ScalarProperty Name="ReaderID" ColumnName="ReaderID" />
                 <ScalarProperty Name="ScanAt" ColumnName="ScanAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MemberCardChargeRecords">
-            <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
-              <MappingFragment StoreEntitySet="MemberCardChargeRecords">
-                <ScalarProperty Name="Paycode" ColumnName="Paycode" />
-                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
-                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
-                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
-                <ScalarProperty Name="Money" ColumnName="Money" />
-                <ScalarProperty Name="ChargeDate" ColumnName="ChargeDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1536,7 +1528,6 @@
           <EntitySetMapping Name="MemberCards">
             <EntityTypeMapping TypeName="Model.MemberCard">
               <MappingFragment StoreEntitySet="MemberCards">
-                <ScalarProperty Name="Code39" ColumnName="Code39" />
                 <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
                 <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
                 <ScalarProperty Name="Points" ColumnName="Points" />
@@ -1547,6 +1538,7 @@
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="MultipliedMoney" ColumnName="MultipliedMoney" />
+                <ScalarProperty Name="Code39" ColumnName="Code39" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1579,6 +1571,32 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OutShifts">
+            <EntityTypeMapping TypeName="Model.OutShift">
+              <MappingFragment StoreEntitySet="OutShift">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdInShift" ColumnName="IdInShift" />
+                <ScalarProperty Name="IdUsers" ColumnName="IdUsers" />
+                <ScalarProperty Name="Cashiers" ColumnName="Cashiers" />
+                <ScalarProperty Name="RealMoneySale" ColumnName="RealMoneySale" />
+                <ScalarProperty Name="EndShiftMoney" ColumnName="EndShiftMoney" />
+                <ScalarProperty Name="FirstShiftMoney" ColumnName="FirstShiftMoney" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayTypes">
+            <EntityTypeMapping TypeName="Model.PayType">
+              <MappingFragment StoreEntitySet="PayType">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PersonalGifts">
             <EntityTypeMapping TypeName="Model.PersonalGift">
               <MappingFragment StoreEntitySet="PersonalGifts">
@@ -1606,6 +1624,52 @@
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportCreateCards">
+            <EntityTypeMapping TypeName="Model.ReportCreateCard">
+              <MappingFragment StoreEntitySet="ReportCreateCard">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportGameHistories">
+            <EntityTypeMapping TypeName="Model.ReportGameHistory">
+              <MappingFragment StoreEntitySet="ReportGameHistory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdGame" ColumnName="IdGame" />
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportRecharges">
+            <EntityTypeMapping TypeName="Model.ReportRecharge">
+              <MappingFragment StoreEntitySet="ReportRecharge">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1676,7 +1740,6 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="Model.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="ReaderID" ColumnName="ReaderID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1687,6 +1750,7 @@
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
                 <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ReaderID" ColumnName="ReaderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1700,90 +1764,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ReportRecharges">
-            <EntityTypeMapping TypeName="Model.ReportRecharge">
-              <MappingFragment StoreEntitySet="ReportRecharge">
+          <EntitySetMapping Name="MemberCardChargeRecords">
+            <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
+              <MappingFragment StoreEntitySet="MemberCardChargeRecords">
+                <ScalarProperty Name="Cashier" ColumnName="Cashier" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="Paycode" ColumnName="Paycode" />
                 <ScalarProperty Name="TypePay" ColumnName="TypePay" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ChargeDate" ColumnName="ChargeDate" />
                 <ScalarProperty Name="Money" ColumnName="Money" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
-                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PayTypes">
-            <EntityTypeMapping TypeName="Model.PayType">
-              <MappingFragment StoreEntitySet="PayType">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ReportCreateCards">
-            <EntityTypeMapping TypeName="Model.ReportCreateCard">
-              <MappingFragment StoreEntitySet="ReportCreateCard">
-                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
-                <ScalarProperty Name="Money" ColumnName="Money" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
-                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="InShifts">
-            <EntityTypeMapping TypeName="Model.InShift">
-              <MappingFragment StoreEntitySet="InShift">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="FirstShiftMoney" ColumnName="FirstShiftMoney" />
-                <ScalarProperty Name="Cashiers" ColumnName="Cashiers" />
-                <ScalarProperty Name="IdUsers" ColumnName="IdUsers" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OutShifts">
-            <EntityTypeMapping TypeName="Model.OutShift">
-              <MappingFragment StoreEntitySet="OutShift">
-                <ScalarProperty Name="IdInShift" ColumnName="IdInShift" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="FirstShiftMoney" ColumnName="FirstShiftMoney" />
-                <ScalarProperty Name="EndShiftMoney" ColumnName="EndShiftMoney" />
-                <ScalarProperty Name="RealMoneySale" ColumnName="RealMoneySale" />
-                <ScalarProperty Name="Cashiers" ColumnName="Cashiers" />
-                <ScalarProperty Name="IdUsers" ColumnName="IdUsers" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ReportGameHistories">
-            <EntityTypeMapping TypeName="Model.ReportGameHistory">
-              <MappingFragment StoreEntitySet="ReportGameHistory">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
-                <ScalarProperty Name="IdGame" ColumnName="IdGame" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

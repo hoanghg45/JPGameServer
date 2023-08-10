@@ -547,5 +547,54 @@ function InitInputEvent() {
 		}
 	});
 	
-		
+	/// tiền thừa
+	$('input[name="CusMoney"]').on('keypress', function (event) {
+		if (event.which === 13) {
+			event.preventDefault();
+			// Xử lý logic khi nhấn ngoài input
+			let money = Number($('input[name="MoneyPay"]').val().replaceAll(',', ''))
+			let cusMoney = Number($(this).val().replaceAll(',', ''))
+			let changeMoney = 0
+			if ($(this).val() == '')
+				return
+			if (money == '') {
+				toastr.error("Vui lòng nhập số tiền cần nạp", "Lỗi!")
+				$(this).val('')
+			} else if (money < cusMoney) {
+
+				toastr.error("Số tiền cần nạp phải nhỏ hơn số tiền khách đưa", "Lỗi!")
+				$(this).val('')
+			}
+			else if (money < cusMoney) {
+
+				changeMoney = cusMoney - money
+			}
+			$('input[name="ChangeMoney"]').val(changeMoney.toLocaleString('en-US'))
+
+		}
+	});
+	$('input[name="CusMoney"]').on('blur', function (event) {
+		event.preventDefault();
+		// Xử lý logic khi nhấn ngoài input
+		let money = Number($('input[name="MoneyPay"]').val().replaceAll(',', ''))
+		let cusMoney = Number($(this).val().replaceAll(',', ''))
+		let changeMoney = 0
+		if ($(this).val() == '')
+			return
+		if (money == '') {
+			toastr.error("Vui lòng nhập số tiền cần nạp", "Lỗi!")
+			$(this).val('')
+		} else if (money < cusMoney) {
+
+			toastr.error("Số tiền cần nạp phải nhỏ hơn số tiền khách đưa", "Lỗi!")
+			$(this).val('')
+		}
+		else if (money < cusMoney) {
+
+			changeMoney = cusMoney - money
+		}
+		$('input[name="ChangeMoney"]').val(changeMoney.toLocaleString('en-US'))
+
+	});
+
 }
