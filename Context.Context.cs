@@ -52,5 +52,6 @@ namespace JPGame
         public virtual DbSet<InShift> InShifts { get; set; }
         public virtual DbSet<OutShift> OutShifts { get; set; }
         public virtual DbSet<ReportGameHistory> ReportGameHistories { get; set; }
+        public virtual DbSet<PromotionVoucher> PromotionVouchers { get; set; }
     }
 }

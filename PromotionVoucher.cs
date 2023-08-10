@@ -12,17 +12,20 @@ namespace JPGame
     using System;
     using System.Collections.Generic;
     
-    public partial class ReportCreateCard
+    public partial class PromotionVoucher
     {
-        public int ID { get; set; }
-        public string IdCard { get; set; }
-        public string IdUser { get; set; }
+        public string PromotionCode { get; set; }
+        public Nullable<int> Type { get; set; }
+        public Nullable<System.DateTime> StartTime { get; set; }
+        public Nullable<System.DateTime> EndTime { get; set; }
+        public Nullable<double> ReceiveMoney { get; set; }
+        public Nullable<double> MinimumMoney { get; set; }
+        public Nullable<double> VoucherDiscount { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public string ModifyBy { get; set; }
         public Nullable<bool> Status { get; set; }
-        public Nullable<double> Money { get; set; }
-        public Nullable<int> TypePay { get; set; }
+        public string Des { get; set; }
     }
 }

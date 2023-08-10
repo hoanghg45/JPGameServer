@@ -50,6 +50,7 @@
         <EntityTypeShape EntityType="Model.ReportGameHistory" Width="1.5" PointX="17" PointY="7.625" />
         <AssociationConnector Association="Model.FK_ReportGameHistory_MemberCards" />
         <AssociationConnector Association="Model.FK_ReportGameHistory_SettingGame" />
+        <EntityTypeShape EntityType="Model.PromotionVoucher" Width="1.5" PointX="16.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

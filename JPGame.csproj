@@ -290,6 +290,9 @@
     <Compile Include="Promotion.cs">
       <DependentUpon>Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="PromotionVoucher.cs">
+      <DependentUpon>Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="qa\mcardsea.aspx.cs">
       <DependentUpon>mcardsea.aspx</DependentUpon>

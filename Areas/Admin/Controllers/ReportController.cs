@@ -126,10 +126,16 @@ namespace JPGame.Areas.Admin.Controllers
           );
         }
         [HttpGet]
-        public JsonResult ReportGame(int page=0, string From ="2023-08-01", string To="2030-08-01",string game="-1",string card="-1")
+        public JsonResult ReportGame(int page, string From , string To,string game,string card)
         {
-            var dateFrom = int.Parse(getDay(From)) + int.Parse(getMonth(From)) * 30 * int.Parse(getYear(From)); 
-            var dateTo = int.Parse(getDay(To)) + int.Parse(getMonth(To)) * 30 * int.Parse(getYear(To)); 
+
+            From = From == "" || From == null ? "2023-08-01" : From;
+            To = To == "" || To == null ? "2030-08-01" : To;
+            game = game == null|| game == "-1" ? "-1" : game;
+            card = card == null || card == "-1" ? "-1" : card;
+
+            var dateFrom = int.Parse(getDay(From)) + int.Parse(getMonth(From)) * 31 * int.Parse(getYear(From)); 
+            var dateTo = int.Parse(getDay(To)) + int.Parse(getMonth(To)) * 31 * int.Parse(getYear(To)); 
             var data = db.ReportGameHistories.Select(a => new
             {
                 a.Id,
@@ -139,8 +145,8 @@ namespace JPGame.Areas.Admin.Controllers
                 a.SettingGame.Price,
                 a.CreateDate,
                 a.Status,
-            }).Where(x=>x.CreateDate.Value.Day+x.CreateDate.Value.Month*30*x.CreateDate.Value.Year>= dateFrom
-                        && x.CreateDate.Value.Day + x.CreateDate.Value.Month * 30 * x.CreateDate.Value.Year<=dateTo);
+            }).Where(x=>x.CreateDate.Value.Day+x.CreateDate.Value.Month* 31 * x.CreateDate.Value.Year>= dateFrom
+                        && x.CreateDate.Value.Day + x.CreateDate.Value.Month * 31 * x.CreateDate.Value.Year<=dateTo);
             if (game != "-1")
             {
                data= data.Where(x => x.IdGame == game);
@@ -212,8 +218,8 @@ namespace JPGame.Areas.Admin.Controllers
             To = To == "" ? "2030-08-01" : To;
             game = game == "" ? "-1" : game;
             card = card == "" ? "-1" : card;
-            var dateFrom = int.Parse(getDay(From)) + int.Parse(getMonth(From)) * 30 * int.Parse(getYear(From));
-            var dateTo = int.Parse(getDay(To)) + int.Parse(getMonth(To)) * 30 * int.Parse(getYear(To));
+            var dateFrom = int.Parse(getDay(From)) + int.Parse(getMonth(From)) * 31 * int.Parse(getYear(From));
+            var dateTo = int.Parse(getDay(To)) + int.Parse(getMonth(To)) * 31 * int.Parse(getYear(To));
             var data = db.ReportGameHistories.Select(a => new
             {
                 a.Id,
@@ -223,8 +229,8 @@ namespace JPGame.Areas.Admin.Controllers
                 a.SettingGame.Price,
                 a.CreateDate,
                 a.Status,
-            }).Where(x => x.CreateDate.Value.Day + x.CreateDate.Value.Month * 30 * x.CreateDate.Value.Year >= dateFrom
-                        && x.CreateDate.Value.Day + x.CreateDate.Value.Month * 30 * x.CreateDate.Value.Year <= dateTo);
+            }).Where(x => x.CreateDate.Value.Day + x.CreateDate.Value.Month * 31 * x.CreateDate.Value.Year >= dateFrom
+                        && x.CreateDate.Value.Day + x.CreateDate.Value.Month * 31 * x.CreateDate.Value.Year <= dateTo);
             if (game != "-1")
             {
                 data = data.Where(x => x.IdGame == game);
@@ -247,7 +253,7 @@ namespace JPGame.Areas.Admin.Controllers
                 // Thêm dữ liệu từ data vào các ô
                 for (int i = 0; i < data.ToList().Count; i++)
                 {
-                    worksheet.Cells[i + 2, 1].Value = data.ToList()[i].CreateDate.Value.Date.ToString();
+                    worksheet.Cells[i + 2, 1].Value = data.ToList()[i].CreateDate.Value.Year+"-"+ data.ToList()[i].CreateDate.Value.Month+"-"+data.ToList()[i].CreateDate.Value.Day+" "+data.ToList()[i].CreateDate.Value.Hour+":"+ data.ToList()[i].CreateDate.Value.Minute;
                     worksheet.Cells[i + 2, 2].Value = data.ToList()[i].Name;
                     worksheet.Cells[i + 2, 3].Value = data.ToList()[i].Code39;
                     worksheet.Cells[i + 2, 4].Value = data.ToList()[i].Price;

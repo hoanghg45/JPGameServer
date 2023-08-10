@@ -125,6 +125,8 @@
           <Property Name="CreateBy" Type="nchar" MaxLength="50" />
           <Property Name="TypePay" Type="int" />
           <Property Name="Paycode" Type="nchar" MaxLength="100" />
+          <Property Name="RecordType" Type="nvarchar" MaxLength="100" />
+          <Property Name="Cashier" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MemberCardLevels">
           <Key>
@@ -232,6 +234,24 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="PromotionVoucher">
+          <Key>
+            <PropertyRef Name="PromotionCode" />
+          </Key>
+          <Property Name="PromotionCode" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="Type" Type="int" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="ReceiveMoney" Type="float" />
+          <Property Name="MinimumMoney" Type="float" />
+          <Property Name="VoucherDiscount" Type="float" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="Des" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="ReportCreateCard">
           <Key>
             <PropertyRef Name="ID" />
@@ -244,6 +264,8 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
+          <Property Name="Money" Type="float" />
+          <Property Name="TypePay" Type="int" />
         </EntityType>
         <EntityType Name="ReportGameHistory">
           <Key>
@@ -270,6 +292,8 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="bit" />
+          <Property Name="Money" Type="float" />
+          <Property Name="TypePay" Type="int" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -589,6 +613,7 @@
           <EntitySet Name="PayType" EntityType="Self.PayType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PromotionVoucher" EntityType="Self.PromotionVoucher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportCreateCard" EntityType="Self.ReportCreateCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportGameHistory" EntityType="Self.ReportGameHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportRecharge" EntityType="Self.ReportRecharge" Schema="dbo" store:Type="Tables" />
@@ -792,6 +817,8 @@
           <Property Name="TypePay" Type="Int32" />
           <Property Name="Paycode" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="PayType" Relationship="Model.FK_MemberCardChargeRecords_PayType" FromRole="MemberCardChargeRecord" ToRole="PayType" />
+          <Property Name="RecordType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Cashier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MemberCardLevel">
           <Key>
@@ -1262,6 +1289,7 @@
             <End Role="SettingGame" EntitySet="SettingGames" />
             <End Role="ReportGameHistory" EntitySet="ReportGameHistories" />
           </AssociationSet>
+          <EntitySet Name="PromotionVouchers" EntityType="Model.PromotionVoucher" />
         </EntityContainer>
         <EntityType Name="ReportRecharge">
           <Key>
@@ -1275,6 +1303,8 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="Money" Type="Double" />
+          <Property Name="TypePay" Type="Int32" />
         </EntityType>
         <EntityType Name="PayType">
           <Key>
@@ -1308,6 +1338,8 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="Money" Type="Double" />
+          <Property Name="TypePay" Type="Int32" />
         </EntityType>
         <EntityType Name="InShift">
           <Key>
@@ -1379,6 +1411,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="PromotionVoucher">
+          <Key>
+            <PropertyRef Name="PromotionCode" />
+          </Key>
+          <Property Name="PromotionCode" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="ReceiveMoney" Type="Double" />
+          <Property Name="MinimumMoney" Type="Double" />
+          <Property Name="VoucherDiscount" Type="Double" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Des" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1489,6 +1539,8 @@
           <EntitySetMapping Name="MemberCardChargeRecords">
             <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
               <MappingFragment StoreEntitySet="MemberCardChargeRecords">
+                <ScalarProperty Name="Cashier" ColumnName="Cashier" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
                 <ScalarProperty Name="Paycode" ColumnName="Paycode" />
                 <ScalarProperty Name="TypePay" ColumnName="TypePay" />
                 <ScalarProperty Name="RecordID" ColumnName="RecordID" />
@@ -1682,6 +1734,8 @@
           <EntitySetMapping Name="ReportRecharges">
             <EntityTypeMapping TypeName="Model.ReportRecharge">
               <MappingFragment StoreEntitySet="ReportRecharge">
+                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
@@ -1704,6 +1758,8 @@
           <EntitySetMapping Name="ReportCreateCards">
             <EntityTypeMapping TypeName="Model.ReportCreateCard">
               <MappingFragment StoreEntitySet="ReportCreateCard">
+                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
@@ -1759,6 +1815,25 @@
                 <ScalarProperty Name="IdCard" ColumnName="IdCard" />
                 <ScalarProperty Name="IdGame" ColumnName="IdGame" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PromotionVouchers">
+            <EntityTypeMapping TypeName="Model.PromotionVoucher">
+              <MappingFragment StoreEntitySet="PromotionVoucher">
+                <ScalarProperty Name="Des" ColumnName="Des" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="VoucherDiscount" ColumnName="VoucherDiscount" />
+                <ScalarProperty Name="MinimumMoney" ColumnName="MinimumMoney" />
+                <ScalarProperty Name="ReceiveMoney" ColumnName="ReceiveMoney" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="PromotionCode" ColumnName="PromotionCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

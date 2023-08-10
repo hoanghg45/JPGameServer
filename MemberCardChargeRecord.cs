@@ -22,6 +22,8 @@ namespace JPGame
         public string CreateBy { get; set; }
         public Nullable<int> TypePay { get; set; }
         public string Paycode { get; set; }
+        public string RecordType { get; set; }
+        public string Cashier { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual MemberCard MemberCard { get; set; }
