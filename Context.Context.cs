@@ -52,5 +52,12 @@ namespace JPGame
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<VIPGift> VIPGifts { get; set; }
         public virtual DbSet<MemberCardChargeRecord> MemberCardChargeRecords { get; set; }
+        public virtual DbSet<ReportRecharge> ReportRecharges { get; set; }
+        public virtual DbSet<PayType> PayTypes { get; set; }
+        public virtual DbSet<ReportCreateCard> ReportCreateCards { get; set; }
+        public virtual DbSet<InShift> InShifts { get; set; }
+        public virtual DbSet<OutShift> OutShifts { get; set; }
+        public virtual DbSet<ReportGameHistory> ReportGameHistories { get; set; }
+        public virtual DbSet<PromotionVoucher> PromotionVouchers { get; set; }
     }
 }

@@ -50,6 +50,13 @@
         <AssociationConnector Association="Model.FK_MemberCardChargeRecords_Accounts" />
         <AssociationConnector Association="Model.FK_MemberCardChargeRecords_MemberCards" />
         <AssociationConnector Association="Model.FK_MemberCardChargeRecords_PayType" />
+        <EntityTypeShape EntityType="Model.ReportCreateCard" Width="1.5" PointX="10.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Model.InShift" Width="1.5" PointX="12.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Model.OutShift" Width="1.5" PointX="14.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Model.ReportGameHistory" Width="1.5" PointX="17" PointY="7.625" />
+        <AssociationConnector Association="Model.FK_ReportGameHistory_MemberCards" />
+        <AssociationConnector Association="Model.FK_ReportGameHistory_SettingGame" />
+        <EntityTypeShape EntityType="Model.PromotionVoucher" Width="1.5" PointX="16.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

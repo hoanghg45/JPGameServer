@@ -12,7 +12,7 @@
                 @* begin::Page Heading*@
                 <div class="d-flex align-items-baseline flex-wrap mr-5">
                     @*begin::Page Title*@
-                    <h5 class="text-dark font-weight-bold my-1 mr-5">Doanh thu</h5>
+                    <h5 class="text-dark font-weight-bold my-1 mr-5">Báo Cáo</h5>
                     @*end::Page Title
                         begin::Breadcrumb*@
                     <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
@@ -256,7 +256,7 @@
                             let tr = `<tr>
                                     <th scope="row">${((10 * (data.pageCurrent - 1)) + (i + 1))}</th>
 
-                                    <td>${formatDate(v.CreateDate)}</td>
+                                    <td>${formatDate(v.CreateDate)} ${getTime(v.CreateDate)}</td>
 
                                     <td>${v.Name}</td>
 

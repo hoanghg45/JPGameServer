@@ -276,7 +276,154 @@ namespace JPGame.Areas.Admin.Controllers
 
 
         }
+        [System.Web.Http.HttpGet]
+        public JsonResult Promotion(string IdPromotion)
+        {
+            try
+            {
+                var date = DateTime.Now;
+                var currentDate = date.Day + date.Month * 31 * date.Year;
+                if (string.IsNullOrEmpty(IdPromotion))
+                {
+                    return Json(
+                    new
+                    {
+                        status = "fail",
+                        message = "Lỗi hãy thử lại!"
 
+                    }
+                    , JsonRequestBehavior.AllowGet);
+                }
+                if (!db.PromotionVouchers.Any(c => c.PromotionCode.Equals(IdPromotion)))
+                {
+                    return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = "Mã Không Tồn Tại!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+                }
+                var promotion = db.PromotionVouchers.Find(IdPromotion);
+                if (promotion == null)
+                {
+                    return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = "Lỗi hãy thử lại!"
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+                }
+                if(promotion.Status == false)
+                {
+                    return Json(
+                  new
+                  {
+                      status = "fail",
+                      message = "Mã Đã Được Sử Dụng!"
+
+                  }
+                  , JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    if (promotion.Type == 1)
+                    {
+                        var promotionInfo = db.PromotionVouchers.Where(c => c.PromotionCode.Equals(IdPromotion)&&c.Status==true)
+                              .Select(r => new
+                              {
+                                  r.Type,
+                                  r.StartTime,
+                                  r.EndTime,
+                                  r.ReceiveMoney,
+                                  r.Des
+                              }).Where(x=>x.StartTime.Value.Day+ x.StartTime.Value.Month*31* x.StartTime.Value.Year<currentDate&& x.EndTime.Value.Day + x.EndTime.Value.Month * 31 * x.EndTime.Value.Year>currentDate);
+                        if (promotionInfo.Count() == 0)
+                        {
+                            return Json(
+                                 new
+                                 {
+                                     status = "fail",
+                                     message = "Mã Hết Hạn"
+
+                                 }
+                                 , JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(
+                               new
+                               {
+                                   status = "ok",
+                                   message = promotionInfo
+
+                               }
+                               , JsonRequestBehavior.AllowGet);
+                        }
+                   
+                    }else if(promotion.Type == 2)
+                    {
+                        var promotionInfo = db.PromotionVouchers.Where(c => c.PromotionCode.Equals(IdPromotion))
+                              .Select(r => new
+                              {
+                                  r.Type,
+                                  r.StartTime,
+                                  r.EndTime,
+                                  r.MinimumMoney,
+                                  r.VoucherDiscount,
+                                  r.Des
+                              }).Where(x => x.StartTime.Value.Day + x.StartTime.Value.Month * 31 * x.StartTime.Value.Year < currentDate && x.EndTime.Value.Day + x.EndTime.Value.Month * 31 * x.EndTime.Value.Year > currentDate);
+                        if (promotionInfo.Count() == 0)
+                        {
+                            return Json(
+                                 new
+                                 {
+                                     status = "fail",
+                                     message = "Mã Hết Hạn"
+
+                                 }
+                                 , JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(
+                               new
+                               {
+                                   status = "ok",
+                                   message = promotionInfo
+
+                               }
+                               , JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                return Json(
+                          new
+                          {
+                              status = "fail",
+                              message ="Có Lỗi"
+
+                          }
+                          , JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception e)
+            {
+                return Json(
+                   new
+                   {
+                       status = "fail",
+                       message = e
+
+                   }
+                   , JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
         // POST api/<controller>
         [System.Web.Http.HttpPost]
         public JsonResult AddReader(List<SettingGame> data)
