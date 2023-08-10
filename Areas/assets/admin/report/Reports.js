@@ -48,10 +48,10 @@ function ShowTable(pagenumber,from, to) {
                         
                             <td>${formatDate(v.Date)}</td>
                             
-                            <td>${v.Shift1}</td>
+                            <td>${Number(v.Shift1).toLocaleString()}</td>
                         
-                            <td>${v.Shift2}</td>
-                            <td>${v.Total}</td>
+                            <td>${Number(v.Shift2).toLocaleString()}</td>
+                            <td>${Number(v.Total).toLocaleString()}</td>
                
                          
                             </tr>`

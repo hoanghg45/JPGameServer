@@ -122,7 +122,7 @@ var Add = function () {
                 data: data,
                 datatype: "json",
                 success: function (result) {
-                    if (result.status == "success") {
+                    if (result.code == 200) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Tạo thành công!',
@@ -135,7 +135,7 @@ var Add = function () {
                         Swal.fire({
                             icon: 'error',
                             title: 'Đã có lỗi xảy ra, vui lòng thử lại!',
-                            text: result.message,
+                            text: result.msg,
                             showConfirmButton: false,
                             timer: 1500
                         })

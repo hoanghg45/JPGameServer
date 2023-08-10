@@ -76,12 +76,17 @@ namespace JPGame.Areas.Admin.Controllers
         {
             try
             {
+
                 if (formData.AccountName != null)
                 {
                     var date = DateTime.Now;
                     byte[] bytes = System.Text.Encoding.UTF8.GetBytes(formData.AccountName);
                     string base64String = Convert.ToBase64String(bytes);
                     formData.AccountID = base64String + date.Year + date.Month + date.Day + date.Hour + date.Minute + date.Second + date.Millisecond;
+                }
+                if(db.Accounts.Any(a => a.AccountName.Trim().Equals(formData.AccountName.Trim())))
+                {
+                    return Json(new { code = "error", msg = "Tài khoản " + formData.AccountName + "đã được sử dụng"  }, JsonRequestBehavior.AllowGet);
                 }
                 formData.CreateDate = DateTime.Now;
                 formData.ModifyDate = DateTime.Now;
@@ -92,7 +97,7 @@ namespace JPGame.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { code = "error", msg = "Đã Có Tài Khoản " + formData.AccountName }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = "error", msg = e }, JsonRequestBehavior.AllowGet);
             }
         }
 
