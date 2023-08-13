@@ -127,6 +127,8 @@
           <Property Name="Paycode" Type="nchar" MaxLength="100" />
           <Property Name="RecordType" Type="nvarchar" MaxLength="100" />
           <Property Name="Cashier" Type="nvarchar" MaxLength="50" />
+          <Property Name="PromotionID" Type="nchar" MaxLength="10" />
+          <Property Name="PromotionDes" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="MemberCardLevels">
           <Key>
@@ -154,6 +156,8 @@
           <Property Name="Status" Type="bit" />
           <Property Name="MultipliedMoney" Type="bit" />
           <Property Name="Code39" Type="varchar" MaxLength="100" />
+          <Property Name="Phone" Type="nchar" MaxLength="15" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Modules">
           <Key>
@@ -233,6 +237,24 @@
           <Property Name="CreateBy" Type="nchar" MaxLength="50" />
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PromotionVoucher">
+          <Key>
+            <PropertyRef Name="PromotionCode" />
+          </Key>
+          <Property Name="PromotionCode" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="Type" Type="int" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="ReceiveMoney" Type="float" />
+          <Property Name="MinimumMoney" Type="float" />
+          <Property Name="VoucherDiscount" Type="float" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="ModifyBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="Des" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="ReportCreateCard">
           <Key>
@@ -595,6 +617,7 @@
           <EntitySet Name="PayType" EntityType="Self.PayType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PromotionVoucher" EntityType="Self.PromotionVoucher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportCreateCard" EntityType="Self.ReportCreateCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportGameHistory" EntityType="Self.ReportGameHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportRecharge" EntityType="Self.ReportRecharge" Schema="dbo" store:Type="Tables" />
@@ -702,7 +725,7 @@
           <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <NavigationProperty Name="MemberCard" Relationship="Self.FK_Accounts_MemberCards" FromRole="Accounts" ToRole="MemberCards" />
-          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_Accounts" FromRole="Account" ToRole="MemberCardChargeRecord" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Self.FK_MemberCardChargeRecords_Accounts" FromRole="Accounts" ToRole="MemberCardChargeRecords" />
         </EntityType>
         <EntityType Name="Blog">
           <Key>
@@ -797,6 +820,26 @@
           <Property Name="ReaderID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ScanAt" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="MemberCardChargeRecord">
+          <Key>
+            <PropertyRef Name="RecordID" />
+          </Key>
+          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MemberCardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Money" Type="Double" />
+          <Property Name="ChargeDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="TypePay" Type="Int32" />
+          <Property Name="Paycode" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="RecordType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Cashier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_MemberCardChargeRecords_Accounts" FromRole="MemberCardChargeRecords" ToRole="Accounts" />
+          <NavigationProperty Name="MemberCard" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCardChargeRecords" ToRole="MemberCards" />
+          <NavigationProperty Name="PayType" Relationship="Self.FK_MemberCardChargeRecords_PayType" FromRole="MemberCardChargeRecords" ToRole="PayType" />
+          <Property Name="PromotionID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="PromotionDes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="MemberCardLevel">
           <Key>
             <PropertyRef Name="LevelID" />
@@ -828,9 +871,11 @@
           <Property Name="MultipliedMoney" Type="Boolean" />
           <Property Name="Code39" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Accounts" Relationship="Self.FK_Accounts_MemberCards" FromRole="MemberCards" ToRole="Accounts" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Self.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCards" ToRole="MemberCardChargeRecords" />
           <NavigationProperty Name="MemberCardLevel" Relationship="Self.FK_MemberCard_MemberCardLevel" FromRole="MemberCards" ToRole="MemberCardLevels" />
           <NavigationProperty Name="ReportGameHistories" Relationship="Self.FK_ReportGameHistory_MemberCards" FromRole="MemberCards" ToRole="ReportGameHistory" />
-          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCard" ToRole="MemberCardChargeRecord" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Module">
           <Key>
@@ -885,7 +930,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Model.FK_MemberCardChargeRecords_PayType" FromRole="PayType" ToRole="MemberCardChargeRecord" />
+          <NavigationProperty Name="MemberCardChargeRecords" Relationship="Self.FK_MemberCardChargeRecords_PayType" FromRole="PayType" ToRole="MemberCardChargeRecords" />
         </EntityType>
         <EntityType Name="PersonalGift">
           <Key>
@@ -916,6 +961,24 @@
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="User" Relationship="Self.FK_Promotion_Users" FromRole="Promotions" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="PromotionVoucher">
+          <Key>
+            <PropertyRef Name="PromotionCode" />
+          </Key>
+          <Property Name="PromotionCode" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="ReceiveMoney" Type="Double" />
+          <Property Name="MinimumMoney" Type="Double" />
+          <Property Name="VoucherDiscount" Type="Double" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Des" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ReportCreateCard">
           <Key>
@@ -1068,6 +1131,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MemberCardChargeRecords_Accounts">
+          <End Role="Accounts" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="MemberCardChargeRecords" Type="Self.MemberCardChargeRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecords">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MemberCardLevel_CardLevel">
           <End Role="CardLevels" Type="Self.CardLevel" Multiplicity="0..1" />
           <End Role="MemberCardLevels" Type="Self.MemberCardLevel" Multiplicity="*" />
@@ -1125,6 +1200,30 @@
             </Principal>
             <Dependent Role="MemberCardLevels">
               <PropertyRef Name="GiftLevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberCardChargeRecords_MemberCards">
+          <End Role="MemberCards" Type="Self.MemberCard" Multiplicity="0..1" />
+          <End Role="MemberCardChargeRecords" Type="Self.MemberCardChargeRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCards">
+              <PropertyRef Name="MemberCardID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecords">
+              <PropertyRef Name="MemberCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberCardChargeRecords_PayType">
+          <End Role="PayType" Type="Self.PayType" Multiplicity="0..1" />
+          <End Role="MemberCardChargeRecords" Type="Self.MemberCardChargeRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PayType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MemberCardChargeRecords">
+              <PropertyRef Name="TypePay" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1245,6 +1344,7 @@
           <EntitySet Name="Gifts" EntityType="Self.Gift" />
           <EntitySet Name="InShifts" EntityType="Self.InShift" />
           <EntitySet Name="LiveCards" EntityType="Self.LiveCard" />
+          <EntitySet Name="MemberCardChargeRecords" EntityType="Self.MemberCardChargeRecord" />
           <EntitySet Name="MemberCardLevels" EntityType="Self.MemberCardLevel" />
           <EntitySet Name="MemberCards" EntityType="Self.MemberCard" />
           <EntitySet Name="Modules" EntityType="Self.Module" />
@@ -1253,6 +1353,7 @@
           <EntitySet Name="PayTypes" EntityType="Self.PayType" />
           <EntitySet Name="PersonalGifts" EntityType="Self.PersonalGift" />
           <EntitySet Name="Promotions" EntityType="Self.Promotion" />
+          <EntitySet Name="PromotionVouchers" EntityType="Self.PromotionVoucher" />
           <EntitySet Name="ReportCreateCards" EntityType="Self.ReportCreateCard" />
           <EntitySet Name="ReportGameHistories" EntityType="Self.ReportGameHistory" />
           <EntitySet Name="ReportRecharges" EntityType="Self.ReportRecharge" />
@@ -1266,6 +1367,10 @@
           <AssociationSet Name="FK_Accounts_MemberCards" Association="Self.FK_Accounts_MemberCards">
             <End Role="MemberCards" EntitySet="MemberCards" />
             <End Role="Accounts" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardChargeRecords_Accounts" Association="Self.FK_MemberCardChargeRecords_Accounts">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
           </AssociationSet>
           <AssociationSet Name="FK_MemberCardLevel_CardLevel" Association="Self.FK_MemberCardLevel_CardLevel">
             <End Role="CardLevels" EntitySet="CardLevels" />
@@ -1286,6 +1391,14 @@
           <AssociationSet Name="FK_MemberCardLevel_Gift" Association="Self.FK_MemberCardLevel_Gift">
             <End Role="Gifts" EntitySet="Gifts" />
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardChargeRecords_MemberCards" Association="Self.FK_MemberCardChargeRecords_MemberCards">
+            <End Role="MemberCards" EntitySet="MemberCards" />
+            <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCardChargeRecords_PayType" Association="Self.FK_MemberCardChargeRecords_PayType">
+            <End Role="PayType" EntitySet="PayTypes" />
+            <End Role="MemberCardChargeRecords" EntitySet="MemberCardChargeRecords" />
           </AssociationSet>
           <AssociationSet Name="FK_MemberCard_MemberCardLevel" Association="Self.FK_MemberCard_MemberCardLevel">
             <End Role="MemberCardLevels" EntitySet="MemberCardLevels" />
@@ -1323,74 +1436,7 @@
             <End Role="TypeSliders" EntitySet="TypeSliders" />
             <End Role="Sliders" EntitySet="Sliders" />
           </AssociationSet>
-          <EntitySet Name="MemberCardChargeRecords" EntityType="Model.MemberCardChargeRecord" />
-          <AssociationSet Name="FK_MemberCardChargeRecords_Accounts" Association="Model.FK_MemberCardChargeRecords_Accounts">
-            <End Role="Account" EntitySet="Accounts" />
-            <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardChargeRecords_MemberCards" Association="Model.FK_MemberCardChargeRecords_MemberCards">
-            <End Role="MemberCard" EntitySet="MemberCards" />
-            <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MemberCardChargeRecords_PayType" Association="Model.FK_MemberCardChargeRecords_PayType">
-            <End Role="PayType" EntitySet="PayTypes" />
-            <End Role="MemberCardChargeRecord" EntitySet="MemberCardChargeRecords" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="MemberCardChargeRecord">
-          <Key>
-            <PropertyRef Name="RecordID" />
-          </Key>
-          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AccountID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MemberCardID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Money" Type="Double" />
-          <Property Name="ChargeDate" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="TypePay" Type="Int32" />
-          <Property Name="Paycode" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
-          <Property Name="RecordType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Cashier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Account" Relationship="Model.FK_MemberCardChargeRecords_Accounts" FromRole="MemberCardChargeRecord" ToRole="Account" />
-          <NavigationProperty Name="MemberCard" Relationship="Model.FK_MemberCardChargeRecords_MemberCards" FromRole="MemberCardChargeRecord" ToRole="MemberCard" />
-          <NavigationProperty Name="PayType" Relationship="Model.FK_MemberCardChargeRecords_PayType" FromRole="MemberCardChargeRecord" ToRole="PayType" />
-        </EntityType>
-        <Association Name="FK_MemberCardChargeRecords_Accounts">
-          <End Type="Model.Account" Role="Account" Multiplicity="0..1" />
-          <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="AccountID" />
-            </Principal>
-            <Dependent Role="MemberCardChargeRecord">
-              <PropertyRef Name="AccountID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardChargeRecords_MemberCards">
-          <End Type="Model.MemberCard" Role="MemberCard" Multiplicity="0..1" />
-          <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberCard">
-              <PropertyRef Name="MemberCardID" />
-            </Principal>
-            <Dependent Role="MemberCardChargeRecord">
-              <PropertyRef Name="MemberCardID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MemberCardChargeRecords_PayType">
-          <End Type="Model.PayType" Role="PayType" Multiplicity="0..1" />
-          <End Type="Model.MemberCardChargeRecord" Role="MemberCardChargeRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PayType">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="MemberCardChargeRecord">
-              <PropertyRef Name="TypePay" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1513,6 +1559,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="MemberCardChargeRecords">
+            <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
+              <MappingFragment StoreEntitySet="MemberCardChargeRecords">
+                <ScalarProperty Name="PromotionDes" ColumnName="PromotionDes" />
+                <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="ChargeDate" ColumnName="ChargeDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
+                <ScalarProperty Name="Paycode" ColumnName="Paycode" />
+                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
+                <ScalarProperty Name="Cashier" ColumnName="Cashier" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MemberCardLevels">
             <EntityTypeMapping TypeName="Model.MemberCardLevel">
               <MappingFragment StoreEntitySet="MemberCardLevels">
@@ -1528,6 +1592,8 @@
           <EntitySetMapping Name="MemberCards">
             <EntityTypeMapping TypeName="Model.MemberCard">
               <MappingFragment StoreEntitySet="MemberCards">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
                 <ScalarProperty Name="MemberCardLevelID" ColumnName="MemberCardLevelID" />
                 <ScalarProperty Name="Points" ColumnName="Points" />
@@ -1624,6 +1690,25 @@
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PromotionVouchers">
+            <EntityTypeMapping TypeName="Model.PromotionVoucher">
+              <MappingFragment StoreEntitySet="PromotionVoucher">
+                <ScalarProperty Name="PromotionCode" ColumnName="PromotionCode" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="ReceiveMoney" ColumnName="ReceiveMoney" />
+                <ScalarProperty Name="MinimumMoney" ColumnName="MinimumMoney" />
+                <ScalarProperty Name="VoucherDiscount" ColumnName="VoucherDiscount" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyBy" ColumnName="ModifyBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Des" ColumnName="Des" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1761,22 +1846,6 @@
                 <ScalarProperty Name="Moctail" ColumnName="Moctail" />
                 <ScalarProperty Name="VipRoom" ColumnName="VipRoom" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MemberCardChargeRecords">
-            <EntityTypeMapping TypeName="Model.MemberCardChargeRecord">
-              <MappingFragment StoreEntitySet="MemberCardChargeRecords">
-                <ScalarProperty Name="Cashier" ColumnName="Cashier" />
-                <ScalarProperty Name="RecordType" ColumnName="RecordType" />
-                <ScalarProperty Name="Paycode" ColumnName="Paycode" />
-                <ScalarProperty Name="TypePay" ColumnName="TypePay" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="ChargeDate" ColumnName="ChargeDate" />
-                <ScalarProperty Name="Money" ColumnName="Money" />
-                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
-                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

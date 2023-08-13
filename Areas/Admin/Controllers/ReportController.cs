@@ -48,7 +48,7 @@ namespace JPGame.Areas.Admin.Controllers
 
             List<Report> data = new List<Report>();
             var dateFrom = new DateTime(2023, 8, 1);
-            var dateTo = new DateTime(2030, 8, 10);
+            var dateTo = DateTime.Now;
             if(!string.IsNullOrEmpty(From))
              dateFrom = DateTime.ParseExact(From, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             if (!string.IsNullOrEmpty(To))
@@ -65,7 +65,7 @@ namespace JPGame.Areas.Admin.Controllers
                 var date = dateFrom.AddDays(i);
                 var a = records.ToList();
                 // Nếu lịch sử nạp tiền có trong khoảng
-                var record = records.Where(r => r.ChargeDate >= date && r.ChargeDate < date.AddHours(23).AddMinutes(59));
+                var record = records.Where(r => r.ChargeDate >= date && r.ChargeDate < date.AddHours(23).AddMinutes(59) &&( string.IsNullOrEmpty(r.PromotionDes) || r.PromotionID.Equals("1")));
                 if (record.Any())
                 {
                     var shift1 = record.Where(r => r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 15);
@@ -136,7 +136,7 @@ namespace JPGame.Areas.Admin.Controllers
 
            
             var dateFrom = new DateTime(2023, 8, 1);
-            var dateTo = new DateTime(2030, 8, 10);
+            var dateTo = DateTime.Now;
             if(!string.IsNullOrEmpty(From))
                 dateFrom = DateTime.ParseExact(From, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             if (!string.IsNullOrEmpty(To))
@@ -147,20 +147,22 @@ namespace JPGame.Areas.Admin.Controllers
 
             var records = db.MemberCardChargeRecords
                         .Where(r => r.ChargeDate >= dateFrom && r.ChargeDate <= dateTo)
-                        .Where(r => r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 22)
+                        .Where(r => r.ChargeDate.Value.Hour >= 9 && (r.ChargeDate.Value.Hour < 22 ||
+                                   (r.ChargeDate.Value.Hour == 22 && r.ChargeDate.Value.Minute <= 15)))
 
                         .Select(r => new
                         {
                             r.RecordID,
                             Date = r.ChargeDate.Value,
-                            Shift = (r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 15) ? 1 : 2,
+                            r.ChargeDate.Value.Hour,
+                            Shift = (r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour < 15) ? 1 : 2,
                             r.Cashier,
-                            Money = r.Money.Value,
+                            Money = r.PromotionDes.Trim().Equals("Nhận Thẻ Chơi Game Trị Giá 150k")?0: r.Money.Value,
                             Type = r.RecordType,
                             TypePayID = r.PayType.ID,
                             Typepay = r.PayType.Name,
                             RecordType = r.RecordType.Equals("Create")?"Tạo thẻ":"Nạp thẻ",
-
+                            PromotionDes = string.IsNullOrEmpty(r.PromotionDes)?"": r.PromotionDes
 
                         })
                         ;
@@ -370,7 +372,7 @@ namespace JPGame.Areas.Admin.Controllers
 
 
             var dateFrom = new DateTime(2023, 8, 1);
-            var dateTo = new DateTime(2030, 8, 10);
+            var dateTo = DateTime.Now;
             if (!string.IsNullOrEmpty(From))
                 dateFrom = DateTime.ParseExact(From, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             if (!string.IsNullOrEmpty(To))
@@ -381,19 +383,22 @@ namespace JPGame.Areas.Admin.Controllers
 
             var records = db.MemberCardChargeRecords
                         .Where(r => r.ChargeDate >= dateFrom && r.ChargeDate <= dateTo)
-                        .Where(r => r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 22)
+                        .Where(r => r.ChargeDate.Value.Hour >= 9 && (r.ChargeDate.Value.Hour < 22 ||
+                                   (r.ChargeDate.Value.Hour == 22 && r.ChargeDate.Value.Minute <= 15)))
+
 
                         .Select(r => new
                         {
                             r.RecordID,
                             Date = r.ChargeDate.Value,
-                            Shift = (r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 15) ? 1 : 2,
+                            Shift = (r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour < 15) ? 1 : 2,
                             r.Cashier,
-                            Money = r.Money.Value,
+                            Money = r.PromotionDes.Trim().Equals("Nhận Thẻ Chơi Game Trị Giá 150k") ? 0 : r.Money.Value,
                             Type = r.RecordType,
                             TypePayID = r.PayType.ID,
                             Typepay = r.PayType.Name,
                             RecordType = r.RecordType.Equals("Create") ? "Tạo thẻ" : "Nạp thẻ",
+                            PromotionDes = string.IsNullOrEmpty(r.PromotionDes) ? "" : r.PromotionDes
 
 
                         })
@@ -417,6 +422,7 @@ namespace JPGame.Areas.Admin.Controllers
                 worksheet.Cells[1,5].Value = "Tiền";
                 worksheet.Cells[1,6].Value = "Loại thanh toán";
                 worksheet.Cells[1,7].Value = "Tác vụ";
+                worksheet.Cells[1,8].Value = "Khuyến mãi";
 
                 // Thêm dữ liệu từ data vào các ô
                 for (int i = 0; i < records.ToList().Count; i++)
@@ -428,6 +434,7 @@ namespace JPGame.Areas.Admin.Controllers
                     worksheet.Cells[i + 2,  5].Value = records.ToList()[i].Money.ToString("#,##0");
                     worksheet.Cells[i + 2, 6].Value = records.ToList()[i].Typepay;
                     worksheet.Cells[i + 2, 7].Value = records.ToList()[i].RecordType;
+                    worksheet.Cells[i + 2, 8].Value = records.ToList()[i].PromotionDes;
                     
                 }
                 var headerCells = worksheet.Cells[1, 1, 1, worksheet.Dimension.Columns];
@@ -454,7 +461,7 @@ namespace JPGame.Areas.Admin.Controllers
 
             List<Report> data = new List<Report>();
             var dateFrom = new DateTime(2023, 8, 1);
-            var dateTo = new DateTime(2030, 8, 10);
+            var dateTo = DateTime.Now;
 
             //var dateFrom = new DateTime(2023, 8, 3);
             //var dateTo = new DateTime(2023, 8, 10);

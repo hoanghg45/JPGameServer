@@ -35,7 +35,7 @@
             <!--begin::Toolbar-->
             <div class="d-flex align-items-center">
                 <!--begin::Actions-->
-               
+
             </div>
             <!--end::Toolbar-->
         </div>
@@ -180,60 +180,81 @@
                                         </label>
                                     </div>
                                 </div>
+                                <div id="AddMember">
+                                    <div class="separator separator-dashed my-10"></div>
+                                    <h6 class="font-weight-bolder mb-3">Tài khoản của thẻ</h6>
+                                    <div class="form-group fv-plugins-icon-container">
+                                        <div class="form-group">
+                                            <label>Gán tài khoản</label>
+                                            <div class="input-group">
+                                                <select class="form-control select2" id="search_account">
+
+                                                    @foreach (var u in ViewBag.unHaveCardMembers)
+                                                    {
+                                                        <option value="@u.AccountID">@u.AccountName.Trim()</option>
+                                                    }
+                                                </select>
+                                                <div class="input-group-append ml-1">
+                                                    <button class="btn btn-google addmemberBtn" onclick="AddAccountForCard()" type="button">Gán!</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div id="UserInfor">
-                                <div class="separator separator-dashed my-10"></div>
-                                <h6 class="font-weight-bolder mb-3">Thông tin thành viên</h6>
-                                <div class="form-group fv-plugins-icon-container">
-                                    <label>Tên tài khoản</label>
-                                    <input readonly type="text" class="form-control form-control-solid form-control-lg" name="AccountName" placeholder="Tên tài khoản">
+                                    <div class="separator separator-dashed my-10"></div>
+                                    <h6 class="font-weight-bolder mb-3">Thông tin thành viên</h6>
+                                    <div class="form-group fv-plugins-icon-container">
+                                        <label>Tên tài khoản</label>
+                                        <input readonly type="text" class="form-control form-control-solid form-control-lg" name="AccountName" placeholder="Tên tài khoản">
 
 
-                                </div>
-                                <!--end::Input-->
-                                <!--begin::Input-->
-                                <div class="row">
-                                    <div class="col-xl-6">
-                                        <!--begin::Input-->
-                                        <div class="form-group fv-plugins-icon-container">
-                                            <label>Họ và tên</label>
-                                            <input type="text" class="form-control form-control-solid form-control-lg" readonly name="FullName">
-                                            <!--end::Input-->
-                                        </div>
                                     </div>
-                                    <div class="col-xl-6">
-                                        <div class="form-group fv-plugins-icon-container">
+                                    <!--end::Input-->
+                                    <!--begin::Input-->
+                                    <div class="row">
+                                        <div class="col-xl-6">
                                             <!--begin::Input-->
-                                            <label>Ngày sinh</label>
-                                            <input type="text" class="form-control form-control-solid form-control-lg" readonly name="DateOfBirth">
+                                            <div class="form-group fv-plugins-icon-container">
+                                                <label>Họ và tên</label>
+                                                <input type="text" class="form-control form-control-solid form-control-lg" readonly name="FullName">
+                                                <!--end::Input-->
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="form-group fv-plugins-icon-container">
+                                                <!--begin::Input-->
+                                                <label>Ngày sinh</label>
+                                                <input type="text" class="form-control form-control-solid form-control-lg" readonly name="DateOfBirth">
+                                                <!--end::Input-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--end::Input-->
+                                    <div class="row">
+                                        <div class="col-xl-6">
+                                            <!--begin::Input-->
+                                            <div class="form-group fv-plugins-icon-container">
+                                                <label>Địa chỉ Email</label>
+                                                <input type="email" class="form-control form-control-solid form-control-lg" readonly name="Email">
+
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <!--begin::Input-->
+                                            <div class="form-group fv-plugins-icon-container">
+                                                <label>Số điện thoại</label>
+                                                <input type="text" class="form-control form-control-solid form-control-lg" readonly name="Phone">
+
+                                            </div>
                                             <!--end::Input-->
                                         </div>
                                     </div>
                                 </div>
-
-                                <!--end::Input-->
-                                <div class="row">
-                                    <div class="col-xl-6">
-                                        <!--begin::Input-->
-                                        <div class="form-group fv-plugins-icon-container">
-                                            <label>Địa chỉ Email</label>
-                                            <input type="email" class="form-control form-control-solid form-control-lg" readonly name="Email">
-
-                                        </div>
-                                        <!--end::Input-->
-                                    </div>
-                                    <div class="col-xl-6">
-                                        <!--begin::Input-->
-                                        <div class="form-group fv-plugins-icon-container">
-                                            <label>Số điện thoại</label>
-                                            <input type="text" class="form-control form-control-solid form-control-lg" readonly name="Phone">
-
-                                        </div>
-                                        <!--end::Input-->
-                                    </div>
-                                </div>
                             </div>
-                            </div>
-    
+
 
                         </form>
                         <!--end::Form-->
@@ -248,6 +269,7 @@
     </div>
     <!--end::Entry-->
 </div>
+
 <script type="text/javascript">
     var CardID = null
 
@@ -260,5 +282,12 @@
         ReaderID = @Html.Raw(Json.Encode(@ViewBag.ReaderID));
 
     }
+    jQuery(document).ready(function () {
+
+        $('.select2').select2();
+    });
+
 </script>
+
+
 <script src="~/Areas/assets/admin/membercard/DetailMembercard.js"></script>

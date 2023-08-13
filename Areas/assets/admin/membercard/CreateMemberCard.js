@@ -177,6 +177,7 @@ var KTWizard1 = function () {
 
 		// Validation before going to next page
 		var isWelcome = false
+		var isGetCusData = false ///Phải nhập thông tin khách
 		_wizardObj.on('change', function (wizard) {
 			
 			if (wizard.getStep() > wizard.getNewStep()) {
@@ -190,48 +191,81 @@ var KTWizard1 = function () {
 			var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
 			
 			if (validator) {
-				validator.validate().then(function (status) {
-					if (status == 'Valid') {
-						let nextStep = wizard.getNewStep()
-						if (nextStep == 2) {
-							/// Nếu là thẻ welcome thì bỏ bước thông tin
-							if ($("input[name='radiospay']:checked").val() == 2 && $("input[name='Paycode']").val() == "") {
-								$('#PaycodeNoti').show()
-								KTUtil.scrollTop();
-								return
-							} else {
-								nextStep = SkipInfoStep(nextStep)
-                            }
-
-							
-
-                        }
-						if (nextStep == 3) {
-							SetReviewStep()
-                        }
-						///
-						wizard.goTo(nextStep);
-						
-						KTUtil.scrollTop();
+				
+				let level = $('input[name="MemberCardLevelID"]').val().trim()
+				let step = wizard.getNewStep()
+				if (level == "level1" && step == 3) {
+					if (isGetCusData && ($('input[name="FullName"]').val() == '' || $('input[name="Phone"]').val() == '')) {
+						toastr.error('Vui lòng nhập tên và số điện thoại khách hàng!', "Lỗi!")
 					} else {
-						Swal.fire({
-							text: "Đã có lỗi trong quá trình, vui lòng thử lại",
-							icon: "error",
-							buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
-							heightAuto: false,
-							customClass: {
-								confirmButton: "btn font-weight-bold btn-light"
+						SetReviewStep()
+						wizard.goTo(3);
+                    }
+					
+				} else {
+					validator.validate().then(function (status) {
+						if (status == 'Valid') {
+							let nextStep = wizard.getNewStep()
+							
+							if (nextStep == 2) {
+								/// kiểm tra thông tin
+								if ($("input[name='radiospay']:checked").val() == 2 && $("input[name='Paycode']").val() == "") {
+									$('#PaycodeNoti').show()
+									toastr.error($('#PaycodeNoti').text(), "Lỗi!")
+									KTUtil.scrollTop();
+									return
+								} else
+									if ($("input[name='radiospay']:checked").val() == 1 && ($("input[name='CusMoney']").val() == "" || $("input[name='ChangeMoney']").val() == "")) {
+										$('#CusmoneyNoti').show()
+										toastr.error($('#CusmoneyNoti').text(), "Lỗi!")
+										KTUtil.scrollTop();
+										return
+									}
+								if (level == "level1") {
+									$('input[name="FullName"]').attr("readonly", false);
+									$('input[name="Phone"]').attr("readonly", false);
+									isGetCusData = true
+								} else {
+									$('input[name="FullName"]').attr("readonly", true);
+									$('input[name="Phone"]').attr("readonly", true);
+									isGetCusData = false
+                                }
+
+
+
+
 							}
-						}).then(function () {
+							if (nextStep == 3) {
+							
+									SetReviewStep()
+                                
+								
+							}
+							///
+							wizard.goTo(nextStep);
+
 							KTUtil.scrollTop();
-						});
-					}
-				});
+						} else {
+							Swal.fire({
+								text: "Đã có lỗi trong quá trình, vui lòng thử lại",
+								icon: "error",
+								buttonsStyling: false,
+								confirmButtonText: "Ok, got it!",
+								heightAuto: false,
+								customClass: {
+									confirmButton: "btn font-weight-bold btn-light"
+								}
+							}).then(function () {
+								KTUtil.scrollTop();
+							});
+						}
+					});
+                }
+				
 			}
 			///
 			function SetReviewStep() {
-				if ($('input[name = "LevelName"]').val() == "Welcome") {
+				if ($('input[name = "AccountName"]').val() == "") {
 					$('#NameContain').hide()
 				} else {
 					$('input[name = "FullNameReview"]').val($('input[name = "FullName"]').val())
@@ -240,14 +274,18 @@ var KTWizard1 = function () {
 				$('input[name = "LevelNameReview"]').val($('input[name = "LevelName"]').val())
 				let rate = Number($('input[name = "RewardRate"]').val())
 				let money = Number($('input[name = "MoneyPay"]').val().replaceAll(",", ""))
-				let moneyReward = rate != 0? money * rate / 100 : money 
+				let moneyReward = rate != 0 ? money * rate / 100 : money
+				if (promotionInfo != null && promotionInfo.Type == 2) {
+					moneyReward += (money * promotionInfo.VoucherDiscount/100)
+                }
+				
 				$('input[name = "Money"]').val(moneyReward.toLocaleString('en-US'))
 				$('input[name = "Point"]').val($('input[name = "PointPlus"]').val())
 			}
-			function SkipInfoStep(nextStep) {
-				isWelcome = Number($('input[name = "MoneyPay"]').val().replaceAll(',','')) < 3000000
-				return isWelcome ? 3 : nextStep
-			}
+			//function SkipInfoStep(nextStep) {
+			//	isWelcome = Number($('input[name = "MoneyPay"]').val().replaceAll(',','')) < 3000000
+			//	return isWelcome ? 3 : nextStep
+			//}
 			return false;  // Do not change wizard step, further action will be handled by he validator
 		});
 
@@ -295,7 +333,20 @@ var KTWizard1 = function () {
 
                     
 						toastr.success('Thành công!')
-						SaveReportCreateCard(data, result.userID, result.userName)
+						let paytype = $('input[name="radiospay"]:checked').data('type');
+						let cusMoney = 0;
+						let changeMoney = 0
+						let promotiondes = ""
+						if (paytype == 'Tien mat') {
+							cusMoney = $('input[name="CusMoney"]').val()
+							changeMoney = $('input[name="ChangeMoney"]').val()
+						}
+						if (promotionInfo != null) {
+							promotiondes = promotionInfo.Des
+						}
+						let cardcode = $('input[name="CardID"]').val()
+						Print(data, result.userID, result.sp, result.userName, "PHIEU CAP THE", result.cashier, paytype, result.member, cusMoney, changeMoney, promotiondes, cardcode);
+						Print(data, result.userID, result.sp, result.userName, "PHIEU CAP THE", result.cashier, paytype, result.member, cusMoney, changeMoney, promotiondes, cardcode);
                     } else {
                        
                         toastr.error(data.message,'Lỗi')
@@ -310,8 +361,7 @@ var KTWizard1 = function () {
 	}
 	function SaveReportCreateCard(data, userID, userName) {
 		var idCard = "";
-		let paytypeid = $('input[name="radiospay"]:checked').val();
-		let money = $('input[name = "MoneyPay"]').val().replaceAll(',','')
+		
 		$.each(data, function (k, v) {
 			if (v.name == "CardID") {
 				idCard = v.value
@@ -321,14 +371,12 @@ var KTWizard1 = function () {
 			type: "POST",
 			url: "/MemberCard/SaveReportCreateCard",
 			data: {
-				userID: userID, idCard: idCard, money, paytype: paytypeid
+				userID: userID, idCard: idCard
 			},
 			success: function (result) {
 				if (result.status == "Success") {
 					
-					let paytype = $('input[name="radiospay"]:checked').data('type');
-					Print(data, userID, result.sp, userName, "PHIEU CAP THE", result.cashier,paytype,result.member);
-					Print(data, userID, result.sp, userName, "PHIEU CAP THE", result.cashier,paytype,result.member);
+					
 				} else {
 					toastr.error(data.message, 'Lỗi')
 				}
@@ -370,6 +418,7 @@ jQuery(document).ready(function () {
 	initMasks()
 	InitLoadingButton()
 	$('#PaycodeNoti').hide()
+	$('#CusmoneyNoti').hide()
 });
 function ScanTag() {
 	///Lấy thông tin mỗi khi quét thẻ khi đang ở trang quét thẻ
@@ -436,7 +485,8 @@ function GetMemberCardLevel(LevelFee) {
 				$('#Mocktail').prop("checked", data.data.Mocktail);
 				$('#VipRoom').prop("checked", data.data.VipRoom);
 			} else {
-				toastr.error(data.message,"Lỗi!")
+				toastr.error(data.message, "Lỗi!")
+				$('input[name="MoneyPay"]').val('')
             }
 
 
@@ -532,6 +582,18 @@ function InitInputEvent() {
 	//Money
 	$('input[name="MoneyPay"]').on('blur', function (event) {
 
+		if (promotionInfo != null && promotionInfo.Type == 1 && $(this).val() != promotionInfo.ReceiveMoney.toLocaleString('en-US')) {
+		   $('input[name="Promotion"],input[name="PromotionDes"],input[name="CusMoney"],input[name="ChangeMoney"]').val("")
+			$('input[name="PromotionMoney"]').val(0)
+			promotionInfo = null
+			
+		}
+		if (promotionInfo != null && promotionInfo.Type == 2 && Number($(this).val().replaceAll(',','')) < promotionInfo.MinimumMoney) {
+		   $('input[name="Promotion"],input[name="PromotionDes"],input[name="CusMoney"],input[name="ChangeMoney"]').val("")
+			$('input[name="PromotionMoney"]').val(0)
+			promotionInfo = null
+			
+		}
 		
 		let money = $(this).val().replaceAll(',', '')
 		
@@ -540,6 +602,13 @@ function InitInputEvent() {
 	$('input[name="MoneyPay"]').on('keypress', function (event) {
 		if (event.which === 13) {
 			event.preventDefault();
+
+			if (promotionInfo != null && promotionInfo.Type == 1 && $(this).val() != promotionInfo.ReceiveMoney.toLocaleString('en-US')) {
+				$('input[name="Promotion"],input[name="PromotionDes"],input[name="CusMoney"],input[name="ChangeMoney"]').val("")
+				$('input[name="PromotionMoney"]').val(0)
+				promotionInfo = null
+
+			}
 			// Xử lý logic khi nhấn phím Enter
 			let money = $(this).val().replaceAll(',', '')
 
@@ -554,47 +623,149 @@ function InitInputEvent() {
 			// Xử lý logic khi nhấn ngoài input
 			let money = Number($('input[name="MoneyPay"]').val().replaceAll(',', ''))
 			let cusMoney = Number($(this).val().replaceAll(',', ''))
-			let changeMoney = 0
+			
 			if ($(this).val() == '')
 				return
+			if (promotionInfo != null && promotionInfo.Type == 1 && $(this).val() == 0) {
+				$('input[name="ChangeMoney"]').val(0)
+				return
+			}
 			if (money == '') {
 				toastr.error("Vui lòng nhập số tiền cần nạp", "Lỗi!")
 				$(this).val('')
-			} else if (money < cusMoney) {
+			} else if (money > cusMoney) {
 
 				toastr.error("Số tiền cần nạp phải nhỏ hơn số tiền khách đưa", "Lỗi!")
 				$(this).val('')
 			}
-			else if (money < cusMoney) {
+			else if (money <= cusMoney) {
 
-				changeMoney = cusMoney - money
+				let changeMoney = cusMoney - money
+				$('input[name="ChangeMoney"]').val(changeMoney.toLocaleString('en-US'))
 			}
-			$('input[name="ChangeMoney"]').val(changeMoney.toLocaleString('en-US'))
+
 
 		}
 	});
-	$('input[name="CusMoney"]').on('blur', function (event) {
-		event.preventDefault();
-		// Xử lý logic khi nhấn ngoài input
-		let money = Number($('input[name="MoneyPay"]').val().replaceAll(',', ''))
-		let cusMoney = Number($(this).val().replaceAll(',', ''))
-		let changeMoney = 0
-		if ($(this).val() == '')
-			return
-		if (money == '') {
-			toastr.error("Vui lòng nhập số tiền cần nạp", "Lỗi!")
-			$(this).val('')
-		} else if (money < cusMoney) {
 
-			toastr.error("Số tiền cần nạp phải nhỏ hơn số tiền khách đưa", "Lỗi!")
-			$(this).val('')
+	//$('input[name="CusMoney"]').on('blur', function (event) {
+	//	event.preventDefault();
+	//	// Xử lý logic khi nhấn ngoài input
+	//	let money = Number($('input[name="MoneyPay"]').val().replaceAll(',', ''))
+	//	let cusMoney = Number($(this).val().replaceAll(',', ''))
+
+	//	if ($(this).val() == '')
+	//		return
+	//	if (promotionInfo != null && promotionInfo.Type == 1 && $(this).val() == 0) {
+	//		$('input[name="ChangeMoney"]').val(0)
+	//		return
+	//	}
+	//	if (money == '') {
+	//		toastr.error("Vui lòng nhập số tiền cần nạp", "Lỗi!")
+	//		$(this).val('')
+	//	} else if (money > cusMoney) {
+
+	//		toastr.error("Số tiền cần nạp phải nhỏ hơn số tiền khách đưa", "Lỗi!")
+	//		$(this).val('')
+	//	}
+	//	else if (money <= cusMoney) {
+
+	//		let changeMoney = cusMoney - money
+	//		$('input[name="ChangeMoney"]').val(changeMoney.toLocaleString('en-US'))
+	//	}
+
+
+	//});
+	// Mã khuyến mãi
+	//$('input[name="Promotion"]').on('blur', function (event) {
+	//	/// xử lý khi ấn ra ngoài
+	//	$('input[name="PromotionDes"]').val('')
+	
+	//	$('input[name="ChangeMoney"],input[name="CusMoney"]').val("")
+	//	promotionInfo = null
+	//	let IdPromotion = $(this).val()
+	//	if (IdPromotion == '')
+	//		return
+	//	GetPromotion(IdPromotion)
+		
+		
+	//});
+	$('input[name="Promotion"]').on('keypress', function (event) {
+		if (event.which === 13) {
+			event.preventDefault();
+			// Xử lý logic khi nhấn phím Enter
+			promotionInfo = null
+			$('input[name="ChangeMoney"],input[name="CusMoney"]').val("")
+			$('input[name="PromotionDes"]').val('')
+			
+			let IdPromotion = $(this).val()
+			if (IdPromotion == '')
+				return
+			GetPromotion(IdPromotion)
+			
 		}
-		else if (money < cusMoney) {
-
-			changeMoney = cusMoney - money
-		}
-		$('input[name="ChangeMoney"]').val(changeMoney.toLocaleString('en-US'))
-
 	});
 
+}
+function GetPromotion(IdPromotion) {
+	
+	$.ajax({
+		type: "GET",
+		url: "/dataapi/Promotion",
+		data: { IdPromotion },
+
+		datatype: 'json',
+		complete: function () {
+			
+			$('#loadingBtn').hide()
+
+		},
+		success: function (data) {
+			if (data.status == "ok") {
+
+				let promotion = data.message[0]
+				//Hiển thị loại khuyến mãi
+				
+				if (promotion.Type == 1) {
+					//Nhập số tiền thẻ tặng
+					promotionInfo = promotion
+					$('input[name="MoneyPay"]').val(promotion.ReceiveMoney.toLocaleString('en-US'))
+					$('input[name="CusMoney"],input[name="ChangeMoney"]').val(0)
+					var e = $.Event("keypress", { which: 13 });
+					$('input[name="MoneyPay"],input[name="CusMoney"],input[name="ChangeMoney"]').trigger(e);
+					$('input[name="Promotion"]').attr('disabled', true)
+
+
+				}
+				if (promotion.Type == 2) {
+					//Nhập số tiền thẻ tặng
+					let moneypay = $('input[name="MoneyPay"]').val()
+					if (moneypay == '' || Number(moneypay.replaceAll(',', '')) < promotion.MinimumMoney) {
+						toastr.error(`Số tiền nạp phải đạt mức tối thiểu ${promotion.MinimumMoney.toLocaleString('en-US')} để nhận ưu đãi này!`, "Lỗi!")
+						return
+                    }
+					promotionInfo = promotion
+
+
+				}
+
+			
+				$('input[name="PromotionDes"]').val(promotion.Des)
+				toastr.success(`Áp dụng thành công mã ${promotion.Des}!`)
+				
+			} else {
+				toastr.error(data.message, "Lỗi!")
+				promotionInfo = null
+				$('input[name="Promotion"]').attr('disabled', true)
+
+			}
+
+
+		},
+		error: function () {
+			// Xử lý lỗi (nếu cần thiết)
+			// Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
+			toastr.error("Lỗi!")
+		}
+	})
 }

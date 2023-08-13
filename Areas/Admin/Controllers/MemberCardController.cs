@@ -100,6 +100,9 @@ namespace JPGame.Areas.Admin.Controllers
         {
             string ReaderID = Session["ReaderID"].ToString();
             ViewBag.ReaderID = ReaderID;
+
+            var unHaveCardMembers = db.Accounts.Where(a => string.IsNullOrEmpty(a.MemberCardID)).ToList();
+            ViewBag.unHaveCardMembers = unHaveCardMembers;
             return View(model:id);
         }
 
@@ -136,9 +139,10 @@ namespace JPGame.Areas.Admin.Controllers
                        , JsonRequestBehavior.AllowGet
                        );
                 }
-                if (!MemberCardLevel.ID.Trim().Equals("level1"))
+                string accname = collection["AccountName"];
+                if (!string.IsNullOrEmpty(accname))
                 {
-                    string accname = collection["AccountName"];
+                   
                     var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
                     if(string.IsNullOrEmpty(accname) || acc == null)
                     {
@@ -155,7 +159,17 @@ namespace JPGame.Areas.Admin.Controllers
                     acc.MemberCardID = card.MemberCardID;
 
                 }
-                
+                //Thêm thông tin dữ liệu khách nếu không muốn tạo tài khoản
+                else
+                {
+                    if (level.Equals("level1"))
+                    {
+                        card.Phone = collection["Phone"];
+                        card.Name = collection["FullName"];
+                    }
+                }
+
+                //
                 card.Balance = Double.Parse(collection["Money"].Replace(",", ""));
                 card.Points = Double.Parse(collection["Point"].Replace(",", ""));
                 card.Status = true;
@@ -163,6 +177,7 @@ namespace JPGame.Areas.Admin.Controllers
                 var paytype = int.Parse(collection["radiospay"]);
                 string paycode = collection["Paycode"] == ""? null: collection["Paycode"].ToString();
                 string cashier = db.NFCReaders.Find(user.ReaderID).Cashier1.Name;
+               
                 var chargeRecord = new MemberCardChargeRecord
                 {
                     MemberCardID = card.MemberCardID,
@@ -173,8 +188,24 @@ namespace JPGame.Areas.Admin.Controllers
                     Paycode = paycode,
                     RecordType = "Create",
                     Cashier = cashier
+                   
                 };
+                ///mã khuyến mãi
+
+                if (!string.IsNullOrEmpty(collection["Promotion"]))
+                {
+                    var promotion = db.PromotionVouchers.Find(collection["Promotion"]);
+                    chargeRecord.PromotionDes = promotion.Des;
+                    chargeRecord.PromotionID = promotion.PromotionCode;
+                    promotion.Status = false;
+                }
+
+                ///
                 db.MemberCardChargeRecords.Add(chargeRecord);
+                
+                
+                
+            
                 db.SaveChanges();
                 return this.Json(
                  new
@@ -182,7 +213,10 @@ namespace JPGame.Areas.Admin.Controllers
                      status = "Success",
 
                      userID = user.UserID,
-                     userName = user.Name
+                     userName = user.Name,
+                     sp = new { chargeRecord.RecordID, chargeRecord.ChargeDate },
+                     cashier = cashier,
+                     member = accname
                  }
                  , JsonRequestBehavior.AllowGet
                  );
@@ -244,10 +278,10 @@ namespace JPGame.Areas.Admin.Controllers
                 {
                     double oldSumMoney = Double.Parse(collection["CurrTotal"].Replace(",", ""));
                     double newSumMoney = Double.Parse(collection["TotalMoneyPay"].Replace(",", ""));
-
-                    if (oldSumMoney < LevelFee[1] && newSumMoney >= LevelFee[1])
+                    string accname = collection["AccountName"];
+                    if (!string.IsNullOrEmpty(accname) && !oldCard.Accounts.Any())
                     {
-                        string accname = collection["AccountName"];
+                       
                         var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
                         if (string.IsNullOrEmpty(accname) || acc == null)
                         {
@@ -282,36 +316,64 @@ namespace JPGame.Areas.Admin.Controllers
                     );
                     }
 
-                    //Hủy thẻ cũ
-                    oldCard.Status = false;
+                   
                     //Chuyển tiền sang thẻ mới
                     newCard.Balance = FinalMoney;
                     newCard.Points = FinalPoint;
                     newCard.Status = true;
-                   
+                    ///
+                    
+                    var oldRecord = db.MemberCardChargeRecords.Where(r => r.MemberCardID == oldCard.MemberCardID).ToList();
+                    foreach(var r in oldRecord)
+                    {
+                        r.MemberCardID = newCard.MemberCardID;
+                    }
+                    var oldGamehis = db.ReportGameHistories.Where(r => r.IdCard == oldCard.MemberCardID).ToList();
+                    foreach(var g in oldGamehis)
+                    {
+                        g.IdCard = newCard.MemberCardID;
+                    }
+
                     newCard.ModifyDate = DateTime.Now;
                     //Nếu thẻ được nâng cấp
-                    var oldCardAccount = oldCard.Accounts.FirstOrDefault();
-                    if (oldCardAccount == null)
+                    string accname = collection["AccountName"];
+                    if (!string.IsNullOrEmpty(accname) && !oldCard.Accounts.Any())
                     {
-                        return this.Json(
-                      new
-                      {
-                          status = "Error",
-                          message = "Tài khoản sở hữu thẻ cũ không tồn tại!"
+                       
+                        var acc = db.Accounts.Where(a => a.AccountName.Trim().Equals(accname)).FirstOrDefault();
+                        if (string.IsNullOrEmpty(accname) || acc == null)
+                        {
+                            return this.Json(
+                          new
+                          {
+                              status = "Error",
+                              message = "Tài khoản không tồn tại!"
 
-                      }
-                      , JsonRequestBehavior.AllowGet
-                      );
+                          }
+                          , JsonRequestBehavior.AllowGet
+                          );
+                        }
+                        acc.MemberCardID = newCard.MemberCardID;
                     }
-                    oldCardAccount.MemberCardID = newCard.MemberCardID;
-
-
+                    else
+                    {
+                        var acc = oldCard.Accounts.FirstOrDefault();
+                        acc.MemberCardID = newCard.MemberCardID;
+                    }
+                    oldCard.Status = false;
+                    oldCard.Balance = 0;
+                    oldCard.Points = 0;
                 }
                 var paytype = int.Parse(collection["radiospay"]);
                 string paycode = collection["Paycode"] == "" ? null : collection["Paycode"].ToString();
                 string cashier = db.NFCReaders.Find(user.ReaderID).Cashier1.Name;
-                
+                //Hủy thẻ cũ
+           
+                //oldCard.Accounts.Clear();
+                //oldCard.ReportGameHistories.Clear();
+                //oldCard.MemberCardChargeRecords.Clear();
+
+
                 //Lưu thời gian nạp tiền
                 var chargeRecord = new MemberCardChargeRecord
                 {
@@ -322,8 +384,18 @@ namespace JPGame.Areas.Admin.Controllers
                     TypePay = paytype,
                     Paycode = paycode,
                     RecordType = "Recharge",
-                    Cashier = cashier
+                    Cashier = cashier,
+                   
                 };
+                ///mã khuyến mãi
+
+                if (!string.IsNullOrEmpty(collection["Promotion"]))
+                {
+                    var promotion = db.PromotionVouchers.Find(collection["Promotion"]);
+                    chargeRecord.PromotionDes = promotion.Des;
+                    chargeRecord.PromotionID = promotion.PromotionCode;
+                    promotion.Status = false;
+                }
                 db.MemberCardChargeRecords.Add(chargeRecord);
 
 
@@ -333,7 +405,10 @@ namespace JPGame.Areas.Admin.Controllers
                  {
                      status = "Success",
                      userID = user.UserID,
-                     userName = user.Name
+                     userName = user.Name,
+                     sp = new {chargeRecord.RecordID,chargeRecord.ChargeDate },
+                     cashier = cashier,
+                     member = collection["AccountName"]
 
                  }
                  , JsonRequestBehavior.AllowGet
@@ -398,7 +473,7 @@ namespace JPGame.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public JsonResult SaveReportCreateCard(string userID, string idCard, string money, string paytype)
+        public JsonResult SaveReportCreateCard(string userID, string idCard)
         {
             try
             {
@@ -412,7 +487,7 @@ namespace JPGame.Areas.Admin.Controllers
                     ModifyDate = DateTime.Now,
                     CreateBy = user.Name,
                     ModifyBy = user.Name,
-                    Money = double.Parse(money),
+                 
                     Status = true
                 };
                 db.ReportCreateCards.Add(reportCreateCard);
@@ -427,6 +502,73 @@ namespace JPGame.Areas.Admin.Controllers
                      sp = sp,
                      cashier = cashier,
                      member = membername
+                 }
+                 , JsonRequestBehavior.AllowGet
+                 );
+            }
+            catch (Exception e)
+            {
+                return this.Json(
+                 new
+                 {
+                     status = "Error",
+                     message = e
+
+                 }
+                 , JsonRequestBehavior.AllowGet
+                 );
+            }
+        }
+        [HttpPost]
+        public JsonResult AddAccountForCard(string accountID, string cardID)
+        {
+            try
+            {
+                var acc = db.Accounts.Find(accountID.Trim());
+                var card = db.MemberCards.Where(c => c.Code39.Equals(cardID.Trim())).FirstOrDefault();
+                if (string.IsNullOrEmpty(accountID)|| string.IsNullOrEmpty(cardID) || acc == null || card == null)
+                {
+                    return this.Json(
+                 new
+                 {
+                     status = "Error",
+                     message = "Thông tin lỗi"
+
+                 }
+                 , JsonRequestBehavior.AllowGet
+                 );
+                }
+                if (!string.IsNullOrEmpty(acc.MemberCardID))
+                {
+                    return this.Json(new
+                    {
+                        status = "Error",
+                        message = "Tài khoản đã có thẻ thành viên"
+
+                    }, JsonRequestBehavior.AllowGet
+                );
+
+
+                }
+                if (card.Accounts.Any())
+                {
+                    return this.Json(new
+                    {
+                        status = "Error",
+                        message = "Thẻ đã có người sở hữu"
+
+                    }, JsonRequestBehavior.AllowGet
+                );
+
+
+                }
+                acc.MemberCardID = card.MemberCardID;
+                db.SaveChanges();
+                return this.Json(
+                 new
+                 {
+                     status = "Success",
+                   
                  }
                  , JsonRequestBehavior.AllowGet
                  );
@@ -808,10 +950,10 @@ namespace JPGame.Areas.Admin.Controllers
                         {
 
                            
-                            var CardID = workSheet.Cells[row, 2].Text.Trim().Substring(1);
-                            var Code39 = workSheet.Cells[row, 3].Text.Trim();
+                            var CardID = workSheet.Cells[row, 1].Text.Trim().Substring(1);
+                            var Code39 = workSheet.Cells[row, 2].Text.Trim();
                             
-                            var Type = workSheet.Cells[row, 4].Text;
+                            var Type = workSheet.Cells[row, 3].Text;
                             if(string.IsNullOrEmpty(CardID) && string.IsNullOrEmpty(Type))
                             {
                                 break;

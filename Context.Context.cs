@@ -33,6 +33,7 @@ namespace JPGame
         public virtual DbSet<Gift> Gifts { get; set; }
         public virtual DbSet<InShift> InShifts { get; set; }
         public virtual DbSet<LiveCard> LiveCards { get; set; }
+        public virtual DbSet<MemberCardChargeRecord> MemberCardChargeRecords { get; set; }
         public virtual DbSet<MemberCardLevel> MemberCardLevels { get; set; }
         public virtual DbSet<MemberCard> MemberCards { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
@@ -41,6 +42,7 @@ namespace JPGame
         public virtual DbSet<PayType> PayTypes { get; set; }
         public virtual DbSet<PersonalGift> PersonalGifts { get; set; }
         public virtual DbSet<Promotion> Promotions { get; set; }
+        public virtual DbSet<PromotionVoucher> PromotionVouchers { get; set; }
         public virtual DbSet<ReportCreateCard> ReportCreateCards { get; set; }
         public virtual DbSet<ReportGameHistory> ReportGameHistories { get; set; }
         public virtual DbSet<ReportRecharge> ReportRecharges { get; set; }
@@ -51,13 +53,5 @@ namespace JPGame
         public virtual DbSet<TypeSlider> TypeSliders { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<VIPGift> VIPGifts { get; set; }
-        public virtual DbSet<MemberCardChargeRecord> MemberCardChargeRecords { get; set; }
-        public virtual DbSet<ReportRecharge> ReportRecharges { get; set; }
-        public virtual DbSet<PayType> PayTypes { get; set; }
-        public virtual DbSet<ReportCreateCard> ReportCreateCards { get; set; }
-        public virtual DbSet<InShift> InShifts { get; set; }
-        public virtual DbSet<OutShift> OutShifts { get; set; }
-        public virtual DbSet<ReportGameHistory> ReportGameHistories { get; set; }
-        public virtual DbSet<PromotionVoucher> PromotionVouchers { get; set; }
     }
 }

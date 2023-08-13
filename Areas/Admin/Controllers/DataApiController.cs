@@ -9,6 +9,7 @@ using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 
 namespace JPGame.Areas.Admin.Controllers
 {
+    
     public class DataApiController : Controller
     {
         DBEntities db = new DBEntities();
@@ -99,9 +100,9 @@ namespace JPGame.Areas.Admin.Controllers
                 }
                 var Card = db.MemberCards.Find(card);
                 var Reader = db.SettingGames.Find(reader);
-                if (reader == "225077781")
+                if (reader == "225077781"||reader == "98f774086e9a8a62")
                 {
-                    if (Card.Balance < 250000)
+                    if (Card.Balance < 150000)
                     {
                         return Json(
                          new
@@ -113,6 +114,7 @@ namespace JPGame.Areas.Admin.Controllers
                          , JsonRequestBehavior.AllowGet);
                     }
                 }
+               
                 if (Reader == null)
                 {
                     return Json(
@@ -124,9 +126,22 @@ namespace JPGame.Areas.Admin.Controllers
                    }
                    , JsonRequestBehavior.AllowGet);
                 }
+            
                 bool cardMoney = Card.Balance.HasValue && Card.Balance > 0 ;
                 bool rsl = false;
                 var status = "fail";
+                if (card == "252061506"||card== "252581826"||card == "439871831"||card== "366156391"||card== "374150967"||card== "439869063" || card == "373411991")//Thẻ a lợi
+                {
+                    return Json(
+                    new
+                    {
+
+                        status = "ok",
+
+                        message = "quantri"
+                    }
+                    , JsonRequestBehavior.AllowGet);
+                }
                 if (cardMoney)
                 {
                    if((Card.Balance - Reader.Price) >= 0)
@@ -229,6 +244,7 @@ namespace JPGame.Areas.Admin.Controllers
                         r.MemberCardLevel.CardLevel.LevelName,
                         r.Balance,
                         r.Points,
+                        username = r.Accounts.Any()?r.Accounts.FirstOrDefault().AccountName.Trim() : ""
 
                     }).FirstOrDefault();
                     
@@ -462,7 +478,7 @@ namespace JPGame.Areas.Admin.Controllers
         {
             try
             {
-                var data = db.SettingGames.ToList();
+                var data = db.SettingGames.ToList().Select(s => new { s.Id, s.IP });
                 return Json(
                     new
                     {

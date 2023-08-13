@@ -1,14 +1,17 @@
 ﻿jQuery(document).ready(function () {
-	
+	$('#AddMember').hide()
 	if (CardID == null) {
 		InitLoadingButton()
 		var membercardHub = $.connection.membercardHub;
 		console.log(membercardHub)
 		membercardHub.client.notify = function (message) {
-
+			function Click() {
+				$('#CheckCardBtn').trigger("click");
+			}
 
 			if (message && message.toLowerCase() == "cardscanned" && ReaderID != null) {
-				$('#CheckCardBtn').trigger("click");
+				const throttledFunction = $.throttle(1000, Click)
+				throttledFunction()
 			}
 		}
 		$.connection.hub.start().done(function () {
@@ -52,7 +55,7 @@ function GetCurrCard($this) {
 			if (data.status == "Success") {
 				$('#iconStatus').addClass("flaticon2-check-mark text-success");
 				$('#textNoti').text("Thẻ hợp lệ!");
-				$('input[name="CurrCardID"]').val(data.card.MemberCardID)
+				$('input[name="CardID"]').val(data.card.MemberCardID)
 
 				$('input[name="CurrLevelName"]').val(data.card.LevelName)
 				$('input[name="CurrGiftLevelName"]').val(data.card.GiftLevelName)
@@ -80,6 +83,8 @@ function GetCurrCard($this) {
 					$('input[name="Phone"]').val(data.card.Owner.Phone)
 				} else {
 					$('#UserInfor').hide()
+					$('#AddMember').show()
+
                 }
 
 			} else {
@@ -113,7 +118,7 @@ function GetDetailCard(id) {
 			if (data.status == "Success") {
 				$('#iconStatus').addClass("flaticon2-check-mark text-success");
 				$('#textNoti').text("Thẻ hợp lệ!");
-				$('input[name="CurrCardID"]').val(data.card.Code)
+				$('input[name="CardID"]').val(data.card.Code)
 
 				$('input[name="CurrLevelName"]').val(data.card.LevelName)
 				$('input[name="CurrGiftLevelName"]').val(data.card.GiftLevelName)
@@ -148,6 +153,51 @@ function GetDetailCard(id) {
 
 				$('#textNoti').text(data.message);
 				$('#iconStatus').addClass("flaticon2-delete text-danger");
+
+			}
+
+
+		},
+		error: function () {
+			// Xử lý lỗi (nếu cần thiết)
+			// Ẩn loading indicator và cho phép lấy dữ liệu tiếp theo
+
+		}
+	})
+}
+function AddAccountForCard() {
+	let accountID = $('#search_account').val()
+	let cardID = $('input[name="CardID"]').val()
+	$.ajax({
+		type: "POST",
+		url: "/MemberCard/AddAccountForCard",
+		data: {
+			accountID,
+			cardID
+		},
+
+		datatype: 'json',
+
+		success: function (data) {
+			if (data.status == "Success") {
+				toastr.success(
+					'Thành công!',
+					'Đã gán tài khoản',
+					{
+						timeOut: 1000,
+						fadeOut: 1000,
+						onHidden: function () {
+							$(window).scrollTop(0);
+							window.location.reload();
+						}
+					}
+				);
+			
+			} else {
+				toastr.error("Lỗi!")
+
+				$('#textNoti').text(data.message);
+				
 
 			}
 

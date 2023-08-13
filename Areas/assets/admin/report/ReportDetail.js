@@ -54,6 +54,7 @@ function ShowTable(pagenumber, from, to, shift, cashier, type, paytype) {
                             <td>${Number(v.Money).toLocaleString()}</td>
                             <td>${v.Typepay}</td>
                             <td>${v.RecordType}</td>
+                            <td>${v.PromotionDes}</td>
                         
                
                          

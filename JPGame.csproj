@@ -347,6 +347,7 @@
     <Content Include="Areas\assets\admin\membercard\MemberCard.js" />
     <Content Include="Areas\assets\admin\membercard\MoneyCharge.js" />
     <Content Include="Areas\assets\admin\module\module.js" />
+    <Content Include="Areas\assets\admin\RemoveAccents.js" />
     <Content Include="Areas\assets\admin\report\ReportDetail.js" />
     <Content Include="Areas\assets\admin\report\Reports.js" />
     <Content Include="Areas\assets\Print\Impresora.js" />
@@ -2439,6 +2440,7 @@
     <Content Include="Areas\Admin\Views\AccountsAdmin\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Report\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Report\GameHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\DetailReport.cshtml" />
     <EntityDeploy Include="Context.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Context.Designer.cs</LastGenOutput>
@@ -2446,7 +2448,6 @@
     <Content Include="Context.edmx.diagram">
       <DependentUpon>Context.edmx</DependentUpon>
     </Content>
-    <Content Include="Areas\Admin\Views\Report\DetailReport.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

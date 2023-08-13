@@ -78,3 +78,6 @@ function dateTimeFormat(datetime) {
     return formattedDate
 
 }
+function parseJsonDate(jsonDate) {
+    return new Date(parseInt(jsonDate.substr(6)));
+}

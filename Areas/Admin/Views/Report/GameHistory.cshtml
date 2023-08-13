@@ -261,7 +261,7 @@
                                     <td>${v.Name}</td>
 
                                     <td>${v.Code39}</td>
-                                    <td>${v.Price}</td>
+                                    <td>${v.Price.toLocaleString('en-US')}</td>
 
 
                                     </tr>`
@@ -315,7 +315,7 @@
 
 
 
-            ShowTable(1, from, to)
+            ShowTable(page, from, to)
 
 
         }

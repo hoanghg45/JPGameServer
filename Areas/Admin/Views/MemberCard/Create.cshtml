@@ -131,9 +131,25 @@
                                             <input type="text" class="form-control form-control-solid form-control-lg money" name="MoneyPay" placeholder="Số tiền nạp">
 
                                         </div>
-                                        <div class="form-group fv-plugins-icon-container">
-                                            <label>Mã khuyến mãi</label>
-                                            <input type="text" class="form-control form-control-solid form-control-lg " name="Promotion" placeholder="Mã khuyến mãi">
+                                        <div class="form-group fv-plugins-icon-container row">
+                                            <div class="col-lg-6">
+                                                <label>Mã khuyến mãi</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg " name="Promotion" placeholder="Mã khuyến mãi">
+
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>Thông tin khuyến mãi:</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" name="PromotionDes" readonly placeholder="Thông tin khuyến mãi">
+                                                    <input type="text" hidden value="0" class="form-control form-control-solid form-control-lg" name="PromotionMoney" readonly>
+                                                   
+
+                                                </div>
+                                            </div>
 
                                         </div>
                                         <div class="form-group fv-plugins-icon-container">
@@ -162,7 +178,9 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control form-control-solid form-control-lg money" name="CusMoney" placeholder="Số tiền khách đưa">
 
+
                                                 </div>
+                                                <span id="CusmoneyNoti" class="text-danger">Vui lòng nhập số tiền khách đưa</span>
                                             </div>
                                             <div class="col-lg-6">
                                                 <label>Số tiền trả khách:</label>
@@ -297,27 +315,7 @@
                                                     <input type="text" class="form-control form-control-solid form-control-lg" readonly name="FullName">
                                                     <!--end::Input-->
                                                 </div>
-                                            </div>
-                                            <div class="col-xl-6">
-                                                <div class="form-group fv-plugins-icon-container">
-                                                    <!--begin::Input-->
-                                                    <label>Ngày sinh</label>
-                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="DateOfBirth">
-                                                    <!--end::Input-->
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        <!--end::Input-->
-                                        <div class="row">
-                                            <div class="col-xl-6">
-                                                <!--begin::Input-->
-                                                <div class="form-group fv-plugins-icon-container">
-                                                    <label>Địa chỉ Email</label>
-                                                    <input type="email" class="form-control form-control-solid form-control-lg" readonly name="Email">
-
-                                                </div>
-                                                <!--end::Input-->
                                             </div>
                                             <div class="col-xl-6">
                                                 <!--begin::Input-->
@@ -328,6 +326,28 @@
                                                 </div>
                                                 <!--end::Input-->
                                             </div>
+                                        </div>
+
+                                        <!--end::Input-->
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <div class="form-group fv-plugins-icon-container">
+                                                    <!--begin::Input-->
+                                                    <label>Ngày sinh</label>
+                                                    <input type="text" class="form-control form-control-solid form-control-lg" readonly name="DateOfBirth">
+                                                    <!--end::Input-->
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <!--begin::Input-->
+                                                <div class="form-group fv-plugins-icon-container">
+                                                    <label>Địa chỉ Email</label>
+                                                    <input type="email" class="form-control form-control-solid form-control-lg" readonly name="Email">
+
+                                                </div>
+                                                <!--end::Input-->
+                                            </div>
+                                            
                                         </div>
 
                                     </div>
@@ -457,6 +477,7 @@
 <!--end::Content-->
 <script type="text/javascript">
     var ReaderID = null
+    var promotionInfo = null
     if (@Html.Raw(Json.Encode(@ViewBag.ReaderID)) != null) {
         ReaderID = @Html.Raw(Json.Encode(@ViewBag.ReaderID));
 
@@ -468,3 +489,5 @@
 <!--begin::Page Custom Styles(used by this page)-->
 <link href="~/Areas/assets/css/pages/wizard/wizard-1.css" rel="stylesheet" type="text/css" />
 <!--end::Page Custom Styles-->
+<script src="~/Areas/assets/admin/FormatDate.js"></script>
+<script src="~/Areas/assets/admin/RemoveAccents.js"></script>

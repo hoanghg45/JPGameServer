@@ -36,7 +36,7 @@ function PrintEndShiftMoney(cashiersName, sp, userName) {
     impresora.write("SDT: \n");
     impresora.feed(1);
     impresora.setFontSize(2, 2);
-    impresora.write("BAO CAO DAU CA\n");
+    impresora.write("BAO CAO KET CA\n");
     impresora.feed(1);
     impresora.setFontSize(1, 1);
     impresora.setAlign("left");
@@ -120,7 +120,7 @@ function PrintFirstShiftMoney(cashiersName, sp, userName) {
 }
 
 
-function Print(data, userID, sp, userName, name, cashier,paytype,member) {
+function Print(data, userID, sp, userName, name, cashier, paytype, member, cusmoney, changemoney, promotiondes,cardcode) {
     var MoneyPay = "",LevelNameReview=""
     $.each(data, function (k, v) {
         if (v.name == "MoneyPay") {
@@ -147,11 +147,11 @@ function Print(data, userID, sp, userName, name, cashier,paytype,member) {
     impresora.write("QUAY:");
     impresora.write(cashier + "\n");
     impresora.write("SO PHIEU:");
-    impresora.write(sp.ID + "\n");
+    impresora.write(sp.RecordID + "\n");
     impresora.write("NHAN VIEN:");
     impresora.write(userName.trim() + "\n");
     impresora.write("THOI GIAN THU:");
-    impresora.write(formatDate(sp.CreateDate) + " " + getTime(sp.CreateDate+'') + "\n");
+    impresora.write(formatDate(sp.ChargeDate) + " " + getTime(sp.ChargeDate+'') + "\n");
     impresora.feed(1);
     impresora.write("===============================================\n");
     impresora.feed(1);
@@ -160,6 +160,17 @@ function Print(data, userID, sp, userName, name, cashier,paytype,member) {
     impresora.feed(1);
     impresora.write("LOAI THANH TOAN:");
     impresora.write(paytype + "\n");
+    if (cusmoney != '') {
+        impresora.write("SO TIEN KHACH TRA:");
+        impresora.write(cusmoney + "\n");
+        impresora.write("SO TIEN TRA LAI:");
+        impresora.write(changemoney + "\n");
+    }
+    if (promotiondes != '') {
+        impresora.write("KHUYEN MAI:");
+        impresora.write(removeAccents(promotiondes) + "\n");
+    }
+    
     //impresora.write("SO TIEN (BANG CHU):");
     //impresora.write(to_vietnamese(MoneyPay.replaceAll(",", "")) + "\n");
     impresora.feed(1);
@@ -168,15 +179,23 @@ function Print(data, userID, sp, userName, name, cashier,paytype,member) {
     impresora.write("CAP DO THE:");
     impresora.write(LevelNameReview + "\n");
     impresora.feed(1);
+    impresora.write("MA THE:");
+    impresora.write(cardcode + "\n");
+    impresora.feed(1);
     if (member != "") {
         impresora.write("THANH VIEN:");
         impresora.write(member + "\n");
         impresora.feed(1);
     }
     impresora.setAlign("center");
+    impresora.setFontSize(1, 1);
+    impresora.write("(KHI NAP 500K TRO LEN TANG VE CHOI\n");
+    impresora.write("CANH TAY ROBOT MIEN PHI TAI TANG 1)\n");
+    impresora.feed(1);
     impresora.write("*XIN CAM ON QUY KHACH VA HEN GAP LAI*\n");
+    impresora.feed(1);
     impresora.write("WIFI: JP SPORT GAME\nPASSWORD: tang7gigamall\n");
-    impresora.qr("00020101021138580010A000000727012800069704180114315100012780530208QRIBFTTA53037045802VN63049DC0");
+    impresora.qr("00020101021138530010A0000007270123000697042801093123456660208QRIBFTTA53037045802VN6304D728");
     impresora.feed(1);
     impresora.cash();
     impresora.cut();

@@ -345,6 +345,79 @@ namespace JPGame.Areas.Admin.Controllers
             );
             }
         }
+        public JsonResult GetMemberCardLevelForCharge(double LevelFee)
+        {
+            try
+            {
+
+                if (LevelFee == 0)
+                {
+                    return this.Json(
+                    new
+                    {
+                        status = "Error",
+                        message = "Số tiền không hợp lệ"
+
+                    }
+                    , JsonRequestBehavior.AllowGet
+                    );
+                }
+                var LevelID = GetLevel(LevelFee);
+                if (LevelID == null)
+                {
+                    LevelID = "level1";
+                }
+
+
+
+
+
+                var MemberCardLevel = db.MemberCardLevels
+
+                    .WhereIf(LevelFee != 0, c => c.CardLevelID.Equals(LevelID))
+                .Select(c => new
+                {
+                    c.CardLevelID,
+                    c.CardLevel.LevelName,
+                    c.Gift.GiftLevelName,
+                    RewardRate = Math.Round(c.Gift.RewardRate.Value * 100),
+                    c.Gift.PointPlus,
+                    Holiday = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Holiday,
+                    Personal = c.Gift.PersonalGiftID == null ? false : c.Gift.PersonalGift.Personal,
+                    SpecialDay = c.Gift.PersonalGiftID != null && c.Gift.PersonalGift.SpecialDay,
+                    SpecialMemory = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.AvailableTemplates,
+                    CustomizeAvailableTemplate = c.Gift.SpecialMemory == null ? false : c.Gift.SpecialMemory.CustomizeAvailableTemplate,
+                    c.VIP,
+                    Mocktail = (bool)c.VIP ? c.VIPGift.Moctail : false,
+                    VipRoom = (bool)c.VIP ? c.VIPGift.VipRoom : false,
+                    c.CardLevel.LevelFee
+                }).FirstOrDefault();
+
+
+
+                return this.Json(
+            new
+            {
+                status = "Success",
+                data = MemberCardLevel
+
+            }
+            , JsonRequestBehavior.AllowGet
+            );
+
+            }
+            catch (Exception e)
+            {
+                return this.Json(
+           new
+           {
+               status = "Error",
+               message = e.Message
+
+           }, JsonRequestBehavior.AllowGet
+            );
+            }
+        }
         public string GetLevel(double amount)
         {
             using (var context = new DBEntities()) // Thay YourDbContext bằng context của bạn

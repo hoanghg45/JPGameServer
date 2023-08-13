@@ -24,6 +24,8 @@ namespace JPGame
         public string Paycode { get; set; }
         public string RecordType { get; set; }
         public string Cashier { get; set; }
+        public string PromotionID { get; set; }
+        public string PromotionDes { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual MemberCard MemberCard { get; set; }
