@@ -131,11 +131,18 @@
                                             <input type="text" class="form-control form-control-solid form-control-lg money" name="MoneyPay" placeholder="Số tiền nạp">
 
                                         </div>
+                                        <div class="form-group fv-plugins-icon-container">
+                                            <label>Discount</label>
+                                            <div class="input-group">
+                                                <input onkeyup=" Readonly()" type="number" class="form-control form-control-solid form-control-lg" name="Discount" placeholder="Tỉ lệ khuyến mãi" aria-describedby="basic-addon2" />
+                                                <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                            </div>
+                                        </div>
                                         <div class="form-group fv-plugins-icon-container row">
                                             <div class="col-lg-6">
                                                 <label>Mã khuyến mãi</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control form-control-solid form-control-lg " name="Promotion" placeholder="Mã khuyến mãi">
+                                                    <input type="text" onkeyup=" Readonly()" class="form-control form-control-solid form-control-lg " name="Promotion" placeholder="Mã khuyến mãi">
 
 
                                                 </div>
@@ -491,3 +498,24 @@
 <!--end::Page Custom Styles-->
 <script src="~/Areas/assets/admin/FormatDate.js"></script>
 <script src="~/Areas/assets/admin/RemoveAccents.js"></script>
+<script>
+    function Readonly() {
+        var discount = $('input[name="Discount"]').val().trim()
+        var promotion = $('input[name="Promotion"]').val().trim()
+        if (discount.length != "") {
+            $('input[name="Promotion"]').attr('readonly', true)
+            $('input[name="Discount"]').attr('readonly', false)
+        } else if (discount == "") {
+            $('input[name="Promotion"]').attr('readonly', false)
+            $('input[name="Discount"]').attr('readonly', false)
+            if (promotion != "") {
+                $('input[name="Promotion"]').attr('readonly', false)
+                $('input[name="Discount"]').attr('readonly', true)
+            } else if (promotion == "") {
+                $('input[name="Promotion"]').attr('readonly', false)
+                $('input[name="Discount"]').attr('readonly', false)
+            }
+        } 
+    }
+
+</script>

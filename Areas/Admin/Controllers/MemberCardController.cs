@@ -199,13 +199,17 @@ namespace JPGame.Areas.Admin.Controllers
                     chargeRecord.PromotionID = promotion.PromotionCode;
                     promotion.Status = false;
                 }
-
+                ///
+                if (!string.IsNullOrEmpty(collection["Discount"]))
+                {
+                    chargeRecord.PromotionDes = $"Khuyến mãi {collection["Discount"]}% ";
+                }
                 ///
                 db.MemberCardChargeRecords.Add(chargeRecord);
-                
-                
-                
-            
+
+
+
+
                 db.SaveChanges();
                 return this.Json(
                  new
@@ -372,7 +376,7 @@ namespace JPGame.Areas.Admin.Controllers
                 //oldCard.Accounts.Clear();
                 //oldCard.ReportGameHistories.Clear();
                 //oldCard.MemberCardChargeRecords.Clear();
-
+              
 
                 //Lưu thời gian nạp tiền
                 var chargeRecord = new MemberCardChargeRecord
@@ -396,6 +400,11 @@ namespace JPGame.Areas.Admin.Controllers
                     chargeRecord.PromotionID = promotion.PromotionCode;
                     promotion.Status = false;
                 }
+                if (!string.IsNullOrEmpty(collection["Discount"]))
+                {
+                    chargeRecord.PromotionDes = $"Khuyến mãi {collection["Discount"]}% "; 
+                }
+
                 db.MemberCardChargeRecords.Add(chargeRecord);
 
 
@@ -413,6 +422,86 @@ namespace JPGame.Areas.Admin.Controllers
                  }
                  , JsonRequestBehavior.AllowGet
                  );
+            }
+            catch (Exception e)
+            {
+                return this.Json(
+                 new
+                 {
+                     status = "Error",
+                     message = e
+
+                 }
+                 , JsonRequestBehavior.AllowGet
+                 );
+            }
+        }
+
+
+        [HttpGet]
+        public ActionResult MemberCardReissuance()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult MemberCardReissuance(string oldCardID, string newCardID)
+        {
+            try
+            {
+                var oldCard = db.MemberCards.Where(c => c.Code39.Equals(oldCardID)).FirstOrDefault();
+                var newCard = db.MemberCards.Where(c => c.Code39.Equals(newCardID)).FirstOrDefault();
+                if(string.IsNullOrEmpty(oldCardID)|| string.IsNullOrEmpty(newCardID) || oldCard ==null|| newCard == null)
+                {
+                    return this.Json(new
+                    {
+                        status = "Error",
+                        message = "Thông tin chưa đầy đủ, vui lòng thử lại!"
+
+                    }, JsonRequestBehavior.AllowGet
+                    );
+                }
+                //Chuyển tiền sang thẻ mới
+                newCard.Balance = oldCard.Balance;
+                newCard.Points = oldCard.Points;
+                newCard.Status = true;
+                ///
+
+                var oldRecord = db.MemberCardChargeRecords.Where(r => r.MemberCardID == oldCard.MemberCardID).ToList();
+                foreach (var r in oldRecord)
+                {
+                    r.MemberCardID = newCard.MemberCardID;
+                }
+                var oldGamehis = db.ReportGameHistories.Where(r => r.IdCard == oldCard.MemberCardID).ToList();
+                foreach (var g in oldGamehis)
+                {
+                    g.IdCard = newCard.MemberCardID;
+                }
+
+                newCard.ModifyDate = DateTime.Now;
+                //Nếu thẻ có Account
+
+                if (oldCard.Accounts.Any())
+                {
+
+
+                    var acc = oldCard.Accounts.FirstOrDefault();
+                    acc.MemberCardID = newCard.MemberCardID;
+                }
+              
+                oldCard.Status = false;
+                oldCard.Balance = 0;
+                oldCard.Points = 0;
+                db.SaveChanges();
+                return this.Json(
+              new
+              {
+                  status = "Success",
+                
+              }
+              , JsonRequestBehavior.AllowGet
+              );
+
             }
             catch (Exception e)
             {
@@ -817,6 +906,90 @@ namespace JPGame.Areas.Admin.Controllers
              {
                  status = "Error",
                  message = "Loại thẻ không đúng so với số tiền nạp, vui lòng quét lại!"
+
+             }
+             , JsonRequestBehavior.AllowGet
+             );
+            }
+            if (memberCard.Status.Value)
+            {
+                return this.Json(
+             new
+             {
+                 status = "Error",
+                 message = "Thẻ đã được sử dụng bởi người khác, vui lòng quét lại!"
+
+             }
+             , JsonRequestBehavior.AllowGet
+             );
+
+            }
+            if (memberCard.Accounts.Any())
+            {
+                    return Json(
+               new
+               {
+                   status = "Error",
+                   message = "Thẻ đã được sử dụng!"
+
+               }
+               , JsonRequestBehavior.AllowGet
+               );
+            }
+            return this.Json(
+                new
+                {
+                    status = "Success",
+                    card = memberCard.Code39
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+        }
+        [HttpGet]
+        public JsonResult GetCurrentCardForReissuance(string level)
+        {
+            DateTime now = DateTime.Now;
+            DateTime oneMinuteAgo = now.AddMinutes(-2).AddSeconds(-now.Second);
+            string reader = Session["ReaderID"].ToString();
+            var live = db.LiveCards.ToList();
+            var currCard = db.LiveCards.Where(c => c.ReaderID.Trim().Equals(reader) && c.ScanAt >= oneMinuteAgo && c.ScanAt <= now).FirstOrDefault();
+          
+
+            if (currCard == null)
+            {
+                return this.Json(
+                new
+                {
+                    status = "Error",
+                    message = "Vui lòng quét lại thẻ!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+            var memberCard = db.MemberCards.Find(currCard.CardID);
+
+            if (memberCard == null)
+            {
+                return this.Json(
+                new
+                {
+                    status = "Error",
+                    message = "Vui lòng quét lại thẻ!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+
+            if (!memberCard.MemberCardLevel.CardLevel.ID.Trim().Equals(level.Trim()))
+            {
+                return this.Json(
+             new
+             {
+                 status = "Error",
+                 message = "Loại thẻ không đúng so với thẻ cũ, vui lòng quét lại!"
 
              }
              , JsonRequestBehavior.AllowGet

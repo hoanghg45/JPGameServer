@@ -524,7 +524,8 @@ function GetMemberCardLevel(LevelFee) {
 					rate = 0
 				}
 				$('input[name="RewardRate"]').val(rate)
-				SetMoney(rate, data.data.LevelFee)
+				
+				SetMoney(rate)
 			} else {
 				toastr.error(data.message, "Lỗi!")
 				$('input[name="MoneyPay"],input[name="TotalMoneyPay"],input[name="CardMoneyPay"]').val('')
@@ -692,16 +693,19 @@ function InitInputEvent() {
 
 
 	//Money
+	let OldTotal
 	$('input[name="MoneyPay"]').on('blur', function (event) {
 		$('input[name="PromotionDes"],input[name="Promotion"]').val('')
 		
 		let money = Number($(this).val().replaceAll(',', ''))
+		
 		let total = Number($('input[name="CurrTotal"]').val().replaceAll(',', ''))
 		
 		let payTotal = money + total
 		$('input[name="TotalMoneyPay"]').val(payTotal.toLocaleString('en-US'))
 		
 		GetMemberCardLevel(payTotal)
+		OldTotal = Number($('input[name="CardMoneyPay"]').val().replaceAll(',', ''))
 	});
 	$('input[name="MoneyPay"]').on('keypress', function (event) {
 		if (event.which === 13) {
@@ -717,6 +721,7 @@ function InitInputEvent() {
 			$('input[name="TotalMoneyPay"]').val(payTotal.toLocaleString('en-US'))
 
 			GetMemberCardLevel(payTotal)
+			OldTotal = Number($('input[name="CardMoneyPay"]').val().replaceAll(',', ''))
 		}
 	});
 	/// tiền thừa
@@ -801,6 +806,21 @@ function InitInputEvent() {
 
 		}
 	});
+	//Tỉ lệ khuyến mãi
+	$('input[name="Discount"]').on('keypress', function (event) {
+		if (event.which === 13) {
+			event.preventDefault();
+			// Xử lý logic khi nhấn phím Enter
+			if ($('input[name="MoneyPay"]').val() == '') {
+				toastr.error('Nhập số tiền nạp', "Lỗi!")
+				$(this).val("")
+			} else {
+				let Total = Number($('input[name="CardMoneyPay"]').val().replaceAll(',', ''))
+				Total = OldTotal + Number($('input[name="MoneyPay"]').val().replaceAll(',', '')) * (Number($(this).val()) / 100)
+				$('input[name="CardMoneyPay"]').val(Total.toLocaleString('en-US'))
+			}
+		}
+	});
 
 }
 function GetPromotion(IdPromotion) {
@@ -828,7 +848,7 @@ function GetPromotion(IdPromotion) {
 					toastr.error(`Mã ${promotion.Des} áp dụng tặng thẻ, vui lòng chọn chức năng cấp thẻ để sử dụng!`)
 					$('input[name="MoneyPay"],input[name="Promotion]').val("")
 					promotionInfo = null
-					$('input[name="Promotion"]').attr('disabled', true)
+					$('input[name="Promotion"]').attr('readonly', true)
 				}
 				if (promotion.Type == 2) {
 					//Nhập số tiền thẻ tặng
@@ -872,11 +892,11 @@ function GetPromotion(IdPromotion) {
 		}
 	})
 }
-function SetMoney(rate, levelfee) {
+function SetMoney(rate) {
 
 	let money = Number($('input[name="MoneyPay"]').val().replaceAll(',', ''))
 	///
-	money = rate == 0 ? money : levelfee * (rate/100)
+	money = rate == 0 ? money : money * (rate / 100)
 	let currBalance = Number($('input[name="CurrBalance"]').val().replaceAll(',', ''))
 	let newBalance = money + currBalance
 	$('input[name="CardMoneyPay"]').val(newBalance.toLocaleString('en-US'))

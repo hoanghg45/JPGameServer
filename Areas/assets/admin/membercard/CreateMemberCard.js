@@ -277,6 +277,10 @@ var KTWizard1 = function () {
 				let moneyReward = rate != 0 ? money * rate / 100 : money
 				if (promotionInfo != null && promotionInfo.Type == 2) {
 					moneyReward += (money * promotionInfo.VoucherDiscount/100)
+				}
+				let discount = $('input[name = "Discount"]').val()
+				if (discount != '') {
+					moneyReward += money * (discount/100)
                 }
 				
 				$('input[name = "Money"]').val(moneyReward.toLocaleString('en-US'))
@@ -705,6 +709,7 @@ function InitInputEvent() {
 			
 		}
 	});
+	
 
 }
 function GetPromotion(IdPromotion) {
@@ -733,7 +738,7 @@ function GetPromotion(IdPromotion) {
 					$('input[name="CusMoney"],input[name="ChangeMoney"]').val(0)
 					var e = $.Event("keypress", { which: 13 });
 					$('input[name="MoneyPay"],input[name="CusMoney"],input[name="ChangeMoney"]').trigger(e);
-					$('input[name="Promotion"]').attr('disabled', true)
+					$('input[name="Promotion"]').attr('readonly', true)
 
 
 				}
@@ -745,6 +750,7 @@ function GetPromotion(IdPromotion) {
 						return
                     }
 					promotionInfo = promotion
+					$('input[name="Promotion"]').attr('readonly', true)
 
 
 				}
