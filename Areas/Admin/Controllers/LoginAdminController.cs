@@ -80,6 +80,55 @@ namespace JPGame.Areas.Admin.Controllers
 
 
         }
+        [HttpGet]
+        public JsonResult CheckLoginID(string barcode)
+        {
+
+            if (string.IsNullOrEmpty(barcode))
+            {
+                return Json(
+             new
+             {
+                 status = "error",
+                 message = "Vui lòng nhập đầy đủ thông tin!"
+
+             }
+             , JsonRequestBehavior.AllowGet
+             );
+            }
+            if (!db.Users.Any(u => u.UserID.Trim().Equals(barcode)))
+            {
+                return Json(
+                new
+                {
+                    status = "error",
+                    message = "Tài khoản của bạn không tồn tại vui lòng kiểm tra lại!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+
+            }
+            var user = db.Users.Where(u => u.UserID.Trim().Equals(barcode)).FirstOrDefault();
+            Session["UserID"] = user.UserID;
+            Session["Role"] = user.Role.Trim();
+            if (!string.IsNullOrEmpty(user.ReaderID))
+                Session["ReaderID"] = user.ReaderID.Trim();
+
+
+            return Json(
+              new
+              {
+                  status = "success",
+                  message = "Đang nhập thành công!"
+
+              }
+              , JsonRequestBehavior.AllowGet
+              );
+
+
+
+        }
         [SessionCheck]
         [HttpGet]
         public JsonResult GetUserInfor()

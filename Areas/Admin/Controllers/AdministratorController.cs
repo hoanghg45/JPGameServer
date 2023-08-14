@@ -100,6 +100,78 @@ namespace JPGame.Areas.Admin.Controllers
             return View();
         }
 
+        [HttpGet]
+        public JsonResult Cashier()
+        {
+
+            try
+            {
+                string UserID = Session["UserID"].ToString();
+                var user = db.Users.Find(UserID);
+                var reader = user.ReaderID.ToString().Trim();
+                var readers = db.NFCReaders.Select(a => new
+                {
+                    a.ReaderID,
+                    a.ReaderName,
+                });
+                return Json(
+                new
+                {
+                    status = "success",
+                    readers = readers,
+                    reader= reader
+
+                }
+                , JsonRequestBehavior.AllowGet
+            );
+            }
+            catch (Exception ex)
+            {
+                return Json(
+                new
+                {
+                    status = "error",
+                    message = ex,
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+
+        }
+        [HttpPost]
+        public JsonResult Save(string cashier)
+        {
+
+            try
+            {
+                string UserID = Session["UserID"].ToString();
+                var user = db.Users.Find(UserID);
+                user.ReaderID = cashier;
+                db.SaveChanges();
+                return Json(
+                new
+                {
+                    status = "success",
+
+                }
+                , JsonRequestBehavior.AllowGet
+            );
+            }
+            catch (Exception ex)
+            {
+                return Json(
+                new
+                {
+                    status = "error",
+                    message = ex,
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+
+        }
         // POST: Admin/Administator/Create
         [HttpPost]
         public JsonResult Create(User user)
@@ -128,12 +200,16 @@ namespace JPGame.Areas.Admin.Controllers
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 db.Users.Add(user);
                 db.SaveChanges();
+                var id = user.UserID;
+                var name = user.Name;
 
                 return Json(
                      new
                      {
                          status = "success",
-                         
+                         id= id,
+                         name= name
+
                      }
                      , JsonRequestBehavior.AllowGet);
             }

@@ -160,6 +160,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <script src="~/Areas/assets/plugins/global/plugins.bundle.js"></script>
     <script src="~/Areas/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
     <script src="~/Areas/assets/js/scripts.bundle.js"></script>
+    <script src="~/Areas/assets/Scanner/jquery.scannerdetection.js"></script>
     <!--end::Global Theme Bundle-->
     <!--begin::Page Scripts(used by this page)-->
     <script src="~/Areas/assets/admin/login/AdminLogin.js"></script>
@@ -177,6 +178,60 @@ License: You must have a valid license purchased only from themeforest(the above
                 }
             })
         })
+    </script>
+    <script>
+        $(document).scannerDetection({
+            timeBeforeScanTest: 200, // wait for the next character for upto 200ms
+            endChar: [13], // be sure the scan is complete if key 13 (enter) is detected
+            avgTimeByChar: 40, // it's not a barcode if a character takes longer than 40ms
+            ignoreIfFocusOn: 'input', // turn off scanner detection if an input has focus
+            minLength: 1,
+            onComplete: function (barcode, qty) {
+                $.ajax({
+                    url: '/Admin/LoginAdmin/CheckLoginID',
+                    type: 'get',
+                    data: { barcode: barcode},
+                    success: function (result) {
+                        if (result.status == "success") {
+                            swal.fire({
+                                title: "Thành công!",
+                                text: "Đăng nhập thành công",
+                                icon: "success",
+                                buttonsStyling: false,
+
+                                heightAuto: false,
+                                customClass: {
+                                    confirmButton: "btn font-weight-bold btn-light-primary"
+                                }
+
+                            }).then(function () {
+
+                                window.location.href = '/Admin/Dashboard';
+                            });
+                        } else {
+                            swal.fire({
+                                title: "Có lỗi!",
+                                text: result.message,
+                                icon: "error",
+                                buttonsStyling: false,
+
+                                heightAuto: false,
+                                customClass: {
+                                    confirmButton: "btn font-weight-bold btn-light-primary"
+                                }
+
+                            }).then(function () {
+
+                                KTUtil.scrollTop();
+                            });
+                        }
+                    }
+                })
+            }, // main callback function
+            scanButtonKeyCode: 116, // the hardware scan button acts as key 116 (F5)
+            scanButtonLongPressThreshold: 5, // assume a long press if 5 or more events come in sequence
+            onError: function (string) { alert('Error ' + string); }
+        });
     </script>
     <!--end::Page Scripts-->
 </body>

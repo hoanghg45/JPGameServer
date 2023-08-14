@@ -207,6 +207,24 @@ function Print(data, userID, sp, userName, name, cashier, paytype, member, cusmo
 }
 
 
+function PrintAccount(id,name) {
+    let impresora = new Impresora(RUTA_API);
+    impresora.cut();
+    impresora.cutPartial();
+    impresora.qr(id);
+    impresora.feed(1);
+    impresora.setFontSize(1, 1);
+    impresora.setAlign("center");
+    impresora.write(name);
+    impresora.cash();
+    impresora.cut();
+    impresora.cutPartial(); // Pongo este y también cut porque en ocasiones no funciona con cut, solo con cutPartial
+    impresora.end()
+        .then(valor => {
+            window.location.href = "/Admin/Administrator"
+        });
+}
+
 // En el init, obtenemos la lista
 obtenerListaDeImpresoras();
 // Y también la impresora seleccionada

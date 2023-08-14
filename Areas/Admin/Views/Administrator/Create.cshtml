@@ -34,7 +34,7 @@
             <!--end::Info-->
             <!--begin::Toolbar-->
             <div class="d-flex align-items-center">
-           
+
             </div>
             <!--end::Toolbar-->
         </div>
@@ -55,10 +55,10 @@
                         <!--begin::Form-->
                         <form id="UserForm" class="form">
                             <div class="card-body">
-                                
+
                                 <div class="form-group">
                                     <label>Tài khoản:</label>
-                                   
+
                                     <input name="UserName" type="text" class="form-control form-control-solid" required placeholder="Nhập tên tài khoản" />
 
                                 </div>
@@ -68,17 +68,17 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Quyền :</label>
-                                  
+
                                     <select class="form-control select2" style="width:100%" id="SelectRoles" name="Role">
                                         @foreach (var role in ViewBag.Roles)
                                         {
                                             <option value="@role.ID">@role.Description</option>
                                         }
                                     </select>
-                                </div> 
+                                </div>
                                 <div class="form-group">
                                     <label>Reader :</label>
-                                  
+
                                     <select class="form-control select2" style="width:100%" id="SelectReader" name="ReaderID">
                                         @foreach (var reader in ViewBag.Readers)
                                         {
@@ -96,10 +96,10 @@
                                         <label>Xác nhận mật khẩu:</label>
                                         <input type='password' class="form-control" name="RePassword" placeholder="Nhập xác nhận mật khẩu" />
                                     </div>
-                                
+
 
                                 </div>
-                                
+
 
 
                             </div>
@@ -120,4 +120,6 @@
     </div>
     <!--end::Entry-->
 </div>
+<script src="~/Areas/assets/Print/Impresora.js"></script>
+<script src="~/Areas/assets/Print/script.js"></script>
 <script src="~/Areas/assets/admin/users/CreateUser.js"></script>
