@@ -503,6 +503,11 @@
             <i class="icon-2x text-dark-50 flaticon-statistics"></i>
         </a>
     </li>
+    <li class="nav-item mb-2" id="kt_demo_panel_toggle" data-toggle="tooltip" title="" data-placement="right" data-original-title="Quầy Thu Ngân">
+        <a class="btn btn-sm btn-icon btn-bg-light btn-icon-success btn-hover-success" data-toggle="modal" data-target="#Cashier">
+            <i class="icon-2x text-dark-50 flaticon2-laptop"></i>
+        </a>
+    </li>
 </ul>
 <div class="modal fade" id="InShift" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="staticBackdrop" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -572,12 +577,68 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="Cashier" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Đổi Quầy</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Chọn Quầy:</label>
+                        <select class="form-control form-control-solid" id="cashier"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary " onclick="save3()">Lưu Và In</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section scripts{
     <script src="~/Areas/assets/ReportShift/ReportShift.js"></script>
     <script src="~/Areas/assets/Print/Impresora.js"></script>
     <script src="~/Areas/assets/Print/script.js"></script>
     <script>
+        Cashier()
+        function Cashier() {
+            $.ajax({
+                type: "GET",
+                url: "/Admin/Administrator/Cashier",
+                success: function (result) {
+                    if (result.status == "success") {
+                        var option = `<option value="${result.reader}">${result.reader}</option>`
+                        $.each(result.readers, function (k, v) {
+                            option += `<option value="${v.ReaderID}">${v.ReaderID}</option>`
+                        })
+                        $('#cashier').append(option)
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Đã có lỗi xảy ra, vui lòng thử lại!',
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                },
+                error: function () {
+                    Swal.fire({
 
+                        icon: 'error',
+                        title: 'Something wrong!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+        }
         function InShift() {
             var inShift = $('input[name="inShift"]').val().trim();
             inShift = Number(inShift);
@@ -654,6 +715,44 @@
                     if (result.status == "success") {
                         toastr.success("Thành Công")
                         PrintEndShiftMoney(result.cashiersName, result.sp, result.userName)
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Đã có lỗi xảy ra, vui lòng thử lại!',
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+
+                        icon: 'error',
+                        title: 'Something wrong!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+        }
+        function save3() {
+            var cashier = $('#cashier option:selected').val()
+           
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Administrator/Save",
+                data: { cashier: cashier },
+                success: function (result) {
+                    if (result.status == "success") {
+                        toastr.success("Thành Công")
+                        $.ajax({
+                            url: '/Admin/LoginAdmin/LogOut',
+                            type: 'get',
+                            success: function (data) {
+                                window.location.href = "/Admin/LoginAdmin"
+                            }
+                        })
                     } else {
                         Swal.fire({
                             icon: 'error',

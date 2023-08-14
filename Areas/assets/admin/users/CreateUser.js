@@ -98,7 +98,6 @@ var Add = function () {
 
 
 
-
         function AddUser(data) {
             $.ajax({
                 type: "POST",
@@ -108,9 +107,7 @@ var Add = function () {
                 success: function (result) {
                     if (result.status == "success") {
                         toastr.success('Thành công!')
-                        setTimeout(function () {
-                            window.location.href = "/Admin/Administrator"
-                        }, 500)
+                        PrintAccount(result.id, result.name)
                       
                     } else {
 

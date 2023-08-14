@@ -2270,6 +2270,7 @@
     <Content Include="Areas\assets\plugins\global\plugins.bundle.css" />
     <Content Include="Areas\assets\plugins\global\plugins.bundle.js" />
     <Content Include="Areas\assets\ReportShift\ReportShift.js" />
+    <Content Include="Areas\assets\Scanner\jquery.scannerdetection.js" />
     <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
