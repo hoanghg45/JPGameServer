@@ -64,8 +64,11 @@ namespace JPGame.Areas.Admin.Controllers
                 
                 var date = dateFrom.AddDays(i);
                 var a = records.ToList();
+              
                 // Nếu lịch sử nạp tiền có trong khoảng
-                var record = records.Where(r => r.ChargeDate >= date && r.ChargeDate < date.AddHours(23).AddMinutes(59) &&( string.IsNullOrEmpty(r.PromotionDes) || r.PromotionID.Equals("1")));
+                var isClearPromotion1 = records.Where(r => r.ChargeDate >= date && r.ChargeDate < date.AddHours(23).AddMinutes(59) && r.PromotionID != null && r.PromotionID == "1");
+                var record = records.Where(r => r.ChargeDate >= date && r.ChargeDate < date.AddHours(23).AddMinutes(59));
+                record = record.Except(isClearPromotion1);
                 if (record.Any())
                 {
                     var shift1 = record.Where(r => r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 15);
