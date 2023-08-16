@@ -193,7 +193,7 @@ var KTWizard1 = function () {
 
 
 	}
-
+	var isGetCusData = false ///Phải nhập thông tin khách
 	var _initWizard = function () {
 		// Initialize form wizard
 		_wizardObj = new KTWizard(_wizardEl, {
@@ -206,7 +206,7 @@ var KTWizard1 = function () {
 		_wizardObj.on('change', function (wizard) {
 
 			if (wizard.getStep() > wizard.getNewStep()) {
-				/// Nếu là thẻ welcome thì bỏ bước thông tin
+			
 				if (wizard.getStep() == 4 && !isEnterInfor)
 					wizard.goTo(wizard.getStep() - 1);
 				return; // Skip if stepped back
@@ -238,7 +238,16 @@ var KTWizard1 = function () {
 								$('#CusmoneyNoti').show()
 								KTUtil.scrollTop();
 								return
-							} 
+							}
+							if (nextlevel == "level1") {
+								$('input[name="FullName"]').attr("readonly", false);
+								$('input[name="Phone"]').attr("readonly", false);
+								isGetCusData = true
+							} else {
+								$('input[name="FullName"]').attr("readonly", true);
+								$('input[name="Phone"]').attr("readonly", true);
+								isGetCusData = false
+							}
                         }
 						if (nextStep == 3) {
 							/// Nếu là thẻ welcome thì bỏ bước thông tin
@@ -520,9 +529,15 @@ function GetMemberCardLevel(LevelFee) {
 				$('#VIP').prop("checked", data.data.VIP);
 				$('#Mocktail').prop("checked", data.data.Mocktail);
 				$('#VipRoom').prop("checked", data.data.VipRoom);
+				//nếu không nâng cấp thẻ thì không đc tặng ưu đãi
 				if (data.data.CardLevelID.trim() == $('input[name = "CurrCardLevelID"]').val()) {
 					rate = 0
 				}
+				//Nếu vẫn ở trong lv1 thì vẫn nhập được user info
+				if (data.data.CardLevelID.trim() != 'level1') {
+					$('input[name="Phone"]').val('')
+					$('input[name="FullName"]').val('')
+                }
 				$('input[name="RewardRate"]').val(rate)
 				
 				SetMoney(rate)
@@ -611,6 +626,10 @@ function GetCurrCard($this) {
 				$('#CurrMocktail').prop("checked", data.card.Mocktail);
 				$('#CurrVipRoom').prop("checked", data.card.VipRoom);
 
+				if (data.card.CardLevelID.trim() == 'level1') {
+					$('input[name="Phone"]').val(data.card.Phone)
+					$('input[name="FullName"]').val(data.card.Name)
+                }
 				
 			} else {
 				toastr.error("Lỗi!")
@@ -619,7 +638,7 @@ function GetCurrCard($this) {
 				$('#iconStatus').addClass("flaticon2-delete text-danger");
 
 			}
-
+			
 
 		},
 		error: function () {

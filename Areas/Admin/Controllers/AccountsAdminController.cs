@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace JPGame.Areas.Admin.Controllers
 {
-    [SessionCheck]
+    [SessionCheck(roles = new string[] { "admin" })]
     public class AccountsAdminController : Controller
     {
        

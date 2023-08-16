@@ -1,4 +1,5 @@
 ﻿using JPGame.Areas.Admin.Extension;
+using JPGame.Areas.Security;
 using NinjaNye.SearchExtensions;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -12,19 +13,23 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace JPGame.Areas.Admin.Controllers
-{
+{ 
+    [SessionCheck(roles = new string[] { "admin","manager"})]
     public class ReportController : Controller
     {
         private DBEntities db = new DBEntities();
         // GET: Admin/Report
+       
         public ActionResult Index()
         {
             return View();
         }
+      
         public ActionResult GameHistory()
         {
             return View();
         }
+        
         public ActionResult DetailReport()
         {
             return View();
@@ -39,32 +44,32 @@ namespace JPGame.Areas.Admin.Controllers
             //public float Revenue2;
             //public string Cashier2;
             public string Total;
-            
+
         }
-      
+
         [HttpGet]
-        public JsonResult DataTable(int page = 0,string From = "", string To = "")
+        public JsonResult DataTable(int page = 0, string From = "", string To = "")
         {
 
             List<Report> data = new List<Report>();
             var dateFrom = new DateTime(2023, 8, 1);
             var dateTo = DateTime.Now;
-            if(!string.IsNullOrEmpty(From))
-             dateFrom = DateTime.ParseExact(From, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            if (!string.IsNullOrEmpty(From))
+                dateFrom = DateTime.ParseExact(From, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             if (!string.IsNullOrEmpty(To))
                 dateTo = DateTime.ParseExact(To, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             //var dateFrom = new DateTime(2023, 8, 3);
             //var dateTo = new DateTime(2023, 8, 10);
-          
+
             var records = db.MemberCardChargeRecords.ToList();
             TimeSpan duration = dateTo - dateFrom;
             int numberOfDays = duration.Days;
             for (int i = 0; i <= numberOfDays; i++)
             {
-                
+
                 var date = dateFrom.AddDays(i);
                 var a = records.ToList();
-              
+
                 // Nếu lịch sử nạp tiền có trong khoảng
                 var isClearPromotion1 = records.Where(r => r.ChargeDate >= date && r.ChargeDate < date.AddHours(23).AddMinutes(59) && r.PromotionID != null && r.PromotionID == "1");
                 var record = records.Where(r => r.ChargeDate >= date && r.ChargeDate < date.AddHours(23).AddMinutes(59));
@@ -80,18 +85,18 @@ namespace JPGame.Areas.Admin.Controllers
                         Date = date,
                         Shift1 = shift1.Sum(s => s.Money).ToString(),
                         Shift2 = shift2.Sum(s => s.Money).ToString(),
-                        Total = (shift1.Sum(s => s.Money).Value+ shift2.Sum(s => s.Money).Value).ToString()
+                        Total = (shift1.Sum(s => s.Money).Value + shift2.Sum(s => s.Money).Value).ToString()
                     };
                     data.Add(report);
                 }
-                
+
             }
             var c = data.ToList();
             // Lọc theo loại thẻ (type)
 
 
             // tìm kiếm 
-          
+
 
 
 
@@ -120,7 +125,7 @@ namespace JPGame.Areas.Admin.Controllers
             return this.Json(
           new
           {
-              data =filteredReports,
+              data = filteredReports,
               pageCurrent = page,
               numSize,
               total = totalBill,
@@ -131,27 +136,27 @@ namespace JPGame.Areas.Admin.Controllers
           }
           , JsonRequestBehavior.AllowGet
           );
-        } 
+        }
 
         [HttpGet]
-        public JsonResult DataDetailReport(int page = 0,string From = "", string To = "", string cashier="",int shift=0,string type="",int paytype=0)
+        public JsonResult DataDetailReport(int page = 0, string From = "", string To = "", string cashier = "", int shift = 0, string type = "", int paytype = 0)
         {
 
-           
+
             var dateFrom = new DateTime(2023, 8, 1);
             var dateTo = DateTime.Now;
-            if(!string.IsNullOrEmpty(From))
+            if (!string.IsNullOrEmpty(From))
                 dateFrom = DateTime.ParseExact(From, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             if (!string.IsNullOrEmpty(To))
                 dateTo = DateTime.ParseExact(To, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             //var dateFrom = new DateTime(2023, 8, 3);
             //var dateTo = new DateTime(2023, 8, 10);
-          
+
 
             var records = db.MemberCardChargeRecords
                         .Where(r => r.ChargeDate >= dateFrom && r.ChargeDate <= dateTo)
-                        .Where(r => r.ChargeDate.Value.Hour >= 9 && (r.ChargeDate.Value.Hour < 22 ||
-                                   (r.ChargeDate.Value.Hour == 22 && r.ChargeDate.Value.Minute <= 15)))
+                        .Where(r => r.ChargeDate.Value.Hour >= 8 && (r.ChargeDate.Value.Hour < 23 ||
+                                   (r.ChargeDate.Value.Hour == 23 && r.ChargeDate.Value.Minute <= 59)))
 
                         .Select(r => new
                         {
@@ -160,17 +165,17 @@ namespace JPGame.Areas.Admin.Controllers
                             r.ChargeDate.Value.Hour,
                             Shift = (r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour < 15) ? 1 : 2,
                             r.Cashier,
-                            Money = r.PromotionDes.Trim().Equals("Nhận Thẻ Chơi Game Trị Giá 150k")?0: r.Money.Value,
+                            Money = r.PromotionDes.Trim().Equals("Nhận Thẻ Chơi Game Trị Giá 150k") ? 0 : r.Money.Value,
                             Type = r.RecordType,
                             TypePayID = r.PayType.ID,
                             Typepay = r.PayType.Name,
-                            RecordType = r.RecordType.Equals("Create")?"Tạo thẻ":"Nạp thẻ",
-                            PromotionDes = string.IsNullOrEmpty(r.PromotionDes)?"": r.PromotionDes
+                            RecordType = r.RecordType.Equals("Create") ? "Tạo thẻ" : "Nạp thẻ",
+                            PromotionDes = string.IsNullOrEmpty(r.PromotionDes) ? "" : r.PromotionDes
 
                         })
                         ;
             records = records.WhereIf(!string.IsNullOrEmpty(cashier), r => r.Cashier.Equals(cashier))
-                             .WhereIf(!string.IsNullOrEmpty(type), r => r.Type.Equals(type)) 
+                             .WhereIf(!string.IsNullOrEmpty(type), r => r.Type.Equals(type))
                              .WhereIf(paytype != 0, r => r.TypePayID.Equals(paytype))
                              .WhereIf(shift != 0, r => r.Shift == shift);
             var c = records.ToList();
@@ -178,7 +183,7 @@ namespace JPGame.Areas.Admin.Controllers
 
 
             // tìm kiếm 
-          
+
 
 
 
@@ -220,16 +225,16 @@ namespace JPGame.Areas.Admin.Controllers
           );
         }
         [HttpGet]
-        public JsonResult ReportGame(int page, string From , string To,string game,string card)
+        public JsonResult ReportGame(int page, string From, string To, string game, string card)
         {
 
             From = From == "" || From == null ? "2023-08-01" : From;
             To = To == "" || To == null ? "2030-08-01" : To;
-            game = game == null|| game == "-1" ? "-1" : game;
+            game = game == null || game == "-1" ? "-1" : game;
             card = card == null || card == "-1" ? "-1" : card;
 
-            var dateFrom = int.Parse(getDay(From)) + int.Parse(getMonth(From)) * 31 * int.Parse(getYear(From)); 
-            var dateTo = int.Parse(getDay(To)) + int.Parse(getMonth(To)) * 31 * int.Parse(getYear(To)); 
+            var dateFrom = int.Parse(getDay(From)) + int.Parse(getMonth(From)) * 31 * int.Parse(getYear(From));
+            var dateTo = int.Parse(getDay(To)) + int.Parse(getMonth(To)) * 31 * int.Parse(getYear(To));
             var data = db.ReportGameHistories.Select(a => new
             {
                 a.Id,
@@ -239,13 +244,13 @@ namespace JPGame.Areas.Admin.Controllers
                 a.SettingGame.Price,
                 a.CreateDate,
                 a.Status,
-            }).Where(x=>x.CreateDate.Value.Day+x.CreateDate.Value.Month* 31 * x.CreateDate.Value.Year>= dateFrom
-                        && x.CreateDate.Value.Day + x.CreateDate.Value.Month * 31 * x.CreateDate.Value.Year<=dateTo);
+            }).Where(x => x.CreateDate.Value.Day + x.CreateDate.Value.Month * 31 * x.CreateDate.Value.Year >= dateFrom
+                        && x.CreateDate.Value.Day + x.CreateDate.Value.Month * 31 * x.CreateDate.Value.Year <= dateTo);
             if (game != "-1")
             {
-               data= data.Where(x => x.IdGame == game);
+                data = data.Where(x => x.IdGame == game);
             }
-            if(card != "-1")
+            if (card != "-1")
             {
                 data = data.Where(x => x.Code39 == card);
             }
@@ -299,7 +304,7 @@ namespace JPGame.Areas.Admin.Controllers
           new
           {
               game = game,
-              card= card
+              card = card
 
           }
           , JsonRequestBehavior.AllowGet
@@ -343,11 +348,11 @@ namespace JPGame.Areas.Admin.Controllers
                 worksheet.Cells[1, 2].Value = "Máy Game";
                 worksheet.Cells[1, 3].Value = "Thẻ";
                 worksheet.Cells[1, 4].Value = "Tiền";
-               
+
                 // Thêm dữ liệu từ data vào các ô
                 for (int i = 0; i < data.ToList().Count; i++)
                 {
-                    worksheet.Cells[i + 2, 1].Value = data.ToList()[i].CreateDate.Value.Year+"-"+ data.ToList()[i].CreateDate.Value.Month+"-"+data.ToList()[i].CreateDate.Value.Day+" "+data.ToList()[i].CreateDate.Value.Hour+":"+ data.ToList()[i].CreateDate.Value.Minute;
+                    worksheet.Cells[i + 2, 1].Value = data.ToList()[i].CreateDate.Value.Year + "-" + data.ToList()[i].CreateDate.Value.Month + "-" + data.ToList()[i].CreateDate.Value.Day + " " + data.ToList()[i].CreateDate.Value.Hour + ":" + data.ToList()[i].CreateDate.Value.Minute;
                     worksheet.Cells[i + 2, 2].Value = data.ToList()[i].Name;
                     worksheet.Cells[i + 2, 3].Value = data.ToList()[i].Code39;
                     worksheet.Cells[i + 2, 4].Value = data.ToList()[i].Price;
@@ -370,7 +375,7 @@ namespace JPGame.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public ActionResult ExportDetailReport( string From = "", string To = "", string cashier = "", int shift = 0, string type = "", int paytype = 0)
+        public ActionResult ExportDetailReport(string From = "", string To = "", string cashier = "", int shift = 0, string type = "", int paytype = 0)
         {
 
 
@@ -386,8 +391,8 @@ namespace JPGame.Areas.Admin.Controllers
 
             var records = db.MemberCardChargeRecords
                         .Where(r => r.ChargeDate >= dateFrom && r.ChargeDate <= dateTo)
-                        .Where(r => r.ChargeDate.Value.Hour >= 9 && (r.ChargeDate.Value.Hour < 22 ||
-                                   (r.ChargeDate.Value.Hour == 22 && r.ChargeDate.Value.Minute <= 15)))
+                        .Where(r => r.ChargeDate.Value.Hour >= 8 && (r.ChargeDate.Value.Hour < 23 ||
+                                   (r.ChargeDate.Value.Hour == 23 && r.ChargeDate.Value.Minute <= 59)))
 
 
                         .Select(r => new
@@ -419,13 +424,13 @@ namespace JPGame.Areas.Admin.Controllers
                 // Thêm tiêu đề cho các cột
                 worksheet.Cells[1, 1].Value = "Ngày";
                 worksheet.Cells[1, 2].Value = "Mã giao dịch";
-                
+
                 worksheet.Cells[1, 3].Value = "Ca";
-                worksheet.Cells[1,4 ].Value = "Quầy"; 
-                worksheet.Cells[1,5].Value = "Tiền";
-                worksheet.Cells[1,6].Value = "Loại thanh toán";
-                worksheet.Cells[1,7].Value = "Tác vụ";
-                worksheet.Cells[1,8].Value = "Khuyến mãi";
+                worksheet.Cells[1, 4].Value = "Quầy";
+                worksheet.Cells[1, 5].Value = "Tiền";
+                worksheet.Cells[1, 6].Value = "Loại thanh toán";
+                worksheet.Cells[1, 7].Value = "Tác vụ";
+                worksheet.Cells[1, 8].Value = "Khuyến mãi";
 
                 // Thêm dữ liệu từ data vào các ô
                 for (int i = 0; i < records.ToList().Count; i++)
@@ -434,11 +439,11 @@ namespace JPGame.Areas.Admin.Controllers
                     worksheet.Cells[i + 2, 2].Value = records.ToList()[i].RecordID;
                     worksheet.Cells[i + 2, 3].Value = records.ToList()[i].Shift;
                     worksheet.Cells[i + 2, 4].Value = records.ToList()[i].Cashier;
-                    worksheet.Cells[i + 2,  5].Value = records.ToList()[i].Money.ToString("#,##0");
+                    worksheet.Cells[i + 2, 5].Value = records.ToList()[i].Money.ToString("#,##0");
                     worksheet.Cells[i + 2, 6].Value = records.ToList()[i].Typepay;
                     worksheet.Cells[i + 2, 7].Value = records.ToList()[i].RecordType;
                     worksheet.Cells[i + 2, 8].Value = records.ToList()[i].PromotionDes;
-                    
+
                 }
                 var headerCells = worksheet.Cells[1, 1, 1, worksheet.Dimension.Columns];
                 worksheet.View.FreezePanes(2, 1);
@@ -478,7 +483,9 @@ namespace JPGame.Areas.Admin.Controllers
                 var date = dateFrom.AddDays(i);
                 var a = records.ToList();
                 // Nếu lịch sử nạp tiền có trong khoảng
+                var isClearPromotion1 = records.Where(r => r.ChargeDate >= date && r.ChargeDate < date.AddHours(23).AddMinutes(59) && r.PromotionID != null && r.PromotionID == "1");
                 var record = records.Where(r => r.ChargeDate >= date && r.ChargeDate < date.AddHours(23).AddMinutes(59));
+                record = record.Except(isClearPromotion1);
                 if (record.Any())
                 {
                     var shift1 = record.Where(r => r.ChargeDate.Value.Hour >= 9 && r.ChargeDate.Value.Hour <= 15);
@@ -538,7 +545,7 @@ namespace JPGame.Areas.Admin.Controllers
         }
         public string getMonth(string time)
         {
-            var month = time.Split('-')[1]; 
+            var month = time.Split('-')[1];
             return month;
         }
         public string getYear(string time)

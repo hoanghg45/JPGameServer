@@ -1,13 +1,14 @@
 ﻿jQuery(document).ready(function () {
 	$('#AddMember').hide()
 	InitLoadingButton()
+	InitLoadingButton()
 	var membercardHub = $.connection.membercardHub;
 	console.log(membercardHub)
 	membercardHub.client.notify = function (message) {
 		function Click() {
 			$('#CheckCardBtn').trigger("click");
 		}
-
+		console.log(message)
 		if (message && message.toLowerCase() == "cardscanned" && ReaderID != null) {
 			const throttledFunction = $.throttle(1000, Click)
 			throttledFunction()
@@ -17,7 +18,9 @@
 		console.log('Hub started');
 	});
 	$('#scan').show()
-	
+	function Click() {
+		$('#CheckCardBtn').trigger("click");
+	}
 	
 })
 

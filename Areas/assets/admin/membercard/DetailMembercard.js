@@ -1,4 +1,4 @@
-﻿jQuery(document).ready(function () {
+﻿	jQuery(document).ready(function () {
 	$('#AddMember').hide()
 	if (CardID == null) {
 		InitLoadingButton()
@@ -74,6 +74,7 @@ function GetCurrCard($this) {
 				$('#CurrVIP').prop("checked", data.card.VIP);
 				$('#CurrMocktail').prop("checked", data.card.Mocktail);
 				$('#CurrVipRoom').prop("checked", data.card.VipRoom);
+				
 				if (data.card.isHaveOwner) {
 					$('#UserInfor').show()
 					$('input[name="FullName"]').val(data.card.Owner.FullName)
@@ -82,10 +83,17 @@ function GetCurrCard($this) {
 					$('input[name="Email"]').val(data.card.Owner.Email)
 					$('input[name="Phone"]').val(data.card.Owner.Phone)
 				} else {
-					$('#UserInfor').hide()
-					$('#AddMember').show()
+					if (data.card.Name != '' && data.card.Phone != '') {
+						$('#UserInfor').show()
+						$('input[name="FullName"]').val(data.card.Name)
+						$('input[name="Phone"]').val(data.card.Phone)
+					} else {
+						$('#UserInfor').hide()
+						$('#AddMember').show()
+					}
 
-                }
+				}
+				
 
 			} else {
 				toastr.error("Lỗi!")
@@ -145,8 +153,17 @@ function GetDetailCard(id) {
 					$('input[name="Email"]').val(data.card.Owner.Email)
 					$('input[name="Phone"]').val(data.card.Owner.Phone)
 				} else {
-					$('#UserInfor').hide()
+					if (data.card.Name != '' && data.card.Phone != '') {
+						$('#UserInfor').show()
+						$('input[name="FullName"]').val(data.card.Name)
+						$('input[name="Phone"]').val(data.card.Phone)
+					} else {
+						$('#UserInfor').hide()
+						$('#AddMember').show()
+					}
+
 				}
+				
 
 			} else {
 				toastr.error("Lỗi!")

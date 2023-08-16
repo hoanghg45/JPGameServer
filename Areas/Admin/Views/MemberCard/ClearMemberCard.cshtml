@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "MemberCardReissuance";
+    ViewBag.Title = "ClearMemberCard";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -13,7 +13,7 @@
                 <!--begin::Page Heading-->
                 <div class="d-flex align-items-baseline flex-wrap mr-5">
                     <!--begin::Page Title-->
-                    <h5 class="text-dark font-weight-bold my-1 mr-5">Đổi thẻ</h5>
+                    <h5 class="text-dark font-weight-bold my-1 mr-5">Làm mới thẻ</h5>
                     <!--end::Page Title-->
                     <!--begin::Breadcrumb-->
                     <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
@@ -24,7 +24,7 @@
                             <a href="" class="text-muted">Thẻ thành viên</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="" class="text-muted">Cấp thẻ mới</a>
+                            <a href="" class="text-muted">Làm mới thẻ</a>
                         </li>
                     </ul>
                     <!--end::Breadcrumb-->
@@ -57,38 +57,20 @@
                         <form id="PromotionForm" class="form">
                             <div class="card-body">
                                 <div class="form-group fv-plugins-icon-container">
-                                    <h4 class="mb-10 font-weight-bold text-dark">Nhập mã thẻ cũ</h4>
-                                    <h6 class="font-weight-bolder mb-3">Nhập mã thẻ cũ</h6>
+                                    <h4 class="mb-10 font-weight-bold text-dark">Chọn mã thẻ</h4>
+                                    
                                     <div class="form-group">
+                                        <select onchange="GetDetailCard()" class="form-control select2" style="width:100%" id="OldCardID" >
+                                            @foreach (var card in ViewBag.MemberCardList)
+                                            {
+                                                <option value="@card.Code39">@card.Code39</option>
 
-                                        <div class="input-group">
-                                            <input class="form-control" type="text" id="OldCardID" />
-
-                                            <div class="input-group-append ml-1">
-                                                <button class="btn btn-google addmemberBtn" onclick="GetDetailCard()" type="button">Tìm kiếm!</button>
-                                            </div>
-                                        </div>
+                                            }
+                                        </select>
+                                        
                                     </div>
                                 </div>
-                                <div class="form-group fv-plugins-icon-container" id="scan">
-                                    <h4 class="mb-10 font-weight-bold text-dark">Quét thẻ mới</h4>
-                                    <!--begin::Select-->
-                                    <h6 class="font-weight-bolder mb-3">Đưa thẻ vào máy đọc</h6>
-                                    <div class="form-group">
-                                        <button type="button" id="CheckCardBtn" class="btn btn-success mr-3">
-                                            Kiểm tra
-                                        </button>
-                                        <button type="button" id="loadingBtn" class="btn btn-outline-warning spinner spinner-darker-warning spinner-left mr-3">
-                                            Đang kiểm tra
-                                        </button>
-                                        <i id="iconStatus" class="flaticon2-check-mark text-success"></i>
-                                        <input name="CardID" value="@Model" hidden />
-                                    </div>
-                                    <span id="textNoti" class="form-text text-muted"></span>
-                                    <!--end::Select-->
-                                    <!--end::Select-->
-
-                                </div>
+                               
                                 <div class="form-group fv-plugins-icon-container row">
                                     <div class="col-lg-6">
 
@@ -195,27 +177,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div id="AddMember">
-                                    <div class="separator separator-dashed my-10"></div>
-                                    <h6 class="font-weight-bolder mb-3">Tài khoản của thẻ</h6>
-                                    <div class="form-group fv-plugins-icon-container">
-                                        <div class="form-group">
-                                            <label>Gán tài khoản</label>
-                                            <div class="input-group">
-                                                <select class="form-control select2" id="search_account">
-
-                                                    @*@foreach (var u in ViewBag.unHaveCardMembers)
-                            {
-                                <option value="@u.AccountID">@u.AccountName.Trim()</option>
-                            }*@
-                                                </select>
-                                                <div class="input-group-append ml-1">
-                                                    <button class="btn btn-google addmemberBtn" onclick="AddAccountForCard()" type="button">Gán!</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                               
                                 <div id="UserInfor">
                                     <div class="separator separator-dashed my-10"></div>
                                     <h6 class="font-weight-bolder mb-3">Thông tin thành viên</h6>
@@ -295,5 +257,10 @@
 
     }
     console.log(ReaderID)
+    jQuery(document).ready(function () {
+
+        $('.select2').select2();
+    });
 </script>
-<script src="~/Areas/assets/admin/membercard/ReissuanceCard.js"></script>
+<script src="~/Areas/assets/admin/membercard/ClearCard.js"></script>
+

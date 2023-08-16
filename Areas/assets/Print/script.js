@@ -189,8 +189,8 @@ function Print(data, userID, sp, userName, name, cashier, paytype, member, cusmo
     }
     impresora.setAlign("center");
     impresora.setFontSize(1, 1);
-    impresora.write("(KHI NAP 500K TRO LEN TANG VE CHOI\n");
-    impresora.write("CANH TAY ROBOT MIEN PHI TAI TANG 1)\n");
+    impresora.write("(QUY KHACH KHI NAP 500K TRO LEN DUOC TANG VE\n");
+    impresora.write("CHOI VR CANH TAY ROBOT MIEN PHI TAI TANG 1)\n");
     impresora.feed(1);
     impresora.write("*XIN CAM ON QUY KHACH VA HEN GAP LAI*\n");
     impresora.feed(1);

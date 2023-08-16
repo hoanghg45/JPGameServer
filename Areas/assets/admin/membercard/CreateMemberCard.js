@@ -195,12 +195,12 @@ var KTWizard1 = function () {
 				let level = $('input[name="MemberCardLevelID"]').val().trim()
 				let step = wizard.getNewStep()
 				if (level == "level1" && step == 3) {
-					if (isGetCusData && ($('input[name="FullName"]').val() == '' || $('input[name="Phone"]').val() == '')) {
-						toastr.error('Vui lòng nhập tên và số điện thoại khách hàng!', "Lỗi!")
-					} else {
+					//if (isGetCusData && ($('input[name="FullName"]').val() == '' || $('input[name="Phone"]').val() == '')) {
+					//	toastr.error('Vui lòng nhập tên và số điện thoại khách hàng!', "Lỗi!")
+					//} else {
 						SetReviewStep()
 						wizard.goTo(3);
-                    }
+                    /*}*/
 					
 				} else {
 					validator.validate().then(function (status) {

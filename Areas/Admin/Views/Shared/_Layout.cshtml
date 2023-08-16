@@ -457,11 +457,19 @@ License: You must have a valid license purchased only from themeforest(the above
                                                     <span class="menu-text">Đổi thẻ</span>
                                                 </a>
                                             </li>
+                                            <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+                                                <a href="/Admin/MemberCard/ClearMemberCard" class="menu-link">
+                                                    <i class="menu-bullet menu-bullet-line">
+                                                        <span></span>
+                                                    </i>
+                                                    <span class="menu-text">Làm mới thẻ</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
                             }
-                            @if (role == "admin")
+                            @if (role == "admin" || role == "manager")
                             {
                                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                                     <a href="javascript:;" class="menu-link menu-toggle">

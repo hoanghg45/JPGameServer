@@ -342,6 +342,7 @@
     <Content Include="Areas\assets\admin\login\AdminLogin.js" />
     <Content Include="Areas\assets\admin\membercardlevel\AddMemberCard.js" />
     <Content Include="Areas\assets\admin\membercardlevel\MemberCardLevel.js" />
+    <Content Include="Areas\assets\admin\membercard\ClearCard.js" />
     <Content Include="Areas\assets\admin\membercard\CreateMemberCard.js" />
     <Content Include="Areas\assets\admin\membercard\DetailMembercard.js" />
     <Content Include="Areas\assets\admin\membercard\MemberCard.js" />
@@ -2451,6 +2452,7 @@
       <DependentUpon>Context.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\Admin\Views\MemberCard\MemberCardReissuance.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberCard\ClearMemberCard.cshtml" />
     <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

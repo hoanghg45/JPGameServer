@@ -118,7 +118,7 @@ namespace JPGame.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult Create(FormCollection collection)
         {
-            try
+                try
             {
                 // TODO: Add insert logic here
                 var currUser = (Session["UserID"].ToString());
@@ -162,7 +162,7 @@ namespace JPGame.Areas.Admin.Controllers
                 //Thêm thông tin dữ liệu khách nếu không muốn tạo tài khoản
                 else
                 {
-                    if (level.Equals("level1"))
+                    if (level.Trim().Equals("level1"))
                     {
                         card.Phone = collection["Phone"];
                         card.Name = collection["FullName"];
@@ -441,6 +441,8 @@ namespace JPGame.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult MemberCardReissuance()
         {
+            string ReaderID = Session["ReaderID"].ToString();
+            ViewBag.ReaderID = ReaderID;
             return View();
         }
 
@@ -728,7 +730,8 @@ namespace JPGame.Areas.Admin.Controllers
                             Email = c.Accounts.Any() ? c.Accounts.FirstOrDefault().Email : null,
                             Phone = c.Accounts.Any() ? c.Accounts.FirstOrDefault().Phone : null,
                         }:null,
-                       
+                        Name = string.IsNullOrEmpty(c.Name)?"":c.Name.Trim(),
+                        Phone = string.IsNullOrEmpty(c.Phone)?"":c.Phone.Trim(),
 
                         c.Balance,
                         c.Status
@@ -817,8 +820,9 @@ namespace JPGame.Areas.Admin.Controllers
                             Email = c.Accounts.Any() ? c.Accounts.FirstOrDefault().Email : null,
                             Phone = c.Accounts.Any() ? c.Accounts.FirstOrDefault().Phone : null,
                         }:null,
-                       
 
+                        Name = string.IsNullOrEmpty(c.Name) ? "" : c.Name.Trim(),
+                        Phone = string.IsNullOrEmpty(c.Phone) ? "" : c.Phone.Trim(),
                         c.Balance,
                         c.Status
                     }).FirstOrDefault();
@@ -946,6 +950,58 @@ namespace JPGame.Areas.Admin.Controllers
                 , JsonRequestBehavior.AllowGet
                 );
         }
+        [HttpGet]
+        public ActionResult ClearMemberCard()
+        {
+            string ReaderID = Session["ReaderID"].ToString();
+            ViewBag.ReaderID = ReaderID;
+            ViewBag.MemberCardList = db.MemberCards.ToList();
+            return View();
+        }
+        [HttpPost]
+        public JsonResult ClearMemberCard(string MemberCardID)
+        {
+            var card = db.MemberCards.Where(c => c.Code39.Equals(MemberCardID)).FirstOrDefault();
+            if(string.IsNullOrEmpty(MemberCardID) && card == null)
+            {
+                return this.Json(
+                new
+                {
+                    status = "Error",
+                    message = "Thẻ không tồn tại!"
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            }
+            else
+            {
+                card.Balance = 0;
+                card.Status = false;
+                card.Points = 0;
+                var oldRecord = db.MemberCardChargeRecords.Where(r => r.MemberCardID == card.MemberCardID).ToList();
+                foreach (var r in oldRecord)
+                {
+                    db.MemberCardChargeRecords.Remove(r);
+                }
+                var oldGamehis = db.ReportGameHistories.Where(r => r.IdCard == card.MemberCardID).ToList();
+                foreach (var g in oldGamehis)
+                {
+                    db.ReportGameHistories.Remove(g);
+                }
+            }
+            return this.Json(
+                new
+                {
+                    status = "Success",
+                   
+
+                }
+                , JsonRequestBehavior.AllowGet
+                );
+            db.SaveChanges();
+        }
+
         [HttpGet]
         public JsonResult GetCurrentCardForReissuance(string level)
         {
@@ -1102,6 +1158,7 @@ namespace JPGame.Areas.Admin.Controllers
                );
             }
         }
+
         [HttpPost]
         public ActionResult UploadExcel(HttpPostedFileBase file)
         {

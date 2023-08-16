@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace JPGame.Areas.Admin.Controllers
 {
-    [SessionCheck]
+    [SessionCheck(roles = new string[] { "admin","webmanager" })]
     public class BlogAdminController : Controller
     {
         private DBEntities db = new DBEntities();

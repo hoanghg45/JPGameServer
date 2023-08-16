@@ -274,9 +274,11 @@ namespace JPGame.Areas.Admin.Controllers
 
                 user.Name = collection["Name"].Trim();
                 user.UserName = collection["UserName"].Trim();
+                
                 if (!string.IsNullOrEmpty(collection["newPassword"])){
                   user.Password =  BCrypt.Net.BCrypt.HashPassword(collection["newPassword"]);
                 }
+                user.ReaderID = collection["ReaderID"];
                 db.SaveChanges();
                 return Json(
                    new
